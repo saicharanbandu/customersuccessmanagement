@@ -13,7 +13,7 @@ from django.db import models
 #
 #     def __str__(self):
         # return self.name
-class Cus_info(models.Model):
+class CustomerInfo(models.Model):
     legal_name = models.CharField(max_length=55,verbose_name='Legal Name')
     display_name = models.CharField(max_length=55,verbose_name='Display Name')
     short_name = models.CharField(max_length=50,verbose_name='Short Name or Abbreviation')
