@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from customer import forms as customerForms
 from django.urls import reverse
 from customer import models as customerModel
+from django.http import JsonResponse
+from .models import State
 
 def index(request):
     return render(request,'customer/index.html')
@@ -28,3 +30,11 @@ def customer_info_view(request):
         else:
              form = customerForms.CustomerInfo()
     return render(request, 'customer/form_customer.html', {'form': form})
+
+def load_states(request):
+    country_id = request.GET.get('country_id')
+    if country_id is None:
+        print("The country_id is empty")
+    states = customerModel.State.objects.filter(country_id=country_id).order_by('name')
+    print(states)
+    return render(request, 'customer/state_dropdown_list.html', {'states': states})

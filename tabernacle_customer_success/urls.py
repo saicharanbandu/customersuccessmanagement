@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path,include
 from customer import views
 from plan import views as v
+from user import views as uv
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('customer.urls')),
     path('plan/',include('plan.urls')),
+    path('user/',include('user.urls')),
 ]

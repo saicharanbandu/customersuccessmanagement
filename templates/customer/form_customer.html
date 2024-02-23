@@ -8,11 +8,35 @@
   <body>
     <h1>Client information</h1>
     <div class="container">
-      <form class="" action="{% url 'customer:customer_info_view' %}" method="POST">
+      <form class="" id="customerForm" action="{% url 'customer:customer_info_view' %}" method="POST">
         {% csrf_token %}
+      
+
         {{form.as_p}}
         <input type="submit" class="btn btn-primary" value="Continue">
       </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#id_country").change(function () {
+        var url = "{% url 'customer:ajax_load_states' %}"; 
+        var countryId = $(this).val(); 
+      
+        $.ajax({                       
+          url: url, 
+          data: {
+            'country_id': countryId       
+          },
+          success: function (data) {   
+            $("#id_state").html(data);  
+          }
+        });
+      });
+    });
+  </script>
+    
+  
+  
   </body>
 </html>

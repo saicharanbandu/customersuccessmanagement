@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
@@ -11,13 +10,13 @@
     />
   </head>
   <body>
-    <h1>Plan information</h1>
+    <h1>User information</h1>
     <div class="container">
-      <form class="" action="{% url 'plan:plan_info_view' %}" method="post">
+      <form class=""  method="post">
         {% csrf_token %}
         {{ form.as_p }}
-
-        <input type="submit" class="btn btn-primary" value="Continue" />
+        <input type="submit" class="btn " value="ADD NEXT USER" />
+        <input type="submit" class="btn btn-primary" value="Done" />
       </form>
     </div>
   </body>

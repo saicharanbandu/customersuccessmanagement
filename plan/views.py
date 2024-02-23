@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django import forms
+from django.urls import reverse
 from  plan import forms as planForms
 from plan import models as planModels
 # Create your views here.
@@ -15,7 +16,7 @@ def plan_info_view(request):
             amt=form.cleaned_data['amount']
             data=planModels.plan_info(plan_name=pn,no_of_members=no,duration=dur,amount=amt)
             data.save()
-            
+            return redirect(reverse('user:user_view'))
 
         else:
              form = planForms.pl_info()
