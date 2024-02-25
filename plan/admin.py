@@ -1,3 +1,6 @@
 from django.contrib import admin
+from . import models as planModels
 
-# Register your models here.
+admin.site.register(planModels.PlanType)
+admin.site.register(planModels.MemberSize)
+admin.site.register(planModels.SubscriptionPlan)

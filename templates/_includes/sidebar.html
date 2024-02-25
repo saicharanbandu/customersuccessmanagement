@@ -20,7 +20,7 @@
             </a>
         </li>
         <li>
-            <a href="#" class="nav-link {% if active_tab == 'customer' %} active {% else %} link-body-emphasis {% endif %}">
+            <a href="{% url 'customer:create' %}" class="nav-link {% if active_tab == 'customer' %} active {% else %} link-body-emphasis {% endif %}">
                 <i class="fa-solid fa-users me-2"></i>
                 Customers
             </a>

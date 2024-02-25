@@ -3,9 +3,10 @@ from customer import views
 
 app_name = 'customer'
 urlpatterns = [
-    path('',views.index,name='index'),
-    path('form/',views.customer_info_view,name='customer_info_view'),
+    path('ajax/load-states/', views.load_states, name='ajax_load_states'),
+
+    path('create', views.CustomerCreateView.as_view(), name='create'),
+    path('select-plan/<customer_id>', views.CustomerSelectPlanView.as_view(), name='select_plan'),
 
 
-    
-]
+]   
