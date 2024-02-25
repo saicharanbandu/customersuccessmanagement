@@ -13,12 +13,56 @@
   <body>
     <h1>Plan information</h1>
     <div class="container">
-      <form class="" action="{% url 'plan:plan_info_view' %}" method="post">
+      <form class="" id="userForm" action="{% url 'plan:plan_info_view' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
 
         <input type="submit" class="btn btn-primary" value="Continue" />
       </form>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        $(document).ready(function() {
+          $("#id_plan_name").change(function () {
+            var url = "{% url 'plan:ajax_load_numbers' %}"; 
+            var planNameId = $(this).val(); 
+            console.log("Selected plan name ID:", planNameId);
+          
+            $.ajax({                       
+              url: url, 
+              data: {
+                'plan_name_id': planNameId       
+              },
+              success: function (data) {   
+                $("#id_no_of_members").html(data);
+                
+              }
+            });
+          });
+        });
+      </script>
+      <script>
+        $(document).ready(function() {
+          $("#id_plan_name, #id_no_of_members, #id_duration").change(function () {
+            var url = "{% url 'plan:ajax_load_amount' %}"; 
+            var planNameId = $("#id_plan_name").val(); 
+            var noOfMembers = $("#id_no_of_members").val();
+            var duration = $("#id_duration").val();
+            
+            $.ajax({                       
+              url: url, 
+              data: {
+                'plan_name_id': planNameId,
+                'no_of_members': noOfMembers,
+                'duration': duration
+              },
+              success: function (data) {   
+                $("#id_amount").val(data.amount);  // Populate the amount field
+              }
+            });
+          });
+        });
+        </script>
+        
     </div>
   </body>
 </html>

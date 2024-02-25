@@ -2,8 +2,6 @@ from django.shortcuts import render,redirect
 from customer import forms as customerForms
 from django.urls import reverse
 from customer import models as customerModel
-from django.http import JsonResponse
-from .models import State
 
 def index(request):
     return render(request,'customer/index.html')
@@ -13,7 +11,9 @@ def customer_info_view(request):
 
     if request.method == "POST":
         form = customerForms.CustomerInfo(request.POST)
+        
         if form.is_valid():
+            
             ln=form.cleaned_data['legal_name']
             dn=form.cleaned_data['display_name']
             sn=form.cleaned_data['short_name']
@@ -23,9 +23,9 @@ def customer_info_view(request):
             state=form.cleaned_data['state']
             zip=form.cleaned_data['zip_code']
             data=customerModel.CustomerInfo(legal_name=ln,display_name=dn,short_name=sn,address=add,city=city,country=country,state=state,zip_code=zip)
-
+            
             data.save()
-            print("data is stored")
+            
             return redirect(reverse('plan:plan_info_view'))
         else:
              form = customerForms.CustomerInfo()
