@@ -1,0 +1,26 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+
+{% block top_nav %}
+Contacts / Contact Directory
+<h2>{{ title }}</h2>
+{% endblock %}
+
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'contact:create' %}" class="btn btn-primary">
+    <i class="fa-solid fa-plus me-2"></i>
+        New Contact
+</a>
+<h5>
+    List here
+</h5>
+{% endblock %}
