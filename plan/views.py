@@ -3,39 +3,27 @@ from django import forms
 from django.urls import reverse
 from  plan import forms as planForms
 from plan import models as planModels
+from django.http import  JsonResponse
 
-# Create your views here.
 
-def plan_info_view(request):
-    form=planForms.pl_info()
-    if request.method == "POST":
-        form=planForms.pl_info(request.POST)
-        if form.is_valid():
-            pn=form.cleaned_data['plan_name']
-            no=form.cleaned_data['no_of_members']
-            # dur=form.cleaned_data['duration']
-            amt=form.cleaned_data['amount']
-            data=planModels.plan_info(plan_name=pn,no_of_members=no,amount=amt)
-            data.save()
-            return redirect(reverse('user:user_view'))
-
-        else:
-             form = planForms.pl_info()
-    return render(request, 'customer/form_plan.html', {'form': form})
 
 def load_numbers(request):
-    plan_name_id = request.GET.get('plan_name_id')
+    plan_type_id = request.GET.get('plan_type_id')
     
-    if plan_name_id is None:
-        print("The country_id is empty")
-    numbers = planModels.Number.objects.filter(type_id=plan_name_id).order_by('num')
-   
-    print(numbers)
-    return render(request, 'customer/number_dropdown_list.html', {'numbers': numbers})
+    plan_types = planModels.SubscriptionPlan.objects.filter(plan_type_id=plan_type_id).order_by('member_size__lower_limit')
+    return render(request, 'customer/number_dropdown_list.html', {'plan_types': plan_types})
+
+
 
 def load_amount(request):
-    plan_name_id = request.GET.get('plan_name_id')
-    no_of_members = request.GET.get('no_of_members')
+    plan_type_id = request.GET.get('plan_type_id')
+    member_size_id = request.GET.get('member_size_id')
     duration = request.GET.get('duration')
-    amount = planModels.Amount.objects.get(type_id=plan_name_id,num_id=no_of_members,dur_id=duration).amt
-    return {'amount':amount}
+
+    monthly_amount = planModels.SubscriptionPlan.objects.get(plan_type_id=plan_type_id, member_size_id=member_size_id).amount
+    payable_amount = monthly_amount * int(duration)
+    
+    response_data = {
+        'payable_amount':payable_amount
+    }
+    return JsonResponse(response_data)

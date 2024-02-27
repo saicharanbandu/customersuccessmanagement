@@ -1,42 +1,35 @@
 from django.db import models
+import uuid
 
-# Create your models here.
-class PlanName(models.Model):
-    type = models.CharField(max_length=30)
+
+class PlanType(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    name = models.CharField(max_length=30)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
-        return self.type
+        return self.name
 
 
-class Number(models.Model):
-    type = models.ForeignKey(PlanName, on_delete=models.CASCADE)
-    num = models.CharField(max_length=30)
+class MemberSize(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    upper_limit = models.IntegerField()
+    lower_limit = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
-        return self.num
+        return f'{self.lower_limit} - {self.upper_limit}'
 
-# class Duration(models.Model):
-#     CHOICES = [
-#         ("6 Months", '6'),
-#         ('1 Year', '12'),
-#     ]
-#     dur=models.CharField(max_length=10,choices=CHOICES)
     
-# class Amount(models.Model):
-#     type = models.ForeignKey(PlanName, on_delete=models.CASCADE)
-#     num = models.ForeignKey(Number, on_delete=models.CASCADE)
-#     dur=models.ForeignKey(Duration, on_delete=models.CASCADE)
-#     amt=models.CharField(max_length=255)
+class SubscriptionPlan(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    plan_type = models.ForeignKey(PlanType, related_name='subscription_plan_type', to_field='uuid', on_delete=models.SET_NULL, null=True)
+    member_size = models.ForeignKey(MemberSize, related_name="subscription_plan_member_size", to_field='uuid', on_delete=models.SET_NULL, null=True)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-# Amount._meta.get_field('dur').default = 1
-    
-class plan_info(models.Model):
-    CHOICES = [
-        (6 , '6 Months'),
-        (12, '1 Year'),
-    ]
-    # duration=models.CharField(max_length=10,choices=CHOICES)
-    plan_name = models.ForeignKey(PlanName,verbose_name="Plan Type", on_delete=models.SET_NULL, null=True)
-    no_of_members = models.ForeignKey(Number,verbose_name="Number of Members", on_delete=models.SET_NULL, null=True)
-    # duration = models.ForeignKey(Duration,verbose_name="Duration", on_delete=models.SET_NULL, null=True)
-    amount = models.FloatField(null=True)
-
-# class subscription(models.Model):
+    def __str__(self):
+        return f'{self.plan_type.name} [{self.member_size}]'

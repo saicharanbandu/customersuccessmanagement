@@ -1,40 +1,90 @@
 from django.shortcuts import render,redirect
-from customer import forms as customerForms
 from django.urls import reverse
-from customer import models as customerModel
+from django.views import View
 
-def index(request):
-    return render(request,'customer/index.html')
+from customer import models as customerModels, forms as customerForms
+from misc import models as miscModels
+from plan import models as planModels
 
-def customer_info_view(request):
-    form = customerForms.CustomerInfo()
+class CustomerCreateView(View):
+    template_name = 'customer/create_view.html'
+    title = 'Customer Information'
+    active_tab = 'customer'
 
-    if request.method == "POST":
-        form = customerForms.CustomerInfo(request.POST)
+    def get(self, request, *args, **kwargs):
+        customer_info_form = customerForms.CustomerInfoForm()
+
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_info_form': customer_info_form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        customer_info_form = customerForms.CustomerInfoForm(request.POST)
         
-        if form.is_valid():
+        if customer_info_form.is_valid():
+            customer_info_object = customer_info_form.save()
+            print(customer_info_object.uuid)
+            return redirect(reverse('customer:select_plan', kwargs={'customer_id': customer_info_object.uuid }))
+        
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_info_form': customer_info_form
+        }
+        return render(request, self.template_name, context)
+
+
+
+class CustomerSelectPlanView(View):
+    template_name = 'customer/select_plan.html'
+    title = 'Select Plan'
+    active_tab = 'customer'
+
+    def get(self, request, *args, **kwargs):
+        customer_id = self.kwargs.get('customer_id')
+
+        customer_plan_form = customerForms.CustomerPlanForm()
+        plan_options_form = customerForms.PlanOptionsForm()
+    
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_plan_form': customer_plan_form,
+            'plan_options_form': plan_options_form,
+            'customer_id': customer_id
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        customer_id = self.kwargs.get('customer_id')
+
+        plan_options_form = customerForms.PlanOptionsForm(request.POST)
+        
+        if plan_options_form.is_valid():
             
-            ln=form.cleaned_data['legal_name']
-            dn=form.cleaned_data['display_name']
-            sn=form.cleaned_data['short_name']
-            add=form.cleaned_data['address']
-            city=form.cleaned_data['city']
-            country=form.cleaned_data['country']
-            state=form.cleaned_data['state']
-            zip=form.cleaned_data['zip_code']
-            data=customerModel.CustomerInfo(legal_name=ln,display_name=dn,short_name=sn,address=add,city=city,country=country,state=state,zip_code=zip)
-            
-            data.save()
-            
-            return redirect(reverse('plan:plan_info_view'))
-        else:
-             form = customerForms.CustomerInfo()
-    return render(request, 'customer/form_customer.html', {'form': form})
+            plan_type = plan_options_form.cleaned_data['plan_type']
+            member_size = plan_options_form.cleaned_data['member_size']
+            duration = plan_options_form.cleaned_data['duration']
+
+            subscription_plan = planModels.SubscriptionPlan.objects.get(plan_type=plan_type, member_size=member_size)
+            customerModels.CustomerPlan.objects.create(customer_id=customer_id, plan=subscription_plan, duration_months=duration)
+            return redirect(reverse('customer:create'))
+        
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'plan_options_form': plan_options_form
+        }
+        return render(request, self.template_name, context)
 
 def load_states(request):
     country_id = request.GET.get('country_id')
     if country_id is None:
         print("The country_id is empty")
-    states = customerModel.State.objects.filter(country_id=country_id).order_by('name')
+    states = miscModels.State.objects.filter(country_id=country_id).order_by('name')
     print(states)
     return render(request, 'customer/state_dropdown_list.html', {'states': states})
+

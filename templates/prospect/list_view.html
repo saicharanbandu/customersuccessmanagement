@@ -1,0 +1,26 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+
+{% block top_nav %}
+Prospect Overview / Prospect List
+<h2>{{ title }}</h2>
+{% endblock %}
+
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'prospect:create' %}" class="btn btn-primary">
+    <i class="fa-solid fa-plus me-2"></i>
+        New Prospect
+</a>
+<h5>
+    List here
+</h5>
+{% endblock %}
