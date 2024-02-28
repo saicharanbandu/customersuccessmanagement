@@ -26,6 +26,8 @@ class ContactCreateView(View):
         print('a')
         if contact_info_form.is_valid():
             print('b')
+            if 'profile_picture' in request.FILES:
+                contact_info_form.profile_picture = request.FILES['profile_picture']
             contact_info_form.save()
             return redirect(reverse('contact:contact_list'))
         else:
@@ -68,6 +70,7 @@ class ContactListView(ListView):
         users = self.get_queryset()
         paginator = Paginator(users, self.paginate_by)
         users = paginator.page(page)
-        
+        for contact in users:
+            print(contact.profile_picture)
         context['users'] = users
         return context

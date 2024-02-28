@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,6 +20,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th> </th>
         <th>NAME & DESIGNATION</th>
         <th>ORGANIZATION</th>
         <th>ADDRESS</th>
@@ -28,6 +30,13 @@
     <tbody>
       {% for contact in contacts %}
         <tr>
+          <td>
+            {% if contact.profile_picture %}
+              <img src="{{ contact.profile_picture.url }}" alt="Profile Picture" width="50">
+            {% else %}
+              <img src="{% static 'default/image.png' %}" alt="Default Profile Picture" width="50">
+            {% endif %}
+          </td>          
           <td>{{ contact.name }}<br>{{ contact.designation }}</td>
           <td>{{ contact.organization }}</td>
           <td>{{ contact.address }}</td>
