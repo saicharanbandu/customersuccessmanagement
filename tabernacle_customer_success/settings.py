@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'plan',
     'prospect',
     'contact',
+    'misc',
 ]
 
 MIDDLEWARE = [

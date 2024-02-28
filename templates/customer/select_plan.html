@@ -1,0 +1,33 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+
+{% block top_nav %}
+Customer Overview / Start Onboarding / Select Plan
+<h2>{{ title }}</h2>
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<div>
+    <form id="selectPlanForm" action="{% url 'customer:select_plan' customer_id %}" method="POST" data-plan-url="{% url 'plan:ajax_load_numbers' %}" data-amount-url="{% url 'plan:ajax_load_amount' %}">
+        {% csrf_token %}
+        {{ plan_options_form.as_p }}
+
+        
+        <hr>
+        <div class="fw-bold">Payable Amount</div>
+        <div id="payableAmount" class="fs-5 fw-bold">
+          Rs. 0.00
+        </div>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Continue" />
+      </form>
+</div>
+{% endblock %}

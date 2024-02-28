@@ -1,0 +1,7 @@
+<select name="no_of_members">
+    <option value="">---------</option>
+    {% for plan_type in plan_types %}
+      <option value="{{ plan_type.member_size.uuid }}">{{ plan_type.member_size.lower_limit }} - {{ plan_type.member_size.upper_limit }}</option>
+    {% endfor %}
+  </select>
+  
