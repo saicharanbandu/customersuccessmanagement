@@ -41,6 +41,16 @@
 {% endblock %}
 
 {% block content %}
+
+{% for contact in contacts %}
+    <tr>
+      <td>{{ contact.name }}<br>{{ contact.designation }}</td>
+      <td>{{ contact.organization }}</td>
+      <td>{{ contact.address }}</td>
+      <td>{{ contact.email_id }}<br>{{ contact.mobile_number }}</td>
+    </tr>
+{% endfor %}
+
 <style>
     /* Existing styles remain unchanged */
 
@@ -234,6 +244,19 @@
       </li>
     </ul>
   </nav>
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="{% url "contact:list" %}?page={{ page_obj.previous_page_number }}"> Previous</a>
+      {% endif %}
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+      {% if page_obj.has_next %}
+        <a href="{% url "contact:list" %}?page={{ page_obj.next_page_number }}">Next </a>
+      {% endif %}
+    </span>
+  </div>
 </div>
 <script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
