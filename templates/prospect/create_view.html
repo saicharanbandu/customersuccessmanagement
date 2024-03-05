@@ -16,6 +16,17 @@ Prospect Overview / New Prospect
 
 {% block content %}
 <div>
-    <h5>create form here</h5>
+    <form class="" id="ProspectForm" action="{% url 'prospect:create' %}" method="POST">
+        {% csrf_token %}
+        <h1>Prospect Information</h1>
+        {{ prospect_info_form.as_p }}
+        <h1>Point Of Contact</h1>
+        {{ pOC_info_form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Save Prospect">
+    </form>
+    
 </div>
+
 {% endblock %}
+
+

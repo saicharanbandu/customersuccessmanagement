@@ -31,6 +31,12 @@
     
     <!-- CUSTOM CSS -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <style>
+        #contentContainer {
+            max-height: 500px; /* Set the maximum height to 100% of the viewport height */
+            overflow-y: auto; /* Allow vertical scrolling when content overflows the container */
+        }
+    </style>
 
 </head>
 
@@ -69,7 +75,7 @@
     <script src="{% static 'js/app.js' %}"></script>
     <script src="{% static 'js/sidebar.js' %}"></script>
 
-
+    
     {% block javascript %}
     {% endblock %}
 

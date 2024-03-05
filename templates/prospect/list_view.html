@@ -20,7 +20,28 @@ Prospect Overview / Prospect List
     <i class="fa-solid fa-plus me-2"></i>
         New Prospect
 </a>
-<h5>
-    List here
-</h5>
+<h5> List of prospects</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Contact Person</th>
+            <th>Status</th>
+            <th>CRM</th>
+            <th>State</th>
+            <!-- Add more columns as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for prospect in prospects %}
+            <tr>
+                <td>{{ prospect.prospect_name }}</td>
+                <td>{{ prospect.street_loc }}</td>
+                <td>{{ prospect.city }}</td>
+                <td>{{ prospect.country }}</td>
+                <td>{{ prospect.state }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

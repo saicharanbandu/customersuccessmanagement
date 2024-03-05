@@ -8,7 +8,7 @@ import uuid
 
 class CustomerInfo(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    legal_name = models.CharField(max_length=55,verbose_name='Legal Name')
+    legal_name = models.CharField(max_length=55,verbose_name='negal Name')
     display_name = models.CharField(max_length=55,verbose_name='Display Name')
     short_name = models.CharField(max_length=50,verbose_name='Short Name or Abbreviation')
     address = models.CharField(max_length=255,verbose_name='Address')

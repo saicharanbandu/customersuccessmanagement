@@ -19,7 +19,7 @@ Customer Overview / Start Onboarding
     <form class="" id="customerForm" action="{% url 'customer:create' %}" method="POST" data-url="{% url 'customer:ajax_load_states' %}">
         {% csrf_token %}
         {{ customer_info_form.as_p }}
-        <input type="submit" class="btn btn-primary" value="Continue">
+        <input type="submit" class="btn btn-primary" value="Crontinue">
     </form>
 </div>
 {% endblock %}
