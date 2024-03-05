@@ -6,8 +6,7 @@
 
 
 {% block top_nav %}
-Customer Overview / Start Onboarding
-<h2>{{ title }}</h2>
+{% include '_includes/top_nav.html' %}
 {% endblock %}
 
 {% block side_nav %}
@@ -19,7 +18,7 @@ Customer Overview / Start Onboarding
     <form class="" id="customerForm" action="{% url 'customer:create' %}" method="POST" data-url="{% url 'customer:ajax-load-states' %}">
         {% csrf_token %}
         {{ customer_info_form.as_p }}
-        <input type="submit" class="btn btn-primary" value="Continue">
+        <input type="submit" class="btn btn-primary" value="Crontinue">
     </form>
 </div>
 {% endblock %}

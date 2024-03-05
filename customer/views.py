@@ -11,7 +11,7 @@ from tabernacle_customer_success import constants
 
 class CustomerCreateView(View):
     template_name = 'customer/create_view.html'
-    title = 'Customer Information'
+    title = 'Crustomer Information'
     active_tab = 'customer'
 
     def get(self, request, *args, **kwargs):

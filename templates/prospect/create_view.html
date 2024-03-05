@@ -6,34 +6,7 @@
 
 
 {% block top_nav %}
-<div class="d-flex justify-content-end mt-3">
-<div class="w-100 mr-3">
-    Prospect Overview / New Prospect
-    <h2>{{ title }}</h2>
-</div>
-
-    <div class="bordered-form d-flex align-items-center">
-        <form class="form-inline">
-            <input class="form-control mr-sm-2 bordered-input" type="search" placeholder="Search"
-        aria-label="Search" oninput="searchFunction()">
-        </form>
-        <span class="material-symbols-outlined notifications-icon align-middle">notifications</span>
-        <span class="material-symbols-outlined align-middle">settings</span>
-        <div class="dropdown">
-            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-                    class="rounded-circle me-2">
-            </a>
-            <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Log out</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+{% include '_includes/top_nav.html' %}
 {% endblock %}
 
 {% block side_nav %}
@@ -41,190 +14,18 @@
 {% endblock %}
 
 {% block content %}
-<style>
-    /* Existing styles remain unchanged */
-
-    /* New styles for bordered form */
-    .bordered-form {
-        border: 2px solid #ccc;
-        border-radius: 5px;
-        padding: 15px;
-        align-items: center; /* Align items in the center */
-    }
-
-    /* New styles for bordered input */
-    .bordered-input {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-    }
-
-    /* New styles for bordered button */
-    .bordered-button {
-        border: 1px solid #4CAF50;
-        border-radius: 5px;
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-
-    .bordered-button:hover {
-        background-color: #45a049;
-    }
-
-    .bordered-button:focus {
-        outline: none;
-    }
-
-        .material-symbols-outlined {
-            
-          font-variation-settings:
-          'FILL' 0,
-          'wght' 400,
-          'GRAD' 0,
-          'opsz' 24
-        }
+<div class="form-container">
+    <form class="" id="ProspectForm" action="{% url 'prospect:create' %}" method="POST">
+        {% csrf_token %}
         
-        .form-control {
-			margin-bottom: 10px;
-		}
-		.form-group label {
-			font-weight: bold;
-		}
-		.btn-primary {
-			margin-right: 10px;
-		}
-        .container-fluid {
-			margin-top: 100px;
-			margin-bottom: 100px;
-            background-color: #f2f2f2;
-			padding-left: 15px;
-			padding-right: 15px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-		}
-		.centered {
-			position: absolute;
-			top: 80%;
-			left: 60%;
-			transform: translate(-50%, -50%);
-		}
-</style>
+        <h1>Prospect Information</h1>
+        {{ prospect_info_form.as_p }}
 
-<div class="centered">
-    
-    <div class="container-fluid">
-        <form>
-            <h3>Prospect Information</h3>
-            <div class="row">
-                <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" class="form-control" id="name" placeholder="Enter name" required>
-                    <div id="name-error" class="invalid-feedback">Name is required.</div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="street">Street/Locality</label>
-                        <input type="text" class="form-control" id="street" placeholder="Enter street">
-                    </div>
-                    <div class="form-group">
-                        <label for="country">Country</label>
-                        <input type="text" class="form-control" id="country" placeholder="Enter country">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email ID</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter email">
-                    </div>
-                    <div class="form-group">
-                        <label for="denomination">Denomination</label>
-                        <input type="text" class="form-control" id="denomination" placeholder="Enter denomination">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="city">City/Town/Village</label>
-                        <input type="text" class="form-control" id="city" placeholder="Enter city">
-                    </div>
-                    <div class="form-group">
-                        <label for="state">State</label>
-                        <input type="text" class="form-control" id="state" placeholder="Enter state">
-                    </div>
-                    <div class="form-group">
-                        <label for="website">Website</label>
-                        <input type="url" class="form-control" id="website" placeholder="Enter website">
-                    </div>
-                    <div class="form-group">
-                        <label for="congregation-size">Congregation Size (Approx)</label>
-                        <input type="number" class="form-control" id="congregation-size" placeholder="Enter congregation size">
-                    </div>
-                </div>
-                <hr style="border: 5px solid #0b0b0b;">
-                <h3>New contact</h3>
-                <div class="form-group">
-                    <label for="Name">Name</label>
-                    <input type="text" class="form-control" id="Name" placeholder="Enter name">
-                </div>
-                <div class="col-md-6">
-                <div class="form-group">
-                    <label for="mobile">Mobile Number</label>
-                    <input type="tel" class="form-control" id="mobile" placeholder="Enter mobile number">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="email">email ID</label>
-                    <input type="text" class="form-control" id="email" placeholder="Enter email id">
-                </div>
-            </div>
-                <div class="form-group">
-                    <label for="remarks">Remarks</label>
-                    <textarea class="form-control" id="remarks" rows="3"></textarea>
-                </div>
-                
-            </div>
-            <button type="submit" class="btn btn-primary">Save Prospect</button>
-                <button type="button" class="btn btn-secondary">Cancel</button>
-        </form>
-    </div>
+        <h1>Point Of Contact</h1>
+        {{ pOC_info_form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Save Prospect">
+    </form>
 </div>
-<script>
-    const form = document.querySelector('form');
-    const nameInput = document.querySelector('#name');
-    
-    form.addEventListener('submit', function(event) {
-      if (nameInput.value.trim() === '') {
-        event.preventDefault();
-        nameInput.classList.add('is-invalid');
-        document.querySelector('#name-error').style.display = 'block';
-      } else {
-        nameInput.classList.remove('is-invalid');
-        document.querySelector('#name-error').style.display = 'none';
-      }
-    });
-
-    </script>
-    <script>
-        function searchFunction() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("prospectTable");
-            tr = table.getElementsByTagName("tr");
-        
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    </script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
 {% endblock %}
+
+
