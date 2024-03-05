@@ -1,0 +1,201 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block top_nav %}
+<div class="d-flex justify-content-end mt-3">
+  <div class="w-100 mr-3">
+    Contacts / Contact Directory
+    <h2>{{ title }}</h2>
+  </div>
+
+  <div class="bordered-form d-flex align-items-center">
+    <form class="form-inline">
+      <input class="form-control mr-sm-2 bordered-input" type="search" placeholder="Search" aria-label="Search"
+        oninput="searchFunction()">
+    </form>
+    <span class="material-symbols-outlined notifications-icon align-middle">notifications</span>
+    <span class="material-symbols-outlined align-middle">settings</span>
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+      </a>
+      <ul class="dropdown-menu text-small shadow">
+        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" href="#">Log out</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+  /* Existing styles remain unchanged */
+
+  /* New styles for bordered form */
+  .bordered-form {
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    align-items: center;
+    /* Align items in the center */
+  }
+
+  /* New styles for bordered input */
+  .bordered-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  /* New styles for bordered button */
+  .bordered-button {
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  .bordered-button:hover {
+    background-color: #45a049;
+  }
+
+  .bordered-button:focus {
+    outline: none;
+  }
+
+  .material-symbols-outlined {
+
+    font-variation-settings:
+      'FILL'0,
+      'wght'400,
+      'GRAD'0,
+      'opsz'24
+  }
+</style>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <form class="w-auto">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search">
+        <span class="input-group-text" id="search-addon">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+    </form>
+    <a href="{% url 'contact:create' %}" class="btn btn-primary">
+      <i class="fa-solid fa-plus me-2"></i>
+      New contact
+    </a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">NAME & DESIGNATION</th>
+        <th scope="col">ORGANIZATION</th>
+        <th scope="col">ADDRESS</th>
+        <th scope="col">CONTACT</th>
+        <th scope="col">ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for contact in contacts %}
+      <tr>
+
+        <td>
+          <span class="material-symbols-outlined" style="font-size:32px;">assignment_ind</span>
+          {{ contact.name }}
+          <br>
+          <span class="text-muted" style="margin-left:30px"><span class="material-symbols-outlined">
+              trip
+            </span>
+            {{ contact.designation }}
+          </span>
+        </td>
+        <td>{{ contact.organization }}</td>
+        <td>{{ contact.address }}</td>
+        <td><a href="mailto:ckc.pastor@example.com">{{ contact.email_id }}</a><br><span class="text-muted">(+91)
+          {{ contact.mobile_number }}</span></td>
+        <td>
+          <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+            title="Edit contact">
+            <span class="material-symbols-outlined" style="font-size:24px;">
+              edit_square
+            </span>
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item">
+        {% if page_obj.has_previous %}
+        <a class="page-link" href="{% url "contact:list" %}?page={{ page_obj.previous_page_number }}"> Previous</a>
+        {% endif %}
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        {% if page_obj.has_next %}
+        <a class="page-link"  href="{% url "contact:list" %}?page={{ page_obj.next_page_number }}">Next </a>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
+  <div class="pagination">
+    <span class="step-links">
+     
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+      
+    </span>
+  </div>
+</div>
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
+<script>
+  function searchFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("prospectTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+{% endblock %}

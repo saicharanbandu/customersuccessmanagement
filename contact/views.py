@@ -29,7 +29,7 @@ class ContactCreateView(View):
             if 'profile_picture' in request.FILES:
                 contact_info_form.profile_picture = request.FILES['profile_picture']
             contact_info_form.save()
-            return redirect(reverse('contact:contact_list'))
+            return redirect(reverse('contact:list'))
         else:
             print(contact_info_form.errors)
             contact_info_form = contactForm.ContactForm(request.POST, request.FILES)
@@ -56,7 +56,7 @@ class MyPaginator(Paginator):
             
 class ContactListView(ListView):
     model = contactModel.Contact
-    template_name = 'contact_list.html'
+    template_name = 'list.html'
     context_object_name = 'contacts'
     paginate_by = 5
 

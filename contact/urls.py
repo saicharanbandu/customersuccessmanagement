@@ -7,6 +7,6 @@ from django.conf.urls.static import static
 app_name = 'contact'
 urlpatterns = [
     path('',views.index,name='index'),
-    path('form/',views.ContactCreateView.as_view(),name='contact_create_view'),
-     path('list/', views.ContactListView.as_view(), name='contact_list'),
+    path('form/',views.ContactCreateView.as_view(),name='create'),
+     path('list/', views.ContactListView.as_view(), name='list'),
 ]
