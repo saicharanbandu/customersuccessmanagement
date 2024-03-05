@@ -17,7 +17,7 @@ class ContactForm(forms.ModelForm):
         ]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
-            "designation": forms.TextInput(attrs={"class": "form-control mt-2"}),
+            "designation": forms.TextInput(attrs={"class": "form-control"}),
             "organization": forms.TextInput(
                 attrs={
                     "class": "form-control",

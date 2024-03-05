@@ -1,0 +1,53 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block top_nav %}
+{% include '_includes/top_nav.html' %}
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<form method="get" action="{% url 'customer:create' %}">
+  <input type="submit" class="btn btn-primary" value="New Customer">
+</form>
+<br>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th> </th>
+      <th>NAME</th>
+      <th>ADDRESS</th>
+      <th>Plan Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for customer in customers %}
+    <tr>
+      <td>
+        {% if customer.profile_picture %}
+        <img src="{{ customer.profile_picture.image.url }}" alt="Profile Picture" width="50">
+        {% else %}
+        <img src="{% static 'default/image.png' %}" alt="Default Profile Picture" width="50">
+        {% endif %}
+      </td>
+      <td>{{ customer.legal_name }}<br>{{ customer.display_name }}</td>
+
+      <td>
+        {{ customer.address }}<br>{{ customer.city }}<br>{{ customer.state }}<br>{{ customer.country }}<br>{{ customer.zip_code }}
+      </td>
+      {% for plan in customer.plans.all %}
+      <td>{{ plan.subscription_plan }}<br>{{ plan.duration_in_months }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% include '_includes/pagination.html' %}
+
+{% endblock %}

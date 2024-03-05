@@ -15,8 +15,8 @@ Customer Overview / Start Onboarding
 {% endblock %}
 
 {% block content %}
-<div>
-    <form class="" id="customerForm" action="{% url 'customer:create' %}" method="POST" data-url="{% url 'customer:ajax_load_states' %}">
+<div class="form-container">
+    <form class="" id="customerForm" action="{% url 'customer:create' %}" method="POST" data-url="{% url 'customer:ajax-load-states' %}">
         {% csrf_token %}
         {{ customer_info_form.as_p }}
         <input type="submit" class="btn btn-primary" value="Continue">

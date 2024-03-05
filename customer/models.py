@@ -9,6 +9,7 @@ import uuid
 class CustomerInfo(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     legal_name = models.CharField(max_length=55, verbose_name="Legal Name")
+    profile_picture = models.ImageField(upload_to="pictures", blank=True)
     display_name = models.CharField(max_length=55, verbose_name="Display Name")
     short_name = models.CharField(
         max_length=50, verbose_name="Short Name or Abbreviation"
@@ -32,7 +33,11 @@ class CustomerInfo(models.Model):
 class CustomerPlan(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     customer = models.ForeignKey(
-        CustomerInfo, to_field="uuid", on_delete=models.SET_NULL, null=True
+        CustomerInfo,
+        to_field="uuid",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="plans",
     )
     subscription_plan = models.ForeignKey(
         planModels.SubscriptionPlan,

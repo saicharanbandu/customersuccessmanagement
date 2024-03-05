@@ -15,8 +15,8 @@ Customer Overview / Start Onboarding / Select Plan
 {% endblock %}
 
 {% block content %}
-<div>
-    <form id="selectPlanForm" action="{% url 'customer:select_plan' customer_id %}" method="POST" data-plan-url="{% url 'plan:ajax_load_numbers' %}" data-amount-url="{% url 'plan:ajax_load_amount' %}">
+<div class="form-container">
+    <form id="selectPlanForm" action="{% url 'customer:select-plan' customer_id %}" method="POST" data-plan-url="{% url 'plan:ajax_load_numbers' %}" data-amount-url="{% url 'plan:ajax_load_amount' %}">
         {% csrf_token %}
         {{ plan_options_form.as_p }}
 

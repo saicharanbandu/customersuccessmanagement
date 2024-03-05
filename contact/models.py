@@ -3,7 +3,7 @@ from django.db import models
 
 class Contact(models.Model):
     name = models.CharField(max_length=55)
-    profile_picture = models.ImageField(upload_to='contact/profile_pictures',blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures',blank=True)
     designation = models.CharField(max_length=55)
     organization = models.CharField(max_length=55)
     mobile_number = models.BigIntegerField()
