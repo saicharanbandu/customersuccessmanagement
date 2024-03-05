@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views import View
-
-from customer import models as customerModels, forms as customerForms
+from django.core.paginator import Paginator, EmptyPage
+from . import models as customerModels, forms as customerForms
 from misc import models as miscModels
 from plan import models as planModels
+from django.views.generic import ListView
 
 class CustomerCreateView(View):
     template_name = 'customer/create_view.html'
@@ -70,8 +71,8 @@ class CustomerSelectPlanView(View):
             duration = plan_options_form.cleaned_data['duration']
 
             subscription_plan = planModels.SubscriptionPlan.objects.get(plan_type=plan_type, member_size=member_size)
-            customerModels.CustomerPlan.objects.create(customer_id=customer_id, plan=subscription_plan, duration_months=duration)
-            return redirect(reverse('customer:create'))
+            customerModels.CustomerPlan.objects.create(customer_id=customer_id, subscription_plan=subscription_plan, duration_in_months=duration)
+            return redirect(reverse('customer:customer_list'))
         
         context = {
             'title': self.title,
@@ -88,3 +89,39 @@ def load_states(request):
     print(states)
     return render(request, 'customer/state_dropdown_list.html', {'states': states})
 
+class MyPaginator(Paginator):
+    def validate_number(self, number):
+        try:
+            return super().validate_number(number)
+        except EmptyPage:
+            if int(number) > 1:
+                # return the last page
+                return self.num_pages
+            elif int(number) < 1:
+                # return the first page
+                return 1
+            else:
+                raise
+            
+class CustomerListView(ListView):
+    model = customerModels.CustomerInfo
+    template_name = 'customer/customer_list.html'
+    
+    context_object_name = 'customers'
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # queryset = queryset.select_related('plans')
+        return queryset.order_by('legal_name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page = self.request.GET.get('page', 1)
+        customers = self.get_queryset()
+        paginator = Paginator(customers, self.paginate_by)
+        customers = paginator.page(page)
+        for customer in customers:
+            print(customer.profile_picture)
+        context['customers'] = customers
+        return context
