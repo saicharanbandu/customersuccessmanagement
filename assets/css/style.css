@@ -15,7 +15,7 @@ main {
 }
 
 
-#contentContainer { 
+#contentContainer {
     padding: 2rem;
     margin-top: 5rem
 }
@@ -37,4 +37,61 @@ main {
 
 #rightPanelContainer {
     width: calc(100% - 300px);
+}
+
+
+
+/* Existing styles remain unchanged */
+
+/* Prospect FORM STYLES */
+
+/* New styles for bordered form */
+.bordered-form {
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    align-items: center;
+    /* Align items in the center */
+}
+
+/* New styles for bordered input */
+.bordered-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* New styles for bordered button */
+.bordered-button {
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.bordered-button:hover {
+    background-color: #45a049;
+}
+
+.bordered-button:focus {
+    outline: none;
+}
+
+.material-symbols-outlined {
+
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+
+
+
+.form-container {
+    width: 60%;
+    margin: auto;
 }
