@@ -65,7 +65,9 @@ class CustomerInfoForm(forms.ModelForm):
                 ).order_by('name')
             except (ValueError, TypeError):
                 pass
-
+        elif self.instance.pk:
+            if self.instance.state:
+                self.fields['state'].queryset = self.instance.country.state_set.order_by ('name')
 
 class CustomerPlanForm(forms.ModelForm):
     class Meta:

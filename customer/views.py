@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 from django.views import View
+from django.db.models import Q
 from django.views.generic import ListView
 
 from . import models as customerModels, forms as customerForms
@@ -25,7 +26,7 @@ class CustomerCreateView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        customer_info_form = customerForms.CustomerInfoForm(request.POST)
+        customer_info_form = customerForms.CustomerInfoForm(request.POST,request.FILES)
         
         if customer_info_form.is_valid():
             customer_info_object = customer_info_form.save()
@@ -94,7 +95,18 @@ class CustomerListView(ListView):
     title = 'Customer List'
     active_tab = 'customer'
     context_object_name = 'customers'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search")
+        if search_query:
+            print("a")
+            queryset = queryset.filter(
+                (Q(legal_name__istartswith=search_query) | Q(legal_name__icontains=' ' + search_query))
 
+                
+            )
+        return queryset.order_by("legal_name")
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)
         if (page_limit == 'all'):

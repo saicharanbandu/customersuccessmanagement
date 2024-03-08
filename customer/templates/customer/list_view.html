@@ -15,14 +15,15 @@
 {% block content %}
 <div class="container">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <form class="w-auto">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search">
-        <span class="input-group-text" id="search-addon">
-          <i class="fas fa-search"></i>
-        </span>
-      </div>
-    </form>
+  <form class="w-auto" method="GET" action="{% url 'customer:list' %}">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request.GET.search}}">
+      <button type="submit" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Search">
+      <span class="input-group-text" id="search-addon">
+        <i class="fas fa-search"></i>
+      </span>
+    </div>
+  </form>
     <a href="{% url 'customer:create' %}" class="btn btn-primary">
       <i class="fa-solid fa-plus me-2"></i>
       New customer
@@ -44,7 +45,7 @@
     <tr>
       <td>
         {% if customer.profile_picture %}
-        <img src="{{ customer.profile_picture.image.url }}" alt="Profile Picture" width="50">
+        <img src="{{ customer.profile_picture.url }}" alt="Profile Picture" width="50">
         {% else %}
         <img src="{% static 'default/image.png' %}" alt="Default Profile Picture" width="50">
         {% endif %}

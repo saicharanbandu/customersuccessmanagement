@@ -15,11 +15,48 @@
 
 {% block content %}
 <div class="form-container">
-    <form class="" id="customerForm" action="{% url 'customer:create' %}" method="POST" data-url="{% url 'customer:ajax-load-states' %}">
+    <form class="" id="customerForm" action="{% url 'customer:create' %}" method="POST" data-url="{% url 'customer:ajax-load-states' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ customer_info_form.as_p }}
-        <input type="submit" class="btn btn-primary" value="Continue">
-        <a href="{{ request.META.HTTP_REFERER }}" type="button" class="btn btn-secondary cancel-btn">Cancel</a>
+        {{ customer_info_form.legal_name.label_tag }}
+        {{ customer_info_form.legal_name }}
+       
+
+        {{ customer_info_form.profile_picture.label_tag }}
+        {{ customer_info_form.profile_picture }}
+        
+
+        {{ customer_info_form.display_name.label_tag }}
+        {{ customer_info_form.display_name }}
+        
+
+        {{ customer_info_form.short_name.label_tag }}
+        {{ customer_info_form.short_name }}
+     
+
+        {{ customer_info_form.address.label_tag }}
+        {{ customer_info_form.address }}
+       
+
+        {{ customer_info_form.city.label_tag }}
+        {{ customer_info_form.city }}
+      
+
+        {{ customer_info_form.country.label_tag }}
+        {{ customer_info_form.country }}
+        
+
+        {{ customer_info_form.state.label_tag }}
+        {{ customer_info_form.state }}
+       
+
+        {{ customer_info_form.zip_code.label_tag }}
+        {{ customer_info_form.zip_code }}
+       
+<br>
+        <div class="form-group mb-3">
+            <button type="submit" class="btn btn-primary">Continue</button>
+            <a href="{{ request.META.HTTP_REFERER }}" type="button" class="btn btn-secondary cancel-btn">Cancel</a>
+        </div>
     </form>
 </div>
 {% endblock %}

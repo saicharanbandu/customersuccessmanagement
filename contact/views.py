@@ -54,9 +54,8 @@ class ContactListView(ListView):
         if search_query:
             print("a")
             queryset = queryset.filter(
-                Q(name__icontains=search_query) |
-                Q(designation__icontains=search_query) |
-                Q(organization__icontains=search_query) 
+                (Q(name__istartswith=search_query) | Q(name__icontains=' ' + search_query))|
+                (Q(organization__istartswith=search_query) | Q(organization__icontains=' ' + search_query)) 
                 
             )
         return queryset.order_by("name")
