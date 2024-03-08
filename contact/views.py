@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.db.models import Q
 from django.views.generic import ListView
 from . import models as contactModel, forms as contactForm
 
@@ -49,6 +50,15 @@ class ContactListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        search_query = self.request.GET.get("search")
+        if search_query:
+            print("a")
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(designation__icontains=search_query) |
+                Q(organization__icontains=search_query) 
+                
+            )
         return queryset.order_by("name")
     
     def get_paginate_by(self, queryset):
@@ -66,3 +76,42 @@ class ContactListView(ListView):
         }
         context.update(more_context)
         return context
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
+
+class ContactEditView(View):
+    template_name = "contact/edit_view.html"
+    title = "Edit Contact"
+    active_tab = "contact"
+
+    def get(self, request, contact_id, *args, **kwargs):
+        contact = get_object_or_404(contactModel.Contact, id=contact_id)
+        contact_form = contactForm.ContactForm(instance=contact)
+
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "contact_form": contact_form,
+            "contact_id": contact_id,
+        }
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, contact_id, *args, **kwargs):
+        contact = get_object_or_404(contactModel.Contact, id=contact_id)
+        contact_info_form = contactForm.ContactForm(request.POST, request.FILES, instance=contact)
+        if contact_info_form.is_valid():
+            if 'profile_picture' in request.FILES:
+                contact_info_form.profile_picture = request.FILES['profile_picture']
+            contact_info_form.save()
+            return redirect(reverse("contact:list"))
+        else:
+            print(contact_info_form.errors)
+            contact_info_form = contactForm.ContactForm(instance=contact)
+            context = {
+                "title": self.title,
+                "active_tab": self.active_tab,
+                "contact_info_form": contact_info_form,
+                "contact_id": contact_id,
+            }
+            return render(request, self.template_name, context)

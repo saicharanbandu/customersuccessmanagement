@@ -36,16 +36,18 @@ class ContactForm(forms.ModelForm):
                 'class': 'form-control',
             }),
             'address':
-            forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows':4
-            }),
+           forms.TextInput(attrs={"class": "form-control"}),
              'profile_picture':
             forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'accept': 'image/*'
             }),
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['address'].initial = self.instance.address
+
 
     def mobile_number(self):
         mobile_number = self.cleaned_data["mobile_number"]

@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
@@ -11,7 +11,7 @@ from tabernacle_customer_success import constants
 
 class CustomerCreateView(View):
     template_name = 'customer/create_view.html'
-    title = 'Crustomer Information'
+    title = 'Customer Information'
     active_tab = 'customer'
 
     def get(self, request, *args, **kwargs):
@@ -110,3 +110,35 @@ class CustomerListView(ListView):
         }
         context.update(more_context)
         return context
+class CustomerEditView(View):
+    template_name = 'customer/edit_view.html'
+    title = 'Edit Customer'
+    active_tab = 'customer'
+
+    def get(self, request, *args, **kwargs):
+        customer_id = self.kwargs.get('customer_id')
+        customer_object = get_object_or_404(customerModels.CustomerInfo, uuid=customer_id)
+        customer_info_form = customerForms.CustomerInfoForm(instance=customer_object)
+
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_info_form': customer_info_form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        customer_id = self.kwargs.get('customer_id')
+        customer_object = get_object_or_404(customerModels.CustomerInfo, uuid=customer_id)
+        customer_info_form = customerForms.CustomerInfoForm(request.POST, instance=customer_object)
+
+        if customer_info_form.is_valid():
+            customer_info_form.save()
+            return redirect(reverse('customer:list'))
+
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_info_form': customer_info_form
+        }
+        return render(request, self.template_name, context)

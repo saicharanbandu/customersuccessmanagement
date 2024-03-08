@@ -13,9 +13,21 @@
 {% endblock %}
 
 {% block content %}
-<form method="get" action="{% url 'customer:create' %}">
-  <input type="submit" class="btn btn-primary" value="New Customer">
-</form>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <form class="w-auto">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search">
+        <span class="input-group-text" id="search-addon">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+    </form>
+    <a href="{% url 'customer:create' %}" class="btn btn-primary">
+      <i class="fa-solid fa-plus me-2"></i>
+      New customer
+    </a>
+  </div>
 <br>
 <table class="table table-striped">
   <thead>
@@ -24,6 +36,7 @@
       <th>NAME</th>
       <th>ADDRESS</th>
       <th>Plan Details</th>
+      <th scope="col">ACTIONS</th>
     </tr>
   </thead>
   <tbody>
@@ -44,6 +57,16 @@
       {% for plan in customer.plans.all %}
       <td>{{ plan.subscription_plan }}<br>{{ plan.duration_in_months }}</td>
       {% endfor %}
+      <td>
+        <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+          title="Edit contact">
+          
+            <a href="{% url 'customer:customer_edit' customer.uuid %}">
+          <span class="material-symbols-outlined" style="font-size:24px;">
+            edit_square
+          </span>
+        </button>
+      </td>
     </tr>
     {% endfor %}
   </tbody>

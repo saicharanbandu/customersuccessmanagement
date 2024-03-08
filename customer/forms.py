@@ -30,7 +30,7 @@ class CustomerInfoForm(forms.ModelForm):
             'profile_picture': forms.ClearableFileInput(
                 attrs={'class': 'form-control', 'accept': 'image/*'}
             ),
-            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.Select(
                 attrs={
                     'class': 'form-select',
