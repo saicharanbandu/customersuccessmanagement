@@ -1,10 +1,12 @@
 from django.db import models
 import uuid
+from django.contrib.postgres.fields import ArrayField
 
 
 class PlanType(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     name = models.CharField(max_length=30)
+    modules = ArrayField(models.CharField(max_length=50), size=30, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -33,3 +35,6 @@ class SubscriptionPlan(models.Model):
 
     def __str__(self):
         return f'{self.plan_type.name} [{self.member_size}]'
+    
+
+

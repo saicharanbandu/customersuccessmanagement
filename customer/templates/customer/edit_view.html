@@ -14,9 +14,9 @@
 
 {% block content %}
 
-<div class="container">
+<div class="form-container">
     <h1>{{ title }}</h1>
-    <form class="" method="POST" data-url="{% url 'customer:ajax-load-states' %}">
+    <form class="" method="POST" data-url="{% url 'customer:ajax-load-states' %}"  enctype="multipart/form-data">
       {% csrf_token %}
       {{ customer_info_form.as_p }}
       <input type="submit" class="btn btn-primary" value="Save Changes">

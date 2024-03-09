@@ -7,6 +7,7 @@ from . import models as contactModel, forms as contactForm
 
 from tabernacle_customer_success import constants
 
+
 class ContactCreateView(View):
     template_name = "contact/create_view.html"
     title = "Contact Directory"
@@ -26,8 +27,6 @@ class ContactCreateView(View):
     def post(self, request, *args, **kwargs):
         contact_info_form = contactForm.ContactForm(request.POST, request.FILES)
         if contact_info_form.is_valid():
-            if 'profile_picture' in request.FILES:
-                contact_info_form.profile_picture = request.FILES['profile_picture']
             contact_info_form.save()
             return redirect(reverse("contact:list"))
         else:
@@ -54,29 +53,37 @@ class ContactListView(ListView):
         if search_query:
             print("a")
             queryset = queryset.filter(
-                (Q(name__istartswith=search_query) | Q(name__icontains=' ' + search_query))|
-                (Q(organization__istartswith=search_query) | Q(organization__icontains=' ' + search_query)) 
-                
+                (
+                    Q(name__istartswith=search_query)
+                    | Q(name__icontains=" " + search_query)
+                )
+                | (
+                    Q(organization__istartswith=search_query)
+                    | Q(organization__icontains=" " + search_query)
+                )
             )
         return queryset.order_by("name")
-    
+
     def get_paginate_by(self, queryset):
-        page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)
-        if (page_limit == 'all'):
+        page_limit = self.request.GET.get("page_limit", constants.PAGINATION_LIMIT)
+        if page_limit == "all":
             page_limit = len(queryset)
-        return self.request.GET.get('paginate_by', page_limit)
+        return self.request.GET.get("paginate_by", page_limit)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         more_context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
+            "title": self.title,
+            "active_tab": self.active_tab,
         }
         context.update(more_context)
         return context
+
+
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+
 
 class ContactEditView(View):
     template_name = "contact/edit_view.html"
@@ -98,10 +105,10 @@ class ContactEditView(View):
 
     def post(self, request, contact_id, *args, **kwargs):
         contact = get_object_or_404(contactModel.Contact, id=contact_id)
-        contact_info_form = contactForm.ContactForm(request.POST, request.FILES, instance=contact)
+        contact_info_form = contactForm.ContactForm(
+            request.POST, request.FILES, instance=contact
+        )
         if contact_info_form.is_valid():
-            if 'profile_picture' in request.FILES:
-                contact_info_form.profile_picture = request.FILES['profile_picture']
             contact_info_form.save()
             return redirect(reverse("contact:list"))
         else:
