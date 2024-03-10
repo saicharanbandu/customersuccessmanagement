@@ -17,12 +17,9 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <form class="w-auto">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search">
-        <span class="input-group-text" id="search-addon">
-          <i class="fas fa-search"></i>
-        </span>
+          <input type="text" class="form-control" style="width:500px; height: 45px; font-weight: bold; border-radius: 50px; background-color:white;" placeholder=" Search">
       </div>
-    </form>
+  </form>
     <a href="{% url 'contact:create' %}" class="btn btn-primary">
       <i class="fa-solid fa-plus me-2"></i>
       New contact
@@ -31,37 +28,41 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">NAME & DESIGNATION</th>
-        <th scope="col">ORGANIZATION</th>
-        <th scope="col">ADDRESS</th>
-        <th scope="col">CONTACT</th>
-        <th scope="col">ACTIONS</th>
+        <th scope="col" style="color:#9CA195">NAME & DESIGNATION</th>
+        <th scope="col" style="color:#9CA195">ORGANIZATION</th>
+        <th scope="col" style="color:#9CA195">ADDRESS</th>
+        <th scope="col" style="color:#9CA195">CONTACT</th>
+        <th scope="col" style="color:#9CA195">ACTIONS</th>
       </tr>
     </thead>
     <tbody>
 
       {% for contact in contacts %}
       <tr>
-        <td>
+        <td >
           <span class="material-symbols-outlined" style="font-size:32px;">assignment_ind</span>
+          <span style="color:#1F0782">
           {{ contact.name }}
+          </span>
           <br>
-          <span class="text-muted" style="margin-left:30px"><span class="material-symbols-outlined">
+          <span class="text-muted1" style="margin-left:30px;"><span class="material-symbols-outlined">
               trip
             </span>
+            <span style="color:#1F0782">
             {{ contact.designation }}
+            </span>
           </span>
         </td>
-        <td>{{ contact.organization }}</td>
-        <td>{{ contact.address }}</td>
-        <td>{{ contact.email_id }}
+        <td style="color:#1F0782">{{ contact.organization }}</td>
+        <td style="color:#1F0782">{{ contact.address }}</td>
+        <td style="color:#1F0782">{{ contact.email_id }}
           <br>
-          <span class="text-muted">
+          <span class="text-muted1">
             (+91) {{ contact.mobile_number }}
           </span>
         </td>
         <td>
-          <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+          <button type="button" class="btn btn-link p-0"  data-bs-toggle="tooltip" data-bs-placement="top"
             title="Edit contact">
             <span class="material-symbols-outlined" style="font-size:24px;">
               edit_square

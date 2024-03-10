@@ -95,3 +95,6 @@ main {
     width: 60%;
     margin: auto;
 }
+.text-muted1 {
+    color: #1F0782 !important;
+}

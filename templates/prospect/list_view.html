@@ -11,23 +11,25 @@
 Prospect Overview / Prospect List
 <h2>{{ title }}</h2>
 </div>
-    <div class="bordered-form d-flex align-items-center">
+    <div class="bordered-form d-flex align-items-center" style="border-radius: 50px; width:25%; box-shadow: 2px 2px 10px rgba(0,0,0,0.6);">
         <form class="form-inline">
-            <input class="form-control mr-sm-2 bordered-input" type="search" placeholder="Search"
-        aria-label="Search" oninput="searchFunction()">
+            <input class="control mr-sm-2 bordered-input" style="border-radius: 50px; font-size: 1rem; padding: 0.3rem 0.5rem;" type="search" placeholder="Search" aria-label="Search" 
+                oninput="searchFunction()">
         </form>
-        <span class="material-symbols-outlined notifications-icon align-middle">notifications</span>
-        <span class="material-symbols-outlined align-middle">settings</span>
+        <span class="material-symbols-outlined notifications-icon align-middle" style="font-size: 1.5rem; padding: 0.2rem;"></span>
+        <span class="material-symbols-outlined align-middle" style="font-size: 1.5rem; padding: 0.2rem;">notifications</span>
+        <span class="material-symbols-outlined align-middle" style="font-size: 1.5rem; padding: 0.2rem;"></span>
+        <span class="material-symbols-outlined" style="font-size: 1.5rem; padding: 0.2rem;">settings</span>
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32"
-                    class="rounded-circle me-2">
+            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" style="padding: 0.2rem;">
             </a>
-            <ul class="dropdown-menu text-small shadow">
+            <ul class="dropdown-menu text-small shadow" style="font-size: 0.8rem;">
                 <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
                 <li><a class="dropdown-item" href="#">Log out</a></li>
             </ul>
         </div>
@@ -95,10 +97,7 @@ Prospect Overview / Prospect List
     <div class="d-flex justify-content-between align-items-center mb-3">
         <form class="w-auto">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-text" id="search-addon">
-                    <i class="fas fa-search"></i>
-                </span>
+                <input type="text" class="form-control" style="width:500px; height:45px; font-weight: bold; border-radius: 50px;" placeholder=" Search">
             </div>
         </form>
         <a href="{% url 'prospect:create' %}" class="btn btn-primary">
@@ -109,24 +108,24 @@ Prospect Overview / Prospect List
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">NAME</th>
-                <th scope="col">LOCATION</th>
-                <th scope="col">CONTACT PERSON</th>
-                <th scope="col">STATUS</th>
-                <th scope="col">REMARKS</th>
-                <th scope="col">ACTIONS</th>
+                <th scope="col" style="color:#9CA195">NAME</th>
+                <th scope="col" style="color:#9CA195">LOCATION</th>
+                <th scope="col" style="color:#9CA195">CONTACT PERSON</th>
+                <th scope="col" style="color:#9CA195">STATUS</th>
+                <th scope="col" style="color:#9CA195">REMARKS</th>
+                <th scope="col" style="color:#9CA195">ACTIONS</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Christ King Church, Kohima</td>
-                <td>Tinpati, Kohima Nagaland, 797001</td>
-                <td>Vlad Mihalache
+                <td style="color:#1F0782">Christ King Church, Kohima</td>
+                <td  style="color:#1F0782">Tinpati, Kohima Nagaland, 797001</td>
+                <td  style="color:#1F0782">Vlad Mihalache
                     <br> <span class="material-symbols-outlined" style="font-size: 20px;">
                         call
                         </span>(+91) 908765432</td>
-                        <td class>
-                            <span style="background-color:#ACA4A6; border-radius: 45%; padding: 10px 15px; font-size: 16px;">Appointment Requested</span>
+                        <td >
+                            <span style="background-color:#FFAAAA; font-weight: bold; border-radius: 30px; color: #FF5144; padding: 10px 15px; font-size: 16px; font-color:#566573 ">APPOINTMENT REQUESTED</span>
                             <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="To follow up after 2 weeks">
                             <span class="material-symbols-outlined"  style="margin-left: 10px ;">schedule</span>
                         </button>
@@ -146,13 +145,13 @@ Prospect Overview / Prospect List
                             </span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined" >
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined" >
                                 edit
                                 </span>Edit info</a>
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined">
                                 change_circle
                                 </span>Change status</a>
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined">
                                 info_i
                                 </span>Update remarks</a>
                         </div>
@@ -160,12 +159,12 @@ Prospect Overview / Prospect List
                 </td>
             </tr>
             <tr>
-                <td>Christ King Church, Kohima</td>
-                <td>Tinpati, Kohima Nagaland, 797001</td>
-                <td>Vlad Mihalache <br><span class="material-symbols-outlined" style="font-size: 20px;">
+                <td style="color:#1F0782">Christ King Church, Kohima</td>
+                <td style="color:#1F0782">Tinpati, Kohima Nagaland, 797001</td>
+                <td style="color:#1F0782">Vlad Mihalache <br><span class="material-symbols-outlined" style="font-size: 20px;">
                     call
                     </span>(+91) 908765432</td>
-                <td><span style="background-color:#FF18FF; border-radius: 45%; padding: 10px 15px; font-size: 16px;">Meeting Scheduled</span>
+                <td><span style="background-color:#49FFC4; font-weight: bold; border-radius: 30px; padding: 10px 15px;color: #217358; font-size: 16px;">MEETING SCHEDULED</span>
                     <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="metting scheduleon 01/03/24 at 2pm">
                         <span class="material-symbols-outlined" style="margin-left: 10px ;">
                             calendar_month
@@ -187,13 +186,13 @@ Prospect Overview / Prospect List
                             </span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined">
                                 edit
                                 </span>Edit info</a>
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined">
                                 change_circle
                                 </span>Change status</a>
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined">
                                 info_i
                                 </span>Update remarks</a>
                         </div>
@@ -201,12 +200,12 @@ Prospect Overview / Prospect List
                 </td>
             </tr>
             <tr>
-                <td>Christ King Church, Kohima</td>
-                <td>Tinpati, Kohima Nagaland, 797001</td>
-                <td>Vlad Mihalache<br><span class="material-symbols-outlined" style="font-size: 20px;">
+                <td style="color:#1F0782">Christ King Church, Kohima</td>
+                <td style="color:#1F0782">Tinpati, Kohima Nagaland, 797001</td>
+                <td style="color:#1F0782">Vlad Mihalache<br><span class="material-symbols-outlined" style="font-size: 20px;">
                     call
                     </span> (+91) 908765432</td>
-                <td><span style="background-color:#F4F524; border-radius: 45%; padding: 10px 15px; font-size: 16px;">Awaiting Response</span>
+                <td><span style="background-color:#FFFFD1; font-weight: bold; color: #B3A301; border-radius: 30px; padding: 10px 15px; font-size: 16px;">AWAITING RESPONSE</span>
                 </td>
                 <td>
                     <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="To follow up after 2 weeks">
@@ -223,20 +222,19 @@ Prospect Overview / Prospect List
                             </span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#" ><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#" ><span class="material-symbols-outlined">
                                 edit
                                 </span>Edit info</a>
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined">
                                 change_circle
                                 </span>Change status</a>
-                            <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            <a class="dropdown-item" style="color:#1F0782" href="#"><span class="material-symbols-outlined">
                                 info_i
                                 </span>Update remarks</a>
                         </div>
                     </div>
                 </td>
             </tr>
-            <!-- Add more rows as needed -->
         </tbody>
     </table>
     <nav aria-label="Page navigation example">
@@ -258,26 +256,5 @@ Prospect Overview / Prospect List
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
       return new bootstrap.Tooltip(tooltipTriggerEl)
     })
-  </script>
-  <script>
-    function searchFunction() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("prospectTable");
-        tr = table.getElementsByTagName("tr");
-    
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-    }
   </script>
 {% endblock %}

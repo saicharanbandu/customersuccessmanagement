@@ -21,6 +21,7 @@ class ContactForm(forms.ModelForm):
             "organization": forms.TextInput(
                 attrs={
                     "class": "form-control",
+                    "style": "color: red;"
                 }
             ),
             'mobile_number':
