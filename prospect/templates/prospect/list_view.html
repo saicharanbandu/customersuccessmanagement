@@ -1,0 +1,115 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block top_nav %}
+<div class="d-flex justify-content-end mt-3">
+    <div class="w-100 mr-3">
+        Prospect Overview / Prospect List
+        <h2>{{ title }}</h2>
+    </div>
+    <div class="bordered-form d-flex align-items-center">
+        <form class="form-inline">
+            <input class="form-control mr-sm-2 bordered-input" type="search" placeholder="Search" aria-label="Search"
+                oninput="searchFunction()">
+        </form>
+        <span class="material-symbols-outlined notifications-icon align-middle">notifications</span>
+        <span class="material-symbols-outlined align-middle">settings</span>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Log out</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'prospect:create' %}" class="btn btn-primary">
+    <i class="fa-solid fa-plus me-2"></i>
+    New Prospect
+</a>
+<h5> List of prospects</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">NAME</th>
+            <th scope="col">LOCATION</th>
+            <th scope="col">CONTACT PERSON</th>
+            <th scope="col">STATUS</th>
+            <th scope="col">REMARKS</th>
+            <th scope="col">ACTIONS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for prospect in prospects %}
+
+        <tr>
+            <td>{{ prospect.prospect_name }}</td>
+            <td>{{ prospect.street_loc }}, <br> {{ prospect.city }}, {{ prospect.state }} {{ prospect.country }}</td>
+            <td>
+                Vlad Mihalache
+                <br> <span class="material-symbols-outlined" style="font-size: 20px;">
+                    call
+                </span>(+91) 908765432
+            </td>
+            <td class>
+                <span
+                    style="background-color:#ACA4A6; border-radius: 45%; padding: 10px 15px; font-size: 16px;">Appointment
+                    Requested</span>
+                <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="To follow up after 2 weeks">
+                    <span class="material-symbols-outlined" style="margin-left: 10px ;">schedule</span>
+                </button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="To follow up after 2 weeks">
+                    <span class="material-symbols-outlined" style="font-size:24px;">
+                        info
+                    </span>
+                </button>
+            </td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0;">
+                        <span class="material-symbols-outlined" style="font-size:24px;">
+                            more_vert
+                        </span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                                edit
+                            </span>Edit info</a>
+                        <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                                change_circle
+                            </span>Change status</a>
+                        <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                                info_i
+                            </span>Update remarks</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        <!-- Add more rows as needed -->
+    </tbody>
+</table>
+
+{% endblock %}

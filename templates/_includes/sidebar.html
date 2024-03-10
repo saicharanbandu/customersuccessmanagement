@@ -21,7 +21,13 @@
             </a>
         </li>
         <li>
-            <a href="{% url 'customer:create' %}" class="nav-link {% if active_tab == 'customer' %} active {% else %} link-body-emphasis {% endif %}">
+            <a href="#" class="nav-link  {% if active_tab == 'usage' %} active {% else %} link-body-emphasis {% endif %}">
+                <i class="fa-solid fa-indian-rupee-sign me-2"></i>
+                Revenue
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'customer:list' %}" class="nav-link {% if active_tab == 'customer' %} active {% else %} link-body-emphasis {% endif %}">
                 <i class="fa-solid fa-users me-2"></i>
                 Customers
             </a>

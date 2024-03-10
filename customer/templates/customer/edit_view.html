@@ -1,0 +1,47 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block top_nav %}
+{% include '_includes/top_nav.html' %}
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <h1>{{ title }}</h1>
+    <form class="" method="POST" data-url="{% url 'customer:ajax-load-states' %}"  enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ customer_info_form.as_p }}
+      <input type="submit" class="btn btn-primary" value="Save Changes">
+      <a href="{{ request.META.HTTP_REFERER }}" type="button" class="btn btn-secondary cancel-btn">Cancel</a>
+    </form>
+  </div>
+    <script>
+      $(document).ready(function() {
+        $('form').on('submit', function(event) {
+          event.preventDefault();
+          var form = $(this);
+          var url = form.data('url');
+          var country_id = form.find('#id_country').val();
+
+          $.ajax({
+            url: url,
+            data: {
+              'country_id': country_id
+            },
+            success: function(data) {
+              form.find('#id_state').html(data);
+            }
+          });
+        });
+      });
+    </script>
+  </div>
+{% endblock %}

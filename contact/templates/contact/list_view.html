@@ -1,0 +1,84 @@
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block top_nav %}
+{% include '_includes/top_nav.html' %}
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <form class="w-auto" method="GET" action="{% url 'contact:list' %}">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request.GET.search}}">
+        <button type="submit" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Search">
+        <span class="input-group-text" id="search-addon">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+    </form>
+    <a href="{% url 'contact:create' %}" class="btn btn-primary">
+      <i class="fa-solid fa-plus me-2"></i>
+      New contact
+    </a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">NAME & DESIGNATION</th>
+        <th scope="col">ORGANIZATION</th>
+        <th scope="col">ADDRESS</th>
+        <th scope="col">CONTACT</th>
+        <th scope="col">ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for contact in contacts %}
+      <tr>
+        <td>
+          {% if contact.profile_picture %}
+          <img src="{{ contact.profile_picture.url }}" alt="Profile Picture" width="50">
+          {% else %}
+          <img src="{% static 'default/image.png' %}" alt="Default Profile Picture" width="50">
+          {% endif %}
+          {{ contact.name }}
+          <br>
+          <span class="text-muted" style="margin-left:30px"><span class="material-symbols-outlined">
+              trip
+            </span>
+            {{ contact.designation }}
+          </span>
+        </td>
+        <td>{{ contact.organization }}</td>
+        <td>{{ contact.address }}</td>
+        <td>{{ contact.email_id }}
+          <br>
+          <span class="text-muted">
+            (+91) {{ contact.mobile_number }}
+          </span>
+        </td>
+        <td>
+          <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+            title="Edit contact">
+            <a href="{% url 'contact:edit' contact.id %}">
+            <span class="material-symbols-outlined" style="font-size:24px;">
+              edit_square
+            </span>
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% include '_includes/pagination.html' %}
+
+</div>
+{% endblock %}

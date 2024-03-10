@@ -37,6 +37,8 @@ main {
 
 #rightPanelContainer {
     width: calc(100% - 300px);
+    max-height: 100vh; /* Set the maximum height to 100% of the viewport height */
+    overflow-y: auto; /* Allow vertical scrolling when content overflows the container */
 }
 
 
