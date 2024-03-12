@@ -1,18 +1,31 @@
+{% extends "_includes/base.html" %}
 
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block top_nav %}
+{% include '_includes/top_nav.html' %}
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
 
 {% block content %}
-    <h1>User information</h1>
-    <div class="form-container">
-      <form class=""  method="post">
-        {{customer_userpermission_form.as_p}}
-        {% if subscription_plan %}
-        {% for module in plan_type.modules %}
-      <div class="form-check">
-        {% comment %} <input class="form-check-input" type="radio" value="{{ module }}" id="{{ module }}-module" {% if module in selected_modules %}checked{% endif %}> {% endcomment %}
-        <label class="form-check-label" for="{{ module }}-module">
-          {{ module }}
-        </label>
-      </div>
+<h1>User information</h1>
+<div class="form-container">
+  <form class="" method="post">
+    {{customer_userpermission_form.as_p}}
+    {% if subscription_plan %}
+    {% for module in plan_type.modules %}
+    <div class="form-check">
+      <label class="form-check-label" for="{{ module }}-module">
+        {{ module }}
+      </label>
+    </div>
     {% endfor %}
     {% endif %}
-    {% endblock %}
+  </form>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@ from django import forms
 from . import models as customerModels
 from misc import models as miscModels
 from plan import models as planModels
-
+from tabernacle_customer_success import constants
 
 class CustomerInfoForm(forms.ModelForm):
     class Meta:
@@ -107,12 +107,37 @@ class CustomerUserForm(forms.ModelForm):
             'mobile_no': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
-class UserAppPermissionsForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(UserAppPermissionsForm, self).__init__(*args, **kwargs)
-        self.fields['access_role'].initial = 'editor'
-    
+
+class AddUserAppPermissionsForm(forms.ModelForm):
+    has_access = forms.CharField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input module-permission'}))
+    access_role = forms.ChoiceField(required=False, choices=constants.STAFF_ACCESS_ROLE_CHOICES, widget=forms.Select(attrs={'class': 'form-select',}))
+    module_name = forms.CharField(widget=forms.TextInput(), required=False)
 
     class Meta:
         model = customerModels.UserAppPermissions
         fields = ['module', 'access_role']
+        widgets = {
+            'module': forms.HiddenInput(),
+        }
+
+
+class EditUserAppPermissionsForm(forms.ModelForm):
+    has_access = forms.CharField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input module-permission'}))
+    access_role = forms.ChoiceField(required=False, choices=constants.STAFF_ACCESS_ROLE_CHOICES, widget=forms.Select(attrs={'class': 'form-select',}))
+   
+    class Meta:
+        model = customerModels.UserAppPermissions
+        fields = ['user', 'module', 'access_role']
+        widgets = {
+            'user': forms.HiddenInput(),
+            'module': forms.HiddenInput(),
+        }
+
+    # def __init__(self, *args, **kwargs):
+    #     super(UserAppPermissionsForm, self).__init__(*args, **kwargs)
+    #     self.fields['access_role'].initial = 'editor'
+    
+
+    # class Meta:
+    #     model = customerModels.UserAppPermissions
+    #     fields = ['module', 'access_role']

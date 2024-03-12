@@ -1,49 +1,65 @@
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8" />
-    <title></title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <h1>User information</h1>
-    <div class="container">
-      <form class=""  method="POST">
-        {% csrf_token %}
-        
-        {{ customer_user_form.full_name.label }}
-       {{ customer_user_form.full_name }}
-        
+{% extends "_includes/base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block top_nav %}
+{% include '_includes/top_nav.html' %}
+{% endblock %}
+
+{% block side_nav %}
+{% include '_includes/sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form class="" method="POST">
+    {% csrf_token %}
+
+    {{ customer_user_form.full_name.label }}
+    {{ customer_user_form.full_name }}
+
+    {{ customer_user_form.designation.label }}
+    {{ customer_user_form.designation }}
+
+    {{ customer_user_form.mobile_no.label }}
+    {{ customer_user_form.mobile_no }}
+
+    {{ customer_user_form.email.label }}
+    {{ customer_user_form.email }}
 
 
-        {{ customer_user_form.designation.label }}
-        {{ customer_user_form.designation }}
+    <h6>Permissions</h6>
+    <div class="row border-bottom">
+      {{ user_app_permissions_formset.management_form }}
 
-        {{ customer_user_form.mobile_no.label }}
-        {{ customer_user_form.mobile_no }}
-
-        {{ customer_user_form.email.label }}
-        {{ customer_user_form.email }}
-      
-        
-        {% if subscription_plan %}
-        {{ subscription_plan.plan_type }}
-        
-        {% for module in plan_type.modules %}
-    {{module}}
-        
-    {% endfor %}
-    {% endif %}
-    <br>
-        <input type="submit" class="btn btn-primary" value="Go Back" />
-        <input type="submit" class="btn btn-primary" value="ADD NEXT USER" />
-        <input type="submit" class="btn btn-primary" value="Done" />
-      </form>
+      {% for user_app_permissions_form in user_app_permissions_formset %}
+      <div class="col-6">
+        <div class="row">
+          <div class="col-md-2 m-3">
+            <div class="d-flex">
+              <div class="form-check form-switch mx-2 col-form-label" data-module="{{user_app_permissions_form.module.value}}">
+                {{ user_app_permissions_form.has_access }}
+              </div>
+              <div class="me-2 text-uppercase col-form-label">
+                {{ user_app_permissions_form.module.value }}
+                {{ user_app_permissions_form.module }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 m-3 {% if not user_app_permissions_form.access_role.value %}d-none{% endif %}"
+            id="roleFor{{user_app_permissions_form.module.value}}">
+            {{ user_app_permissions_form.access_role }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
-
-  </body>
-</html>
+    <br>
+    <input type="submit" class="btn btn-primary" value="Go Back" />
+    <input type="submit" class="btn btn-primary" value="ADD NEXT USER" />
+    <input type="submit" class="btn btn-primary" value="Done" />
+  </form>
+</div>
+{% endblock %}

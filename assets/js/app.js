@@ -56,3 +56,17 @@ $(document).ready(function () {
         });
     });
 });
+
+
+// Show/hide the viewer/editor select box on select of module
+$('.module-permission').on('change', function () {
+    let module = $(this).parent().attr('data-module');
+
+    if ($(this).is(':checked')) {
+        $(`#roleFor${module}`).removeClass('d-none');
+    }
+    else {
+        $(`#roleFor${module}`).addClass('d-none');
+
+    }
+})
