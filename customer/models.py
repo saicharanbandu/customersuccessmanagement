@@ -74,7 +74,7 @@ class CustomerUser(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.profile.full_name} [{self.church.name}]"
+        return f"{self.full_name}"
 
     class Meta:
         verbose_name = "staff"

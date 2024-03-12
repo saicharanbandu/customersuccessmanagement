@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views import View
 from django.db.models import Q
 from django.views.generic import ListView
-
+import uuid
 from . import models as customerModels, forms as customerForms
 from misc import models as miscModels
 from plan import models as planModels
@@ -85,12 +85,14 @@ class CustomerSelectPlanView(View):
                 subscription_plan=subscription_plan,
                 duration_in_months=duration,
             )
-            return redirect(reverse("customer:list"))
+            request.session["selected_subscription_plan"] = str(subscription_plan.uuid)
+            return redirect(reverse("customer:user-create",kwargs={'customer_id': customer_id}))
 
         context = {
             "title": self.title,
             "active_tab": self.active_tab,
             "plan_options_form": plan_options_form,
+            "subscription_plan": subscription_plan,
         }
         return render(request, self.template_name, context)
 
@@ -174,5 +176,69 @@ class CustomerEditView(View):
             "title": self.title,
             "active_tab": self.active_tab,
             "customer_info_form": customer_info_form,
+        }
+        return render(request, self.template_name, context)
+
+
+class UserCreateView(View):
+    model = customerModels.CustomerUser
+    template_name = "customer/form_user.html"
+    title = "User Information"
+    active_tab = "customer"
+
+    def get(self, request, *args, **kwargs):
+        customer_user_form = customerForms.CustomerUserForm()
+        customer_userpermission_form = customerForms.UserAppPermissionsForm()
+        if "selected_subscription_plan" in request.session:
+            subscription_plan = planModels.SubscriptionPlan.objects.get(
+                uuid=request.session["selected_subscription_plan"]
+            )
+            plan_type = subscription_plan.plan_type
+            request.session.pop("selected_subscription_plan", None)
+        else:
+            subscription_plan = None
+            plan_type = None
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "customer_user_form": customer_user_form,
+            "customer_userpermission_form": customer_userpermission_form,
+            "subscription_plan": subscription_plan,
+            "plan_type": plan_type,
+            "selected_modules": [],
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        customer_id = self.kwargs.get("customer_id")
+        customer_info_object = get_object_or_404(customerModels.CustomerInfo, uuid=customer_id)
+        customer_user_form = customerForms.CustomerUserForm(request.POST)
+        customer_userpermission_form = customerForms.UserAppPermissionsForm(request.POST)
+
+        if customer_user_form.is_valid():
+            customer_user_object = customer_user_form.save(commit=False)
+            customer_user_object.customer = customer_info_object
+            customer_user_object.save()
+            customer_user = customerModels.CustomerUser.objects.get(uuid=uuid)
+            selected_module = request.POST.getlist("modules")
+            selected_module = selected_module[0] if selected_module else None
+            new_user_app_permission = customerForms.UserAppPermissionsForm(
+            user=customer_user,
+            module="some_module",
+            access_role="some_role"
+            )
+            new_user_app_permission.save()
+            return redirect(
+                reverse(
+                    "customer:list"
+                )
+            )
+
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "customer_user_form": customer_user_form,
+            "selected_module": selected_module,
+            "customer_userpermission_form": customer_userpermission_form,
         }
         return render(request, self.template_name, context)

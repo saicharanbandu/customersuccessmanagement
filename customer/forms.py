@@ -96,3 +96,23 @@ class PlanOptionsForm(forms.Form):
                 )
             except (ValueError, TypeError):
                 pass
+class CustomerUserForm(forms.ModelForm):
+    class Meta:
+        model = customerModels.CustomerUser
+        fields = ['full_name', 'designation', 'mobile_no', 'email']
+
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'designation': forms.TextInput(attrs={'class': 'form-control'}),
+            'mobile_no': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+class UserAppPermissionsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserAppPermissionsForm, self).__init__(*args, **kwargs)
+        self.fields['access_role'].initial = 'editor'
+    
+
+    class Meta:
+        model = customerModels.UserAppPermissions
+        fields = ['module', 'access_role']

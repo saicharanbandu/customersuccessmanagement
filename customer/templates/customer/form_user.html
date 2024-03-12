@@ -12,12 +12,38 @@
   <body>
     <h1>User information</h1>
     <div class="container">
-      <form class=""  method="post">
+      <form class=""  method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class="btn " value="ADD NEXT USER" />
+        
+        {{ customer_user_form.full_name.label }}
+       {{ customer_user_form.full_name }}
+        
+
+
+        {{ customer_user_form.designation.label }}
+        {{ customer_user_form.designation }}
+
+        {{ customer_user_form.mobile_no.label }}
+        {{ customer_user_form.mobile_no }}
+
+        {{ customer_user_form.email.label }}
+        {{ customer_user_form.email }}
+      
+        
+        {% if subscription_plan %}
+        {{ subscription_plan.plan_type }}
+        
+        {% for module in plan_type.modules %}
+    {{module}}
+        
+    {% endfor %}
+    {% endif %}
+    <br>
+        <input type="submit" class="btn btn-primary" value="Go Back" />
+        <input type="submit" class="btn btn-primary" value="ADD NEXT USER" />
         <input type="submit" class="btn btn-primary" value="Done" />
       </form>
     </div>
+
   </body>
 </html>
