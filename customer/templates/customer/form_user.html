@@ -7,7 +7,7 @@
 {% block top_nav %}
 {% include '_includes/top_nav.html' %}
 {% endblock %}
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% block side_nav %}
 {% include '_includes/sidebar.html' %}
 {% endblock %}
@@ -57,9 +57,21 @@
       {% endfor %}
     </div>
     <br>
+    <input type="hidden" id="next" name="next" value="">
     <input type="submit" class="btn btn-primary" value="Go Back" />
-    <input type="submit" class="btn btn-primary" value="ADD NEXT USER" />
-    <input type="submit" class="btn btn-primary" value="Done" />
+    <input type="submit" class="btn btn-primary" name="add_next_user" value="ADD NEXT USER" />
+    <input type="submit" class="btn btn-primary" name="done" value="Done" />
+    <script>
+      $('input[name="add_next_user"]').click(function() {
+        $('input[name="next"]').val('customer:user-add');
+        console.log("Value of 'next':", $('#next').val());
+      });
+      
+      $('input[name="done"]').click(function() {
+        $('input[name="next"]').val('customer:list');
+      });
+    </script>
   </form>
 </div>
+
 {% endblock %}

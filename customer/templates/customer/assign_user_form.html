@@ -13,19 +13,73 @@
 {% endblock %}
 
 {% block content %}
-<h1>User information</h1>
-<div class="form-container">
-  <form class="" method="post">
-    {{customer_userpermission_form.as_p}}
-    {% if subscription_plan %}
-    {% for module in plan_type.modules %}
-    <div class="form-check">
-      <label class="form-check-label" for="{{ module }}-module">
-        {{ module }}
-      </label>
-    </div>
+<div class="col-md-4">
+  
+  <ol>
+    {% for user in users %}
+      <li>{{ user.full_name }} {{ user.designation }}</li>
+    
     {% endfor %}
-    {% endif %}
+  </ol>
+</div>
+<div class="container">
+  <form class="" method="POST">
+    {% csrf_token %}
+
+    {{ customer_user_form.full_name.label }}
+    {{ customer_user_form.full_name }}
+
+    {{ customer_user_form.designation.label }}
+    {{ customer_user_form.designation }}
+
+    {{ customer_user_form.mobile_no.label }}
+    {{ customer_user_form.mobile_no }}
+
+    {{ customer_user_form.email.label }}
+    {{ customer_user_form.email }}
+
+
+    <h6>Permissions</h6>
+    <div class="row border-bottom">
+      {{ user_app_permissions_formset.management_form }}
+
+      {% for user_app_permissions_form in user_app_permissions_formset %}
+      <div class="col-6">
+        <div class="row">
+          <div class="col-md-2 m-3">
+            <div class="d-flex">
+              <div class="form-check form-switch mx-2 col-form-label" data-module="{{user_app_permissions_form.module.value}}">
+                {{ user_app_permissions_form.has_access }}
+              </div>
+              <div class="me-2 text-uppercase col-form-label">
+                {{ user_app_permissions_form.module.value }}
+                {{ user_app_permissions_form.module }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 m-3 {% if not user_app_permissions_form.access_role.value %}d-none{% endif %}"
+            id="roleFor{{user_app_permissions_form.module.value}}">
+            {{ user_app_permissions_form.access_role }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <br>
+    <input type="hidden" id="next" name="next" value="">
+    <input type="submit" class="btn btn-primary" value="Go Back" />
+    <input type="submit" class="btn btn-primary" name="add_next_user" value="ADD NEXT USER" />
+    <input type="submit" class="btn btn-primary" name="done" value="Done" />
+    <script>
+      $('input[name="add_next_user"]').click(function() {
+        $('input[name="next"]').val('customer:user-add');
+        console.log("Value of 'next':", $('#next').val());
+      });
+      
+      $('input[name="done"]').click(function() {
+        $('input[name="next"]').val('customer:list');
+      });
+    </script>
   </form>
 </div>
 {% endblock %}
