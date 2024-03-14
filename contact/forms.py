@@ -21,7 +21,6 @@ class ContactForm(forms.ModelForm):
             "organization": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "style": "color: red;"
                 }
             ),
             'mobile_number':
@@ -37,10 +36,10 @@ class ContactForm(forms.ModelForm):
                 'class': 'form-control',
             }),
             'address':
-           forms.TextInput(attrs={"class": "form-control"}),
+           forms.Textarea(attrs={"class": "form-control", "rows":"4"}),
              'profile_picture':
             forms.ClearableFileInput(attrs={
-                'class': 'form-control',
+                'class': 'form-control file-upload-info',
                 'accept': 'image/*'
             }),
         }

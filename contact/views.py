@@ -10,7 +10,7 @@ from tabernacle_customer_success import constants
 
 class ContactCreateView(View):
     template_name = "contact/create_view.html"
-    title = "Contact Directory"
+    title = "New Contact"
     active_tab = "contact"
 
     def get(self, request, *args, **kwargs):

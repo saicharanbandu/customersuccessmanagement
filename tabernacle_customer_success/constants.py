@@ -1,4 +1,4 @@
-PAGINATION_LIMIT = '5'
+PAGINATION_LIMIT = '10'
 
 VIEWER = 'viewer'
 EDITOR = 'editor'

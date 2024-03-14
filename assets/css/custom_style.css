@@ -1,0 +1,43 @@
+body, html {
+    font-size: 14px !important;
+}
+
+table th {
+    font-size: 0.65rem !important;
+    color: #76838f !important;
+}
+
+
+.name-group .description {
+    font-size:  0.75rem;
+    padding-top: 0.75rem;
+}
+
+
+.name-group .description, .name-group .description i {
+    color: #8f9091;
+}
+
+.contact-group i {
+    color: #8f9091;
+    margin-right: 0.5rem;
+}
+
+.contact-group div {
+    padding: 0.35rem 0;
+}
+
+.address p {
+    line-height: 1.25rem;
+    margin: 0;
+}
+
+.table-photo {
+    width: 5rem;
+    overflow: hidden;
+}
+
+.form-container {
+    width: 70%;
+    margin: auto;
+}

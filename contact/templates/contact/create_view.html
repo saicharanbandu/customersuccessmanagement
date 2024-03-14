@@ -1,23 +1,30 @@
-{% extends "_includes/base.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block top_nav %}
-{% include '_includes/top_nav.html' %}
+{% block navbar %}
+{% include '_partials/_navbar.html' %}
 {% endblock %}
 
-{% block side_nav %}
-{% include '_includes/sidebar.html' %}
+{% block sidebar %}
+{% include '_partials/_sidebar.html' %}
+{% endblock %}
+
+{% block page_title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'contact:list' %}">Contact Directory</a></li>
+  <li class="breadcrumb-item active" aria-current="page">New Contact</li>
+</ol>
 {% endblock %}
 
 {% block content %}
-
 <div class="form-container">
-  <div class="header">
-    <h1 style="color: #0C0482">New Contact</h1>
-  </div>
   {% include 'contact/contact_form.html' %}
 </div>
 {% endblock %}

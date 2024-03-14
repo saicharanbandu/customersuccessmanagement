@@ -1,0 +1,72 @@
+{% load paginator_helper %}
+<div class="row mt-4">
+    <div class="col-6 my-auto">
+        <div >Showing
+            {{ page_obj.start_index }}&nbsp;to
+            {{ page_obj.end_index }}&nbsp;of
+            {{ page_obj.paginator.count }}&nbsp;entries
+        </div>
+    </div>
+    <div class="col-6">
+        <nav class="pagination-wrapper" aria-label="Page navigation">
+            <ul class="pagination justify-content-end">
+                {% if page_obj.has_previous %}
+                <li class="page-item ">
+                    <a class="page-link" href="{% relative_url 1 'page' request.GET.urlencode %}"
+                        tabindex="-1">&laquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1">&laquo;</a>
+                </li>
+                {% endif %}
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link"
+                        href="{% relative_url page_obj.previous_page_number 'page' request.GET.urlencode %}">Prev</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">Prev</span></li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                {% if i < page_obj.number and i >= page_obj.number|add:"-2" and i != page_obj.number and i != 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% relative_url i 'page' request.GET.urlencode %}">{{ i }}
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                {% elif i > page_obj.number and i <= page_obj.number|add:"2" and i != page_obj.number and i != page_obj.paginator.num_pages %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="{% relative_url i 'page' request.GET.urlencode %}">{{ i }} <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                {% elif page_obj.number == i %}
+                <li class="page-item active">
+                    <a class="page-link"
+                        href="{% relative_url i 'page' request.GET.urlencode %}">{{ i }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="{% relative_url page_obj.next_page_number 'page' request.GET.urlencode %}">Next</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link">Next</span></li>
+                {% endif %}
+                {% if page_obj.has_next %}
+                <li class="page-item ">
+                    <a class="page-link"
+                        href="{% relative_url page_obj.paginator.num_pages 'page' request.GET.urlencode %}"
+                        tabindex="-1">&raquo;</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>

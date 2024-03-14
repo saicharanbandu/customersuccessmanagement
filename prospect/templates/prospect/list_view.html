@@ -1,8 +1,31 @@
-{% extends "_includes/base.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 
 {% block head_title %}{{ title }}{% endblock %}
+
+{% block navbar %}
+{% include '_partials/_navbar.html' %}
+{% endblock %}
+
+{% block sidebar %}
+{% include '_partials/_sidebar.html' %}
+{% endblock %}
+
+{% block page_title %}
+<span class="page-title-icon bg-gradient-primary text-white me-2">
+    <i class="mdi mdi-bullseye"></i>
+</span>
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">
+        <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+    </li>
+</ul>
+{% endblock %}
 
 {% block top_nav %}
 <div class="d-flex justify-content-end mt-3">
@@ -36,7 +59,7 @@
 {% endblock %}
 
 {% block side_nav %}
-{% include '_includes/sidebar.html' %}
+{% include '_partials/sidebar.html' %}
 {% endblock %}
 
 {% block content %}
@@ -94,15 +117,24 @@
                         </span>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                        <a class="dropdown-item" href="#">
+                            <span class="material-symbols-outlined">
                                 edit
-                            </span>Edit info</a>
-                        <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            </span>
+                            Edit info
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <span class="material-symbols-outlined">
                                 change_circle
-                            </span>Change status</a>
-                        <a class="dropdown-item" href="#"><span class="material-symbols-outlined">
+                            </span>
+                            Change status
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <span class="material-symbols-outlined">
                                 info_i
-                            </span>Update remarks</a>
+                            </span>
+                            Update remarks
+                        </a>
                     </div>
                 </div>
             </td>

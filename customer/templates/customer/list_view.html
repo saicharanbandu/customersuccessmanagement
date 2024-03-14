@@ -1,16 +1,32 @@
-{% extends "_includes/base.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block top_nav %}
-{% include '_includes/top_nav.html' %}
+{% block navbar %}
+{% include '_partials/_navbar.html' %}
 {% endblock %}
 
-{% block side_nav %}
-{% include '_includes/sidebar.html' %}
+{% block sidebar %}
+{% include '_partials/_sidebar.html' %}
 {% endblock %}
+
+{% block page_title %}
+<span class="page-title-icon bg-gradient-primary text-white me-2">
+  <i class="mdi mdi-account-multiple"></i>
+</span>
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+  <li class="breadcrumb-item active" aria-current="page">
+    <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+  </li>
+</ul>
+{% endblock %}
+
 
 {% block content %}
 <div class="container">
@@ -74,6 +90,6 @@
       {% endfor %}
     </tbody>
   </table>
-  {% include '_includes/pagination.html' %}
+  {% include '_partials/_pagination.html' %}
 
   {% endblock %}
