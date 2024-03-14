@@ -19,13 +19,6 @@
 {{ title }}
 {% endblock %}
 
-{% block breadcrumbs %}
-<ul class="breadcrumb">
-  <li class="breadcrumb-item active" aria-current="page">
-  </li>
-</ul>
-{% endblock %}
-
 {% block content %}
 <div class="row">
   <div class="col-lg-12 grid-margin stretch-card">
@@ -85,7 +78,7 @@
               <td>
                 <div class="contact-group">
                   <div>
-                    <i class="mdi mdi-email-outline"></i>{{ contact.email_id }}
+                    <i class="mdi mdi-email-outline"></i>{{ contact.email }}
                   </div>
                   <div>
                     <i class="mdi mdi-cellphone-android"></i>(+91) {{ contact.mobile_number }}
@@ -106,5 +99,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}

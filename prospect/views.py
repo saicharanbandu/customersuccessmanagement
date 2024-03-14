@@ -45,12 +45,12 @@ class ProspectCreateView(View):
     
     def post(self, request, *args, **kwargs):
         prospect_info_form = prospectForms.ProspectInfoForm(request.POST)
-        pOC_info_form = prospectForms.PointOfContactForm(request.POST)
+        poc_info_form = prospectForms.PointOfContactForm(request.POST)
         print(prospect_info_form.errors)
         try:
-            if prospect_info_form.is_valid() and pOC_info_form.is_valid():
+            if prospect_info_form.is_valid() and poc_info_form.is_valid():
                 prospect_info = prospect_info_form.save()
-                point_of_contact_info = pOC_info_form.save(commit=False)
+                point_of_contact_info = poc_info_form.save(commit=False)
                 point_of_contact_info.prospect = prospect_info
                 point_of_contact_info.save()
                 print("Prospect and POC Data saved")
@@ -62,6 +62,6 @@ class ProspectCreateView(View):
             'title': self.title,
             'active_tab': self.active_tab,
             'prospect_info_form': prospect_info_form,
-            'pOC_info_form': pOC_info_form
+            'poc_info_form': poc_info_form
         }
         return render(request, self.template_name, context)

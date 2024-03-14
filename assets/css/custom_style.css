@@ -41,3 +41,7 @@ table th {
     width: 70%;
     margin: auto;
 }
+
+.dropdown .dropdown-menu .dropdown-item {
+    padding: 0.75rem 1.5rem !important;
+}

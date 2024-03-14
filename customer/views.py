@@ -13,9 +13,9 @@ from tabernacle_customer_success import constants
 from django.forms import modelformset_factory, formset_factory
 
 
-class CustomerCreateView(View):
-    template_name = 'customer/create_view.html'
-    title = 'Customer Information'
+class CustomerOnboardingView(View):
+    template_name = 'customer/onboard_view.html'
+    title = 'Onboarding'
     active_tab = 'customer'
 
     def get(self, request, *args, **kwargs):

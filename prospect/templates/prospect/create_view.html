@@ -4,86 +4,48 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block top_nav %}
-{% include '_partials/top_nav.html' %}
+{% block navbar %}
+{% include '_partials/_navbar.html' %}
 {% endblock %}
 
-{% block side_nav %}
-{% include '_partials/sidebar.html' %}
+{% block sidebar %}
+{% include '_partials/_sidebar.html' %}
+{% endblock %}
+
+{% block page_title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'prospect:list' %}">Prospect List</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+</ol>
 {% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <form class="" id="ProspectForm" action="{% url 'prospect:create' %}" method="POST">
-        {% csrf_token %}
-        <h3>Prospect Information</h3>
-        <div class="row mb-3">
-            <div class="form-group mb-3">
-                <label for="name">Name *</label>
-                {{ prospect_info_form.prospect_name }}
-            </div>
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label for="street">Street/Locality</label>
-                    {{ prospect_info_form.street_loc }}
-                </div>
-                <div class="form-group mb-3">
-                    <label for="country">Country</label>
-                    {{ prospect_info_form.country }}
-                </div>
-                <div class="form-group mb-3">
-                    <label for="email">Email ID</label>
-                    {{ prospect_info_form.state }}
-                </div>
-                <div class="form-group mb-3">
-                    <label for="denomination">Denomination</label>
-                    {{ prospect_info_form.denomination }}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label for="city">City/Town/Village</label>
-                    {{ prospect_info_form.city }}
-                </div>
-                <div class="form-group mb-3">
-                    <label for="state">State</label>
-                    {{ prospect_info_form.state }}
-                </div>
-                <div class="form-group mb-3">
-                    <label for="website">Website</label>
-                    {{ prospect_info_form.website }}
-                </div>
-                <div class="form-group mb-3">
-                    <label for="congregation-size">Congregation Size (Approx)</label>
-                    {{ prospect_info_form.congregation }}
-                </div>
-            </div>
+    <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <form class="forms-sample" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h4 class="card-title">Prospect Information</h4>
+            <p class="card-description">Enter prospect details </p>
+            {% include 'prospect/prospect_form.html' %}
             <hr>
-            <h3>Point of Contact</h3>
-            <div class="form-group mb-3">
-                <label for="Name">Name</label>
-                {{ pOC_info_form.pOC_name }}
-            </div>
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label for="mobile">Mobile Number</label>
-                    {{ pOC_info_form.mobile }}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group mb-3">
-                    <label for="email">Email ID</label>
-                    {{ pOC_info_form.mobile }}
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="remarks">Remarks</label>
-                <textarea class="form-control" id="remarks" rows="3"></textarea>
-            </div>
 
+            <h4 class="card-title">Point of Contact</h4>
+            
+            <p class="card-description">Contact Person 1</p>
+            {% include 'prospect/poc_form.html' %}
+            
+
+            <button type="submit" class="btn btn-primary">Save Prospect</button>
+            <a href="{% url 'prospect:list' %}" type="button" class="btn btn-light">Cancel</a>
+          </form>
         </div>
-        <button type="submit" class="btn btn-primary">Save Prospect</button>
-        <a href="{{ request.META.HTTP_REFERER }}" type="button" class="btn btn-secondary cancel-btn">Cancel</a>
-    </form>
-</div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

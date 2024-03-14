@@ -11,7 +11,7 @@ class ContactForm(forms.ModelForm):
             "organization",
             "mobile_number",
             "alt_number",
-            "email_id",
+            "email",
             "address",
             "profile_picture",
         ]
@@ -31,7 +31,7 @@ class ContactForm(forms.ModelForm):
             forms.NumberInput(attrs={
                 'class': 'form-control',
             }),
-            'email_id':
+            'email':
             forms.EmailInput(attrs={
                 'class': 'form-control',
             }),

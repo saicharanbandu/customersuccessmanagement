@@ -8,8 +8,8 @@ class ProspectInfoForm(forms.ModelForm):
     class Meta:
         model = prospectModels.ProspectInfo
         fields = [
-            'prospect_name',
-            'street_loc',
+            'name',
+            'street',
             'country',
             'state',
             'city',
@@ -20,8 +20,8 @@ class ProspectInfoForm(forms.ModelForm):
         ]
 
         widgets = {
-            'prospect_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'street_loc': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'street': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.TextInput(attrs={'class': 'form-control'}),
             'state': forms.TextInput(attrs={'class': 'form-control'}),
             'city': forms.TextInput(
@@ -69,10 +69,10 @@ class ProspectInfoForm(forms.ModelForm):
 class PointOfContactForm(forms.ModelForm):
     class Meta:
         model = pointOfContactModels.PointOfContactInfo
-        fields = ['pOC_name', 'mobile', 'email', 'remarks']
+        fields = ['contact_name', 'mobile', 'email', 'remarks']
 
         widgets = {
-            'pOC_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_name': forms.TextInput(attrs={'class': 'form-control'}),
             'mobile': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(
                 attrs={

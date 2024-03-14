@@ -14,22 +14,76 @@
 
 {% block page_title %}
 <span class="page-title-icon bg-gradient-primary text-white me-2">
-  <i class="mdi mdi-account-multiple"></i>
+  <i class="mdi mdi-contacts"></i>
 </span>
 {{ title }}
 {% endblock %}
 
-{% block breadcrumbs %}
-<ul class="breadcrumb">
-  <li class="breadcrumb-item active" aria-current="page">
-    <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
-  </li>
-</ul>
-{% endblock %}
-
 
 {% block content %}
-<div class="container">
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-8 col-lg-6">
+            <form method="GET">
+              <div class="input-group">
+                <input type="search" class="form-control" placeholder="Search" name="search" value="{{ request.GET.search }}">
+                <button type="submit" class="btn btn-sm btn-light">
+                    <i class="mdi mdi-magnify"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="col-4 col-lg-6">
+            <a href="{% url 'customer:onboard' %}" class="btn btn-gradient-primary float-end">
+              <i class="mdi mdi-plus me-2"></i>
+              New Customer
+            </a>
+          </div>
+        </div>
+        <table class="table table-hover mt-3">
+          <thead>
+            <tr>
+              <th class="table-photo"></th>
+              <th>CUSTOMER NAME</th>
+              <th>PLAN</th>
+              <th>ONBOARDED ON</th>
+              <th>STATUS</th>
+              <th>DUE DATE</th>
+              <th class="text-center">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for customer in customers %}
+            <tr>
+              <td>
+                <div>
+                  {% if customer.profile_picture %}
+                  <img src="{{ customer.profile_picture.url }}" alt="Profile Picture" width="50">
+                  {% else %}
+                  <img src="{% static 'images/avatar.jpg' %}" alt="Default Profile Picture" width="50">
+                  {% endif %}
+                </div>
+              </td>
+              <td>{{ customer.legal_name }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% include '_partials/_pagination.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} <div class="container">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <form class="w-auto" method="GET" action="{% url 'customer:list' %}">
       <div class="input-group">
@@ -40,7 +94,7 @@
           </span>
       </div>
     </form>
-    <a href="{% url 'customer:create' %}" class="btn btn-primary">
+    <a href="{% url 'customer:onboard' %}" class="btn btn-primary">
       <i class="fa-solid fa-plus me-2"></i>
       New customer
     </a>
@@ -90,6 +144,6 @@
       {% endfor %}
     </tbody>
   </table>
-  {% include '_partials/_pagination.html' %}
+  {% include '_partials/_pagination.html' %} {% endcomment %}
 
   {% endblock %}

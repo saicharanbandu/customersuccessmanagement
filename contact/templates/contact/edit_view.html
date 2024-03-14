@@ -27,76 +27,20 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="form-container">
-    <div class="header">
-        <h1>Edit Contact</h1>
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Edit Contact</h4>
+        <p class="card-description">Update contact details </p>
+        <form class="forms-sample" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% include 'contact/contact_form.html' %}
+          <button type="submit" class="btn btn-gradient-primary me-2">Update Contact</button>
+          <a href="{% url 'contact:list' %}" type="button" class="btn btn-light">Cancel</a>
+        </form>
+      </div>
     </div>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-    
-        {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-            {{ form.non_field_errors }}
-        </div>
-        {% endif %}
-    
-        <div class="form-group d-flex justify-content-between align-items-center mb-3">
-    
-            <div class="row">
-                <div class="form-group mb-3">
-                    <label for="{{ form.name.id_for_label }}">Name:</label>
-                    {{ contact_form.name }}
-                </div>
-                <div class="form-group mb-3">
-                    <label for="{{ form.designation.id_for_label }}" class="mt-2">Designation:</label>
-                    {{ contact_form.designation }}
-                </div>
-    
-            </div>
-    
-            <div>
-                <label for="{{ form.profile_picture.id_for_label }}">Upload Picture</label>
-                {{ contact_form.profile_picture }}
-            </div>
-        </div>
-        <div class="form-group mb-3">
-            <label for="{{ contact_form.organization.id_for_label }}">Organization:</label>
-            {{ contact_form.organization }}
-        </div>
-    
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ contact_form.mobile_number.id_for_label }}">Mobile Number:</label>
-                    {{ contact_form.mobile_number }}
-                </div>
-            </div>
-    
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ contact_form.alt_number.id_for_label }}">Alternate Mobile Number:</label>
-                    {{ contact_form.alt_number }}
-                </div>
-            </div>
-        </div>
-    
-        <div class="form-group mb-3">
-            <label for="{{ contact_form.email_id.id_for_label }}">Email ID:</label>
-            {{ contact_form.email_id }}
-        </div>
-    
-        <div class="form-group mb-3">
-            <label for="address">Address:</label>
-            {{ contact_form.address }}
-        </div>
-    
-        <div class="form-group mb-3">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            <a href="{{ request.META.HTTP_REFERER }}" type="button" class="btn btn-secondary cancel-btn">Cancel</a>
-        </div>
-    
-    </form>
-    
+  </div>
 </div>
 {% endblock %}
