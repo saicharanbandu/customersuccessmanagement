@@ -5,6 +5,8 @@ from prospect import models as prospectModels, forms as prospectForms
 from django.http import HttpResponse
 from tabernacle_customer_success import constants
 
+from django.db.models import Q
+
 class ProspectsListView(ListView):
     template_name = 'prospect/list_view.html'
     title = 'Prospect List'
@@ -12,6 +14,17 @@ class ProspectsListView(ListView):
     model = prospectModels.Profile
     context_object_name = 'prospects'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get("search")
+        if search_query:
+            queryset = queryset.filter(
+                (
+                    Q(name__istartswith=search_query)
+                    | Q(name__icontains=" " + search_query)
+                )
+            )
+        return queryset.order_by("name")
 
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)
@@ -23,8 +36,8 @@ class ProspectsListView(ListView):
         context = super().get_context_data(**kwargs)
 
         more_context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
+            "title": self.title,
+            "active_tab": self.active_tab,
         }
         context.update(more_context)
         return context

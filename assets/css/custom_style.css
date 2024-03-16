@@ -5,14 +5,20 @@ table th {
 }
 
 
-.name-group .description, .contact-group .contact-details {
-    font-size:  0.75rem;
+
+.contact-group .contact-details {
     padding-top: 0.5rem;
+    line-height: 1.5rem;
+}
+
+.name-group .description, .contact-group .contact-details-sm {
+    padding-top: 0.5rem;
+    font-size:  0.75rem;
     line-height: 1.25rem;
 }
 
 
-.name-group .description, .name-group .description i, .contact-group .contact-details {
+.name-group .description, .name-group .description i, .contact-group .contact-details, .contact-group .contact-details-sm {
     color: #8f9091;
 }
 
@@ -24,6 +30,8 @@ table th {
 .address, .address p {
     line-height: 1.25rem;
     margin: 0;
+    color: #8f9091;
+    font-size:  0.75rem;
 }
 
 .table-photo {
@@ -38,6 +46,11 @@ table th {
 
 .dropdown .dropdown-menu .dropdown-item {
     padding: 0.75rem 1.5rem !important;
+    font-size: 0.85rem;
+}
+
+.dropdown .dropdown-menu .dropdown-item:hover {
+    color: #b66dff;
 }
 
 table .remarks-col {
@@ -79,4 +92,9 @@ table .sl-col {
     border: 1px solid #fe7c96;
     background: #fe7c96;
     color: #ffffff;
+}
+
+
+.pagination-sm .page-link, .pagination-sm-desc  {
+    font-size: 0.75rem;
 }

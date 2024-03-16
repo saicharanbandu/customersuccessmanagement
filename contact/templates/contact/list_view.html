@@ -28,9 +28,10 @@
           <div class="col-8 col-lg-6">
             <form class="w-auto" method="GET" action="{% url 'contact:list' %}">
               <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" name="search" value="{{ request.GET.search }}">
+                <input type="search" class="form-control" placeholder="Search" name="search"
+                  value="{{ request.GET.search }}">
                 <button type="submit" class="btn btn-sm btn-light">
-                    <i class="mdi mdi-magnify"></i>
+                  <i class="mdi mdi-magnify"></i>
                 </button>
               </div>
             </form>
@@ -45,7 +46,7 @@
         <table class="table table-hover mt-3">
           <thead>
             <tr>
-              <th class="table-photo"></th>
+              <th class="sl-col table-photo">#</th>
               <th>NAME & DESIGNATION</th>
               <th>ORGANIZATION</th>
               <th>ADDRESS</th>
@@ -56,20 +57,23 @@
           <tbody>
             {% for contact in contacts %}
             <tr>
-              <td>
-                <div>
-                  {% if contact.profile_picture %}
-                  <img src="{{ contact.profile_picture.url }}" alt="Profile Picture" width="50">
-                  {% else %}
-                  <img src="{% static 'images/avatar.jpg' %}" alt="Default Profile Picture" width="50">
-                  {% endif %}
-                </div>
+              <td class="sl-col">
+                {{ forloop.counter0 | add:page_obj.start_index }}
               </td>
               <td>
-                <div class="name-group">
-                  <div>{{ contact.name }}</div>
-                  <div class="description">
-                    <i class="mdi mdi-briefcase"></i> {{ contact.designation }}
+                <div class="d-flex">
+                  <div class="me-3">
+                    {% if contact.profile_picture %}
+                    <img src="{{ contact.profile_picture.url }}" alt="Profile Picture" width="50">
+                    {% else %}
+                    <img src="{% static 'images/avatar.jpg' %}" alt="Default Profile Picture" width="50">
+                    {% endif %}
+                  </div>
+                  <div class="d-inline-block name-group">
+                    <div>{{ contact.name }}</div>
+                    <div class="description">
+                      <i class="mdi mdi-briefcase"></i> {{ contact.designation }}
+                    </div>
                   </div>
                 </div>
               </td>
@@ -77,11 +81,13 @@
               <td><span class='address'>{{ contact.address|linebreaks }}</span></td>
               <td>
                 <div class="contact-group">
-                  <div>
-                    <i class="mdi mdi-email-outline"></i>{{ contact.email }}
-                  </div>
-                  <div>
-                    <i class="mdi mdi-cellphone-android"></i>(+91) {{ contact.mobile_number }}
+                  <div class="contact-details">
+                    <div>
+                      <i class="mdi mdi-email-outline"></i>{{ contact.email }}
+                    </div>
+                    <div>
+                      <i class="mdi mdi-cellphone-android"></i>(+91) {{ contact.mobile_number }}
+                    </div>
                   </div>
                 </div>
               </td>
