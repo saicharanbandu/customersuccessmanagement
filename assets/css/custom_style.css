@@ -1,4 +1,9 @@
 
+.btn {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 table th {
     font-size: 0.65rem !important;
     color: #76838f !important;
@@ -62,6 +67,15 @@ table .actions-col, table .status-col {
     text-align: center;
 }
 
+table .actions-col {
+    width: 3rem;
+}
+
+table .status-col {
+    width: 10rem;
+}
+
+
 table .sl-col {
     width: 2rem;
     text-align: center;
@@ -97,4 +111,16 @@ table .sl-col {
 
 .pagination-sm .page-link, .pagination-sm-desc  {
     font-size: 0.75rem;
+}
+
+textarea.form-control {
+    line-height: 1.25rem !important;
+}
+
+table .org-col, table .name-col {
+    width: 20rem;
+}
+
+table .address-col {
+    width: 15rem;
 }

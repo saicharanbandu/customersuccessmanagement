@@ -34,7 +34,7 @@ class ProspectProfileForm(forms.ModelForm):
                     'class': 'form-control',
                 }
             ),
-            'street': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
             'city': forms.TextInput(
                 attrs={
                     'class': 'form-control',
@@ -45,6 +45,25 @@ class ProspectProfileForm(forms.ModelForm):
             'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
 
+
+    def __init__(self, *args, **kwargs):
+        super(ProspectProfileForm, self).__init__(*args, **kwargs)
+        self.fields["state"].queryset = miscModels.State.objects.none()
+
+        if "prospect-country" in self.data:
+            country_id = self.data.get("prospect-country")
+
+            try:
+                self.fields["state"].queryset = miscModels.State.objects.filter(
+                    country_id=country_id
+                ).order_by("name")
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            if self.instance.state:
+                self.fields["state"].queryset = (
+                    self.instance.country.state_set.order_by("name")
+                )
 
 class PointOfContactForm(forms.ModelForm):
     class Meta:

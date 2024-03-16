@@ -1,29 +1,26 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 
 from plan import models as planModels
 from misc import models as miscModels
+from prospect import models as prospectModels
 
 import uuid
 
 
-class CustomerInfo(models.Model):
+class Profile(models.Model):
+    """
+    Customer Profile
+    """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    prospect = models.ForeignKey(
+        prospectModels.Profile, to_field="uuid", on_delete=models.SET_NULL, null=True
+    )
     legal_name = models.CharField(max_length=55, verbose_name="Legal Name")
     profile_picture = models.ImageField(upload_to="pictures", blank=True)
     display_name = models.CharField(max_length=55, verbose_name="Display Name")
     short_name = models.CharField(
         max_length=50, verbose_name="Short Name or Abbreviation"
     )
-    address = models.CharField(max_length=255, verbose_name="Address")
-    city = models.CharField(max_length=50, verbose_name="City/Town/Village")
-    country = models.ForeignKey(
-        miscModels.Country, to_field="uuid", on_delete=models.SET_NULL, null=True
-    )
-    state = models.ForeignKey(
-        miscModels.State, to_field="uuid", on_delete=models.SET_NULL, null=True
-    )
-    zip_code = models.IntegerField(verbose_name="Zip/Postal Code")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -31,22 +28,25 @@ class CustomerInfo(models.Model):
         return self.legal_name
 
 
-class CustomerPlan(models.Model):
+class SubscribedPlan(models.Model):
+    """
+    Plan the customer is subscribed to
+    """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     customer = models.ForeignKey(
-        CustomerInfo,
+        Profile,
         to_field="uuid",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="customer_plans",
+        related_name="customer_plan",
     )
     subscription_plan = models.ForeignKey(
-        planModels.SubscriptionPlan,
+        planModels.Tariff,
         to_field="uuid",
         on_delete=models.SET_NULL,
         null=True,
     )
-    duration_in_months = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0) # Duration in months
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,14 +54,13 @@ class CustomerPlan(models.Model):
         return f"{self.customer}"
 
 
-class CustomerUser(models.Model):
+class User(models.Model):
     """
-    Staff Model
+    User created for a customer
     """
-
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     customer = models.ForeignKey(
-        CustomerInfo,
+        Profile,
         related_name="customer_user",
         to_field="uuid",
         on_delete=models.CASCADE,
@@ -69,27 +68,22 @@ class CustomerUser(models.Model):
     full_name = models.CharField(max_length=100, blank=True, null=True)
     designation = models.CharField(max_length=100, blank=True, null=True)
     mobile_no = models.CharField(max_length=15, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True, max_length=254)
+    email = models.EmailField( max_length=254, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.full_name}"
-
-    class Meta:
-        verbose_name = "staff"
-        verbose_name_plural = "staff"
 
 
 
 class UserAppPermissions(models.Model):
     """
-    Member Family Relation Model
+    User App Permissions
     """
-
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     user = models.ForeignKey(
-        CustomerUser,
+        User,
         related_name="user_app_permissions_customer",
         to_field="uuid",
         on_delete=models.CASCADE,

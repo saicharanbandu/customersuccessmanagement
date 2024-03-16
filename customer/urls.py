@@ -4,7 +4,6 @@ from . import views as customerViews
 app_name = 'customer'
 
 urlpatterns = [
-    path('ajax/load-states/', customerViews.load_states, name='ajax-load-states'),
     
     path('onboard', customerViews.CustomerOnboardingView.as_view(), name='onboard'),
     path('select-plan/<customer_id>', customerViews.CustomerSelectPlanView.as_view(), name='select-plan'),

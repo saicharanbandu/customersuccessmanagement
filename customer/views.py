@@ -1,15 +1,17 @@
+# Dango Imports
+from django.db.models import Q
+from django.forms import formset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.db.models import Q
 from django.views.generic import ListView
+
+# Project Imports
 from . import models as customerModels, forms as customerForms
-from misc import models as miscModels
 from plan import models as planModels
 from django.contrib import messages
 
 from tabernacle_customer_success import constants
-from django.forms import modelformset_factory, formset_factory
 
 
 class CustomerOnboardingView(View):
@@ -18,7 +20,7 @@ class CustomerOnboardingView(View):
     active_tab = 'customer'
 
     def get(self, request, *args, **kwargs):
-        customer_info_form = customerForms.CustomerInfoForm()
+        customer_info_form = customerForms.CustomerProfileForm()
 
         context = {
             'title': self.title,
@@ -28,7 +30,7 @@ class CustomerOnboardingView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        customer_info_form = customerForms.CustomerInfoForm(request.POST, request.FILES)
+        customer_info_form = customerForms.CustomerProfileForm(request.POST, request.FILES)
 
         if customer_info_form.is_valid():
             customer_info_object = customer_info_form.save()
@@ -100,14 +102,10 @@ class CustomerSelectPlanView(View):
         return render(request, self.template_name, context)
 
 
-def load_states(request):
-    country_id = request.GET.get('country_id')
-    states = miscModels.State.objects.filter(country_id=country_id).order_by('name')
-    return render(request, 'customer/state_dropdown_list.html', {'states': states})
 
 
 class CustomerListView(ListView):
-    model = customerModels.CustomerInfo
+    model = customerModels.Profile
     template_name = 'customer/list_view.html'
     title = 'Customer List'
     active_tab = 'customer'
@@ -150,9 +148,9 @@ class CustomerEditView(View):
     def get(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
         customer_object = get_object_or_404(
-            customerModels.CustomerInfo, uuid=customer_id
+            customerModels.Profile, uuid=customer_id
         )
-        customer_info_form = customerForms.CustomerInfoForm(instance=customer_object)
+        customer_info_form = customerForms.CustomerProfileForm(instance=customer_object)
 
         context = {
             'title': self.title,
@@ -164,9 +162,9 @@ class CustomerEditView(View):
     def post(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
         customer_object = get_object_or_404(
-            customerModels.CustomerInfo, uuid=customer_id
+            customerModels.Profile, uuid=customer_id
         )
-        customer_info_form = customerForms.CustomerInfoForm(
+        customer_info_form = customerForms.CustomerProfileForm(
             request.POST, request.FILES, instance=customer_object
         )
 
@@ -183,7 +181,7 @@ class CustomerEditView(View):
 
 
 class UserCreateView(View):
-    model = customerModels.CustomerUser
+    model = customerModels.User
     template_name = 'customer/form_user.html'
     title = 'User Information'
     active_tab = 'customer'
@@ -273,7 +271,7 @@ class UserCreateView(View):
         return render(request, self.template_name, context)
 
 class AnotherUserCreateView(View):
-    model = customerModels.CustomerUser
+    model = customerModels.User
     template_name = 'customer/assign_user_form.html'
     title = 'User Information'
     active_tab = 'customer'

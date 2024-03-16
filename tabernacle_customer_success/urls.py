@@ -23,11 +23,12 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("customer/", include("customer.urls")),
-    path("plan/", include("plan.urls")),
-    path('user/',include('user.urls')),
-    path("prospect/", include("prospect.urls")),
     path("contact/", include("contact.urls")),
+    path("customer/", include("customer.urls")),
+    path("misc/", include("misc.urls")),
+    path("plan/", include("plan.urls")),
+    path("prospect/", include("prospect.urls")),
+    path('user/',include('user.urls')),
     path('', RedirectView.as_view(pattern_name='customer:list')),
 ]
 

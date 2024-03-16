@@ -7,7 +7,7 @@ class Profile(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
 
     name = models.CharField(max_length=255, verbose_name="Prospect Name")
-    street = models.CharField(max_length=255, null=True, verbose_name="Street/Locality")
+    address = models.CharField(max_length=255, null=True, verbose_name="Street/Locality")
     city = models.CharField(max_length=50, null=True, verbose_name="City/Town/Village")
     country = models.ForeignKey(
         miscModels.Country,

@@ -68,7 +68,15 @@
                 </div>
               </td>
               <td>{{ customer.legal_name }}</td>
-              <td></td>
+              <td>
+                {% for plan in customer.customer_plan.all %}
+                {{ plan.subscription_plan.name }}
+                  {% if plan.duration_in_months == '12' %}
+                  
+                  {% else %}
+                {% endif %}
+                {% endfor %}
+              </td>
               <td></td>
               <td></td>
               <td></td>
