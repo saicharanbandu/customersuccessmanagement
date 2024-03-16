@@ -10,7 +10,8 @@ table th {
 
 .name-group .description {
     font-size:  0.75rem;
-    padding-top: 0.75rem;
+    padding-top: 0.5rem;
+    line-height: 1.25rem;
 }
 
 
@@ -27,7 +28,7 @@ table th {
     padding: 0.35rem 0;
 }
 
-.address p {
+.address, .address p {
     line-height: 1.25rem;
     margin: 0;
 }
@@ -44,4 +45,19 @@ table th {
 
 .dropdown .dropdown-menu .dropdown-item {
     padding: 0.75rem 1.5rem !important;
+}
+
+table .remarks-col {
+    width: 4rem;
+}
+
+table .actions-col {
+    text-align: center;
+}
+
+table .sl-col {
+    width: 2rem;
+    text-align: center;
+    font-size: 1.25rem;
+    color: #8f9091;
 }

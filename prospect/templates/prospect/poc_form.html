@@ -1,22 +1,22 @@
 <div class="form-group mb-3">
-    <label for="Name">Name</label>
-    {{ pOC_info_form.contact_name }}
+    <label for="{{ poc_form.name.id_for_label }}">Name *</label>
+    {{ poc_form.name }}
 </div>
 <div class="row">
     <div class="col-md-6">
         <div class="form-group mb-3">
-            <label for="mobile">Mobile Number</label>
-            {{ pOC_info_form.mobile }}
+            <label for="{{ poc_form.mobile.id_for_label }}">Mobile Number</label>
+            {{ poc_form.mobile }}
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group mb-3">
-            <label for="email">Email ID</label>
-            {{ pOC_info_form.mobile }}
+            <label for="{{ poc_form.email.id_for_label }}">Email ID</label>
+            {{ poc_form.email }}
         </div>
     </div>
 </div>
 <div class="form-group">
-    <label for="remarks">Remarks</label>
-    <textarea class="form-control" id="remarks" rows="3"></textarea>
+    <label for="{{ poc_form.remarks.id_for_label }}">Remarks</label>
+    {{ poc_form.remarks }}
 </div>

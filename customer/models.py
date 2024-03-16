@@ -38,7 +38,7 @@ class CustomerPlan(models.Model):
         to_field="uuid",
         on_delete=models.SET_NULL,
         null=True,
-        related_name="plans",
+        related_name="customer_plans",
     )
     subscription_plan = models.ForeignKey(
         planModels.SubscriptionPlan,
@@ -62,7 +62,7 @@ class CustomerUser(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     customer = models.ForeignKey(
         CustomerInfo,
-        related_name="customer",
+        related_name="customer_user",
         to_field="uuid",
         on_delete=models.CASCADE,
     )

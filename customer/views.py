@@ -3,7 +3,6 @@ from django.urls import reverse
 from django.views import View
 from django.db.models import Q
 from django.views.generic import ListView
-import uuid
 from . import models as customerModels, forms as customerForms
 from misc import models as miscModels
 from plan import models as planModels
@@ -118,7 +117,6 @@ class CustomerListView(ListView):
         queryset = super().get_queryset()
         search_query = self.request.GET.get('search')
         if search_query:
-            print('a')
             queryset = queryset.filter(
                 (
                     Q(legal_name__istartswith=search_query)
