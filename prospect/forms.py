@@ -3,7 +3,7 @@ from . import models as prospectModels
 from misc import models as miscModels
 
 
-class ProspectInfoForm(forms.ModelForm):
+class ProspectProfileForm(forms.ModelForm):
     class Meta:
         model = prospectModels.Profile
         exclude = [

@@ -28,9 +28,9 @@ class Profile(models.Model):
     denomination = models.CharField(
         max_length=50, blank=True, null=True, verbose_name="Denomination"
     )
-    congregation = models.IntegerField(verbose_name="Congregation Size (Approx)")
+    congregation = models.IntegerField(blank=True, null=True, verbose_name="Congregation Size (Approx)")
     
-    remarks = models.TextField(verbose_name="Remarks", blank=True, null=True)
+    remarks = models.TextField( blank=True, null=True, verbose_name="Remarks")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

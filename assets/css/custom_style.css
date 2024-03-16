@@ -1,6 +1,3 @@
-body, html {
-    font-size: 14px !important;
-}
 
 table th {
     font-size: 0.65rem !important;
@@ -8,24 +5,20 @@ table th {
 }
 
 
-.name-group .description {
+.name-group .description, .contact-group .contact-details {
     font-size:  0.75rem;
     padding-top: 0.5rem;
     line-height: 1.25rem;
 }
 
 
-.name-group .description, .name-group .description i {
+.name-group .description, .name-group .description i, .contact-group .contact-details {
     color: #8f9091;
 }
 
 .contact-group i {
     color: #8f9091;
     margin-right: 0.5rem;
-}
-
-.contact-group div {
-    padding: 0.35rem 0;
 }
 
 .address, .address p {
@@ -49,9 +42,10 @@ table th {
 
 table .remarks-col {
     width: 4rem;
+    text-align: center;
 }
 
-table .actions-col {
+table .actions-col, table .status-col {
     text-align: center;
 }
 
@@ -60,4 +54,29 @@ table .sl-col {
     text-align: center;
     font-size: 1.25rem;
     color: #8f9091;
+}
+
+
+.status-initiated {
+    border: 1px solid #ce82ff;
+    background: #ce82ff;
+    color: #ffffff;
+}
+
+.status-meeting {
+    border: 1px solid #1bcfb4;
+    background: #1bcfb4;
+    color: #ffffff;
+}
+
+.status-awaiting {
+    border: 1px solid #198ae3;
+    background: #198ae3;
+    color: #ffffff;
+}
+
+.status-rejected {
+    border: 1px solid #fe7c96;
+    background: #fe7c96;
+    color: #ffffff;
 }

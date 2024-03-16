@@ -37,8 +37,8 @@ class ProspectCreateView(View):
     active_tab = 'prospect'
 
     def get(self, request, *args, **kwargs):
-        prospect_form = prospectForms.ProspectInfoForm()
-        poc_form = prospectForms.PointOfContactForm()
+        prospect_form = prospectForms.ProspectProfileForm(prefix='prospect')
+        poc_form = prospectForms.PointOfContactForm(prefix='poc')
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
@@ -49,10 +49,8 @@ class ProspectCreateView(View):
         return render(request, self.template_name, context)
     
     def post(self, request, *args, **kwargs):
-        prospect_form = prospectForms.ProspectInfoForm(request.POST)
-        poc_form = prospectForms.PointOfContactForm(request.POST)
-        print(prospect_form.errors)
-        print(poc_form.errors)
+        prospect_form = prospectForms.ProspectProfileForm(request.POST, prefix='prospect')
+        poc_form = prospectForms.PointOfContactForm(request.POST, prefix='poc')
 
         try:
             if prospect_form.is_valid() and poc_form.is_valid():

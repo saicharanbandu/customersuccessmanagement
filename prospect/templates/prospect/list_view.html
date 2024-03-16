@@ -14,126 +14,134 @@
 
 {% block page_title %}
 <span class="page-title-icon bg-gradient-primary text-white me-2">
-    <i class="mdi mdi-bullseye"></i>
+  <i class="mdi mdi-bullseye"></i>
 </span>
 {{ title }}
 {% endblock %}
 
-{% block breadcrumbs %}
-<ul class="breadcrumb">
-    <li class="breadcrumb-item active" aria-current="page">
-        <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
-    </li>
-</ul>
-{% endblock %}
-
 {% block content %}
 <div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-8 col-lg-6">
-              <form method="GET">
-                <div class="input-group">
-                  <input type="search" class="form-control" placeholder="Search" name="search" value="{{ request.GET.search }}">
-                  <button type="submit" class="btn btn-sm btn-light">
-                      <i class="mdi mdi-magnify"></i>
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div class="col-4 col-lg-6">
-              <a href="{% url 'prospect:create' %}" class="btn btn-gradient-primary float-end">
-                <i class="mdi mdi-plus me-2"></i>
-                New Prospect
-              </a>
-            </div>
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-8 col-lg-6">
+            <form method="GET">
+              <div class="input-group">
+                <input type="search" class="form-control" placeholder="Search" name="search"
+                  value="{{ request.GET.search }}">
+                <button type="submit" class="btn btn-sm btn-light">
+                  <i class="mdi mdi-magnify"></i>
+                </button>
+              </div>
+            </form>
           </div>
-          <table class="table table-hover mt-3">
-            <thead>
-              <tr>
-                <th class="sl-col">#</th>
-                <th>NAME</th>
-                <th>CONTACT PERSONS</th>
-                <th>STATUS</th>
-                <th>CRM</th>
-                <th class="remarks-col">REMARKS</th>
-                <th class="actions-col">ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-            {% for prospect in prospects %}
-              <tr>
-                <td class="sl-col">{{ forloop.counter0 | add:page_obj.start_index }}</td>
-                <td>
-                  <div class="name-group">
-                    {{ prospect.name }}
-                    <div class="description">
-                    {{ prospect.street}}, {{ prospect.city }}, <br>{{ prospect.state }} {{ prospect.country }}
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  {% for contact in prospect.prospect_poc.all %}
-                  <div class="contact-group">
-                    {{ contact.name }}
-                    <div>
-                      <i class="mdi mdi-email-outline"></i>{{ contact.email }}
-                    </div>
-                    <div>
-                      <i class="mdi mdi-cellphone-android"></i>(+91) {{ contact.mobile_number }}
-                    </div>
-                  </div>
-                  {% if not forloop.last %}
-                    <hr>                            
-                  {% endif %}
-                  {% endfor %}
-                </td>
-                <td></td>
-                <td></td>
-                <td>
-                  {% if prospect.remarks %}
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ prospect.remarks }}">
-                      <i class="mdi mdi-information-outline fs-4"></i>
-                    </a>
-                  {% endif %}
-                </td>
-                <td class="actions-col">
-                    <div class="dropdown">
-                        <button class="btn p-0" type="button" id="dropdownMenuButton"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">
-                                <i class="mdi mdi-pencil-box-outline me-2"></i>
-                                Edit info
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="mdi mdi-information-outline me-2"></i>
-                                Update remarks
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="mdi mdi-account-convert me-2"></i>
-                                Re-assign CRM
-                            </a>
-                            
-                            <a class="dropdown-item border-top" href="#">
-                                <i class="mdi mdi-refresh me-2"></i>
-                                Change status
-                            </a>
-                        </div>
-                    </div>
-                </td>
-                
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          {% include '_partials/_pagination.html' %}
+          <div class="col-4 col-lg-6">
+            <a href="{% url 'prospect:create' %}" class="btn btn-gradient-primary float-end">
+              <i class="mdi mdi-plus me-2"></i>
+              New Prospect
+            </a>
+          </div>
         </div>
+        <table class="table table-hover mt-3">
+          <thead>
+            <tr>
+              <th class="sl-col">#</th>
+              <th>NAME</th>
+              <th>CONTACT PERSONS</th>
+              <th class="status-col">STATUS</th>
+              <th>CRM</th>
+              <th class="remarks-col">REMARKS</th>
+              <th class="actions-col">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for prospect in prospects %}
+            <tr>
+              <td class="sl-col">{{ forloop.counter0 | add:page_obj.start_index }}</td>
+              <td>
+                <div class="name-group">
+                  {{ prospect.name }}
+                  <div class="description">
+                    {{ prospect.street}}, {{ prospect.city }}, <br>{{ prospect.state }} {{ prospect.country }}
+                  </div>
+                </div>
+              </td>
+              <td>
+                {% for contact in prospect.prospect_poc.all %}
+                <div class="contact-group">
+                  {{ contact.name }}{% if contact.remarks %}
+                  <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ contact.remarks }}">
+                    <i class="mdi mdi-information-outline"></i>
+                  </a>
+                  {% endif %}
+                  <div class="contact-details">
+                    <div>
+                      <i class="mdi mdi-email-outline"></i>
+                      {{ contact.email | default_if_none:"--" }}
+                    </div>
+                    <div>
+                      <i class="mdi mdi-cellphone-android"></i>
+                      {{ contact.mobile | default_if_none:"--" }}
+                    </div>
+                  </div>
+
+                </div>
+                {% if not forloop.last %}
+                <hr>
+                {% endif %}
+                {% endfor %}
+              </td>
+              <td class="status-col">
+                {% if prospect.status %}
+                <label class="badge status-{{ prospect.status }}">{{ prospect.status }}</label>
+                {% else %}
+                --
+                {% endif %}
+              </td>
+              <td></td>
+              <td class="remarks-col">
+                {% if prospect.remarks %}
+                <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ prospect.remarks }}">
+                  <i class="mdi mdi-information-outline fs-4"></i>
+                </a>
+                {% endif %}
+              </td>
+              <td class="actions-col">
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="mdi mdi-dots-vertical"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">
+                      <i class="mdi mdi-pencil-box-outline me-2"></i>
+                      Edit info
+                    </a>
+                    <a class="dropdown-item" href="#">
+                      <i class="mdi mdi-information-outline me-2"></i>
+                      Update remarks
+                    </a>
+                    <a class="dropdown-item" href="#">
+                      <i class="mdi mdi-account-convert me-2"></i>
+                      Re-assign CRM
+                    </a>
+
+                    <a class="dropdown-item border-top" href="#">
+                      <i class="mdi mdi-refresh me-2"></i>
+                      Change status
+                    </a>
+                  </div>
+                </div>
+              </td>
+
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% include '_partials/_pagination.html' %}
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
