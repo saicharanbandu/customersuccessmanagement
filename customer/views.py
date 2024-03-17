@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 # Project Imports
 from . import models as customerModels, forms as customerForms
@@ -20,20 +22,21 @@ class CustomerOnboardingView(View):
     active_tab = 'customer'
 
     def get(self, request, *args, **kwargs):
-        customer_info_form = customerForms.CustomerProfileForm()
+        customer_profile_form = customerForms.CustomerProfileForm()
 
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
-            'customer_info_form': customer_info_form,
+            'customer_profile_form': customer_profile_form,
         }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        customer_info_form = customerForms.CustomerProfileForm(request.POST, request.FILES)
-
-        if customer_info_form.is_valid():
-            customer_info_object = customer_info_form.save()
+        customer_profile_form = customerForms.CustomerProfileForm(
+            request.POST, request.FILES
+        )
+        if customer_profile_form.is_valid():
+            customer_info_object = customer_profile_form.save()
             return redirect(
                 reverse(
                     'customer:select-plan',
@@ -44,7 +47,7 @@ class CustomerOnboardingView(View):
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
-            'customer_info_form': customer_info_form,
+            'customer_profile_form': customer_profile_form,
         }
         return render(request, self.template_name, context)
 
@@ -58,7 +61,7 @@ class CustomerSelectPlanView(View):
         customer_id = self.kwargs.get('customer_id')
 
         customer_plan_form = customerForms.CustomerPlanForm()
-        plan_options_form = customerForms.PlanOptionsForm()
+        plan_options_form = customerForms.SubscriptionPlanOptionsForm()
 
         context = {
             'title': self.title,
@@ -72,23 +75,42 @@ class CustomerSelectPlanView(View):
     def post(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
 
-        plan_options_form = customerForms.PlanOptionsForm(request.POST)
+        plan_options_form = customerForms.SubscriptionPlanOptionsForm(request.POST)
 
         if plan_options_form.is_valid():
 
-            plan_type = plan_options_form.cleaned_data['plan_type']
-            member_size = plan_options_form.cleaned_data['member_size']
-            duration = plan_options_form.cleaned_data['duration']
+            plan = request.POST.get('plan')
+            duration = int(request.POST.get('duration'))
+            payment_status = request.POST.get('payment_status')
 
-            subscription_plan = planModels.SubscriptionPlan.objects.get(
-                plan_type=plan_type, member_size=member_size
-            )
-            customerModels.CustomerPlan.objects.create(
-                customer_id=customer_id,
-                subscription_plan=subscription_plan,
-                duration_in_months=duration,
-            )
-            request.session['selected_subscription_plan'] = str(subscription_plan.uuid)
+            tariff = planModels.Tariff.objects.get(uuid=plan)
+
+            try:
+                subscribed_plan = customerModels.SubscribedPlan.objects.get(
+                    customer_id=customer_id
+                )
+                subscribed_plan.subscription_plan = tariff
+                subscribed_plan.duration = duration
+                subscribed_plan.save()
+            except:
+                customerModels.SubscribedPlan.objects.create(
+                    customer_id=customer_id,
+                    subscription_plan=tariff,
+                    duration=duration,
+                )
+
+            amount = int(tariff.amount) * duration
+            payment_date = datetime.today()
+            due_date = payment_date + relativedelta(months=duration)
+            if duration == constants.PAID:
+                payment_data = {
+                    'customer_id': customer_id,
+                    'amount': amount,
+                    'payment_date': payment_date,
+                    'due_date': due_date,
+                }
+                customerModels.PaymentHistory.objects.create(**payment_data)
+            request.session['subscribed_plan'] = str(tariff.uuid)
             return redirect(
                 reverse('customer:user-create', kwargs={'customer_id': customer_id})
             )
@@ -97,11 +119,9 @@ class CustomerSelectPlanView(View):
             'title': self.title,
             'active_tab': self.active_tab,
             'plan_options_form': plan_options_form,
-            'subscription_plan': subscription_plan,
+            'subscription_plan': tariff,
         }
         return render(request, self.template_name, context)
-
-
 
 
 class CustomerListView(ListView):
@@ -121,7 +141,32 @@ class CustomerListView(ListView):
                     | Q(legal_name__icontains=' ' + search_query)
                 )
             )
-        return queryset.order_by('legal_name')
+        queryset = queryset.order_by('legal_name')
+
+        for query in queryset:
+            try:
+                last_payment = customerModels.PaymentHistory.objects.filter(customer_id=query.uuid).order_by('-created_at').first()
+                query.due_date = last_payment.due_date
+                
+                days_difference = (query.due_date - datetime.now().date()).days
+                if days_difference > 0 and days_difference < 30:
+                    query.payment_status = constants.DUE
+                elif days_difference < 0:
+                    query.payment_status = constants.OVERDUE
+                else:
+                    query.payment_status = constants.PAID
+
+                query.days_difference = abs(days_difference)
+            except:
+                if query.customer_plan.duration == 0:
+                    query.due_date = query.created_at.date() + timedelta(days=constants.TRIAL_DURATION)
+                    query.payment_status = constants.EXPIRY
+                    query.days_difference = (query.due_date - datetime.now().date()).days
+                else:
+                    query.payment_status = constants.PENDING
+
+                
+        return queryset
 
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)
@@ -147,9 +192,7 @@ class CustomerEditView(View):
 
     def get(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
-        customer_object = get_object_or_404(
-            customerModels.Profile, uuid=customer_id
-        )
+        customer_object = get_object_or_404(customerModels.Profile, uuid=customer_id)
         customer_info_form = customerForms.CustomerProfileForm(instance=customer_object)
 
         context = {
@@ -161,9 +204,7 @@ class CustomerEditView(View):
 
     def post(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
-        customer_object = get_object_or_404(
-            customerModels.Profile, uuid=customer_id
-        )
+        customer_object = get_object_or_404(customerModels.Profile, uuid=customer_id)
         customer_info_form = customerForms.CustomerProfileForm(
             request.POST, request.FILES, instance=customer_object
         )
@@ -182,7 +223,7 @@ class CustomerEditView(View):
 
 class UserCreateView(View):
     model = customerModels.User
-    template_name = 'customer/form_user.html'
+    template_name = 'customer/admin_user.html'
     title = 'User Information'
     active_tab = 'customer'
 
@@ -190,51 +231,53 @@ class UserCreateView(View):
         form=customerForms.AddUserAppPermissionsForm, extra=0
     )
 
+    def get_context(self):
+        customer_id = self.kwargs.get('customer_id')
+        customer_user_form = customerForms.CustomerUserForm(
+            initial={'customer': customer_id}
+        )
+        return {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_id': customer_id,
+            'customer_user_form': customer_user_form,
+            'go_back_url': reverse(
+                'customer:select-plan', kwargs={'customer_id': customer_id}
+            ),
+        }
+
     def get(self, request, *args, **kwargs):
-        customer_user_form = customerForms.CustomerUserForm()
-        customer_userpermission_form = customerForms.AddUserAppPermissionsForm()
 
-        if 'selected_subscription_plan' in request.session:
-            subscription_plan = planModels.SubscriptionPlan.objects.get(
-                uuid=request.session['selected_subscription_plan']
-            )
+        context = self.get_context()
+        if 'subscribed_plan' in request.session:
+            subscribed_plan = request.session['subscribed_plan']
 
-            plan_type = subscription_plan.plan_type
+            tariff = planModels.Tariff.objects.get(uuid=subscribed_plan)
+
             user_app_permissions_formset = self.UserAppPermissionsFormSet(
                 initial=[
                     {
                         'module': module,
-                        'has_access': True, #remove this for the other pages. default is false.
-                        'access_role': constants.VIEWER,  #remove this for the other pages, where it's not selected by default.
+                        'has_access': True,
+                        'access_role': constants.VIEWER,
                     }
-                    for module in plan_type.modules
+                    for module in tariff.modules
                 ]
             )
 
-        else:
-            subscription_plan = None
-            plan_type = None
-        context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
-            'customer_user_form': customer_user_form,
-            'user_app_permissions_formset': user_app_permissions_formset,
-        }
+            more_context = {
+                'user_app_permissions_formset': user_app_permissions_formset,
+            }
+            context.update(more_context)
+
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
-        customer_id = self.kwargs.get('customer_id')
-        customer_info_object = get_object_or_404(
-            customerModels.CustomerInfo, uuid=customer_id
-        )
         customer_user_form = customerForms.CustomerUserForm(request.POST)
         user_app_permissions_formset = self.UserAppPermissionsFormSet(request.POST)
 
         if customer_user_form.is_valid():
-            customer_user_object = customer_user_form.save(commit=False)
-            customer_user_object.customer = customer_info_object
-            customer_user_object.save()
+            customer_user_object = customer_user_form.save()
 
             if user_app_permissions_formset.is_valid():
                 for user_app_permissions_form in user_app_permissions_formset:
@@ -250,25 +293,24 @@ class UserCreateView(View):
                     else:
                         user_app_permissions_form_object.access_role = None
                     user_app_permissions_form_object.save()
-            
-            messages.success(request, 'Employee Access Successfully Updated')
-            next = request.POST.get('next', '')
-            print(f"next: {next}, customer_id: {customer_id}")
-            if next:
-                if next == 'customer:user-add':
-                    return redirect(reverse('customer:user-add', kwargs={'customer_id': customer_id}))
-                elif next == 'customer:list':
-                    return redirect(reverse('customer:list')) #redirect to next page (other users)
 
-        context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
-            'customer_user_form': customer_user_form,
-            'user_app_permissions_formset': user_app_permissions_formset,
-        }
-        # request.session.pop('selected_subscription_plan', None)
+            action = request.POST.get('action', None)
+
+            if action == 'add_more_user':
+                return redirect(
+                    reverse(
+                        'customer:user-add',
+                        kwargs={'customer_id': customer_user_object.customer_id},
+                    )
+                )
+            elif action == 'done':
+                request.session.pop('subscribed_plan', None)
+                return redirect(reverse('customer:list'))
+
+        context = self.get_context()
 
         return render(request, self.template_name, context)
+
 
 class AnotherUserCreateView(View):
     model = customerModels.User
@@ -279,35 +321,29 @@ class AnotherUserCreateView(View):
     UserAppPermissionsFormSet = formset_factory(
         form=customerForms.AddUserAppPermissionsForm, extra=0
     )
-    # def get_queryset(self):
-        
 
     def get(self, request, *args, **kwargs):
-        customer_user_form = customerForms.CustomerUserForm()
-        customer_userpermission_form = customerForms.AddUserAppPermissionsForm()
+        customer_id = self.kwargs.get('customer_id')
+        customer_user_form = customerForms.CustomerUserForm(
+            initial={'customer': customer_id}
+        )
 
-        if 'selected_subscription_plan' in request.session:
-            subscription_plan = planModels.SubscriptionPlan.objects.get(
-                uuid=request.session['selected_subscription_plan']
-            )
+        if 'subscribed_plan' in request.session:
+            subscribed_plan = request.session['subscribed_plan']
 
-            plan_type = subscription_plan.plan_type
+            tariff = planModels.Tariff.objects.get(uuid=subscribed_plan)
+
             user_app_permissions_formset = self.UserAppPermissionsFormSet(
                 initial=[
                     {
                         'module': module,
-                        # 'has_access': True, #remove this for the other pages. default is false.
-                        # 'access_role': constants.VIEWER,  #remove this for the other pages, where it's not selected by default.
                     }
-                    for module in plan_type.modules
+                    for module in tariff.modules
                 ]
             )
 
-        else:
-            subscription_plan = None
-            plan_type = None
         customer_id = self.kwargs.get('customer_id')
-        users = customerModels.CustomerUser.objects.filter(customer_id=customer_id)
+        users = customerModels.User.objects.filter(customer_id=customer_id)
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
@@ -318,17 +354,11 @@ class AnotherUserCreateView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        customer_id = self.kwargs.get('customer_id')
-        customer_info_object = get_object_or_404(
-            customerModels.CustomerInfo, uuid=customer_id
-        )
         customer_user_form = customerForms.CustomerUserForm(request.POST)
         user_app_permissions_formset = self.UserAppPermissionsFormSet(request.POST)
 
         if customer_user_form.is_valid():
-            customer_user_object = customer_user_form.save(commit=False)
-            customer_user_object.customer = customer_info_object
-            customer_user_object.save()
+            customer_user_object = customer_user_form.save()
 
             if user_app_permissions_formset.is_valid():
                 for user_app_permissions_form in user_app_permissions_formset:
@@ -345,14 +375,18 @@ class AnotherUserCreateView(View):
                         user_app_permissions_form_object.access_role = None
                     user_app_permissions_form_object.save()
 
-            messages.success(request, 'Employee Access Successfully Updated')
-            next = request.POST.get('next', '')
-            print(f"next: {next}, customer_id: {customer_id}")
-            if next:
-                if next == 'customer:user-add':
-                    return redirect(reverse('customer:user-add', kwargs={'customer_id': customer_id}))
-                elif next == 'customer:list':
-                    return redirect(reverse('customer:list')) #redirect to next page (other users)
+            action = request.POST.get('action', None)
+
+            if action == 'add_more_user':
+                return redirect(
+                    reverse(
+                        'customer:user-add',
+                        kwargs={'customer_id': customer_user_object.customer_id},
+                    )
+                )
+            elif action == 'done':
+                request.session.pop('subscribed_plan', None)
+                return redirect(reverse('customer:list'))
 
         context = {
             'title': self.title,
@@ -360,6 +394,5 @@ class AnotherUserCreateView(View):
             'customer_user_form': customer_user_form,
             'user_app_permissions_formset': user_app_permissions_formset,
         }
-        # request.session.pop('selected_subscription_plan', None)
 
         return render(request, self.template_name, context)

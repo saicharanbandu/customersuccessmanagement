@@ -1,12 +1,21 @@
+body, html {
+    font-size: 14px !important;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;;
+}
 
 .btn {
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-size: 0.8rem;
 }
 
 table th {
-    font-size: 0.65rem !important;
-    color: #76838f !important;
+    font-size: 0.75rem !important;
+    color: #838c95 !important;
 }
 
 
@@ -123,4 +132,8 @@ table .org-col, table .name-col {
 
 table .address-col {
     width: 15rem;
+}
+
+.text-faded {
+    color: #8f9091;
 }

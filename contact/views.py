@@ -91,7 +91,7 @@ class ContactEditView(View):
     active_tab = "contact"
 
     def get(self, request, contact_id, *args, **kwargs):
-        contact = get_object_or_404(contactModel.Contact, id=contact_id)
+        contact = get_object_or_404(contactModel.Contact, uuid=contact_id)
         contact_form = contactForm.ContactForm(instance=contact)
 
         context = {
@@ -104,7 +104,7 @@ class ContactEditView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, contact_id, *args, **kwargs):
-        contact = get_object_or_404(contactModel.Contact, id=contact_id)
+        contact = get_object_or_404(contactModel.Contact, uuid=contact_id)
         contact_info_form = contactForm.ContactForm(
             request.POST, request.FILES, instance=contact
         )
@@ -112,7 +112,6 @@ class ContactEditView(View):
             contact_info_form.save()
             return redirect(reverse("contact:list"))
         else:
-            print(contact_info_form.errors)
             contact_info_form = contactForm.ContactForm(instance=contact)
             context = {
                 "title": self.title,

@@ -9,41 +9,46 @@ class CustomerProfileForm(forms.ModelForm):
     class Meta:
         model = customerModels.Profile
         exclude = [
-            "uuid",
-            "created_at",
-            "updated_at",
+            'uuid',
+            'created_at',
+            'updated_at',
         ]
 
         widgets = {
-            "legal_name": forms.TextInput(attrs={"class": "form-control"}),
-            "display_name": forms.TextInput(attrs={"class": "form-control"}),
-            "short_name": forms.TextInput(
+            'prospect': forms.Select(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-select',
                 }
             ),
-            "profile_picture": forms.ClearableFileInput(
-                attrs={"class": "form-control", "accept": "image/*"}
-            ),
-            "address": forms.TextInput(attrs={"class": "form-control"}),
-            "country": forms.Select(
+            'legal_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'display_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'short_name': forms.TextInput(
                 attrs={
-                    "class": "form-select",
+                    'class': 'form-control',
                 }
             ),
-            "state": forms.Select(
+            'profile_picture': forms.ClearableFileInput(
+                attrs={'class': 'form-control', 'accept': 'image/*'}
+            ),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'country': forms.Select(
                 attrs={
-                    "class": "form-select",
+                    'class': 'form-select',
                 }
             ),
-            "city": forms.TextInput(
+            'state': forms.Select(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-select',
                 }
             ),
-            "zip_code": forms.NumberInput(
+            'city': forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
+                }
+            ),
+            'zip_code': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
                 }
             ),
         }
@@ -52,39 +57,40 @@ class CustomerProfileForm(forms.ModelForm):
 class CustomerPlanForm(forms.ModelForm):
     class Meta:
         model = customerModels.SubscribedPlan
-        exclude = [
-            "uuid",
-            "created_at",
-            "updated_at"
-        ]
+        exclude = ['uuid', 'created_at', 'updated_at']
 
 
-class PlanOptionsForm(forms.Form):
-    plan_name = forms.ModelChoiceField(queryset=planModels.Tariff.objects.all(), widget=forms.Select(attrs={'class': 'form-select'}))
-    duration = forms.ChoiceField(choices=constants.PLAN_DURATION_CHOICES, widget=forms.Select(attrs={'class': 'form-select'}))
-
+class SubscriptionPlanOptionsForm(forms.Form):
+    plan = forms.ModelChoiceField(
+        queryset=planModels.Tariff.objects.all(),
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
+    )
+    duration = forms.ChoiceField(
+        choices=constants.PLAN_DURATION_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+    )
+    payment_status = forms.ChoiceField(
+        choices=constants.PAYMENT_STATUS_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
 
 class CustomerUserForm(forms.ModelForm):
     class Meta:
         model = customerModels.User
-        exclude = [
-            "uuid",
-            "created_at",
-            "updated_at"
-        ]
+        exclude = ['uuid', 'created_at', 'updated_at']
 
         widgets = {
-            "full_name": forms.TextInput(attrs={"class": "form-control"}),
-            "designation": forms.TextInput(attrs={"class": "form-control"}),
-            "mobile_no": forms.TextInput(attrs={"class": "form-control"}),
-            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            'customer': forms.HiddenInput(),
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'designation': forms.TextInput(attrs={'class': 'form-control'}),
+            'mobile_no': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
 
 class AddUserAppPermissionsForm(forms.ModelForm):
     has_access = forms.CharField(
         widget=forms.CheckboxInput(
-            attrs={"class": "form-check-input module-permission"}
+            attrs={'class': 'form-check-input module-permission'}
         )
     )
     access_role = forms.ChoiceField(
@@ -92,7 +98,7 @@ class AddUserAppPermissionsForm(forms.ModelForm):
         choices=constants.STAFF_ACCESS_ROLE_CHOICES,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                'class': 'form-select',
             }
         ),
     )
@@ -100,16 +106,16 @@ class AddUserAppPermissionsForm(forms.ModelForm):
 
     class Meta:
         model = customerModels.UserAppPermissions
-        fields = ["module", "access_role"]
+        fields = ['module', 'access_role']
         widgets = {
-            "module": forms.HiddenInput(),
+            'module': forms.HiddenInput(),
         }
 
 
 class EditUserAppPermissionsForm(forms.ModelForm):
     has_access = forms.CharField(
         widget=forms.CheckboxInput(
-            attrs={"class": "form-check-input module-permission"}
+            attrs={'class': 'form-check-input module-permission'}
         )
     )
     access_role = forms.ChoiceField(
@@ -117,17 +123,17 @@ class EditUserAppPermissionsForm(forms.ModelForm):
         choices=constants.STAFF_ACCESS_ROLE_CHOICES,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                'class': 'form-select',
             }
         ),
     )
 
     class Meta:
         model = customerModels.UserAppPermissions
-        fields = ["user", "module", "access_role"]
+        fields = ['user', 'module', 'access_role']
         widgets = {
-            "user": forms.HiddenInput(),
-            "module": forms.HiddenInput(),
+            'user': forms.HiddenInput(),
+            'module': forms.HiddenInput(),
         }
 
     # def __init__(self, *args, **kwargs):

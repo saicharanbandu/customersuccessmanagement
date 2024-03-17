@@ -1,12 +1,12 @@
-var tooltipTriggerList = [].slice.call(document.querySelectorAll("[data-bs-toggle='tooltip']"))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+let tooltipTriggerList = [].slice.call(document.querySelectorAll("[data-bs-toggle='tooltip']"))
+let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 })
 
 $(document).ready(function () {
     $("#id_prospect-country").change(function () {
-        var url = $(this).closest("form").attr("data-url");
-        var countryId = $(this).val();
+        let url = $(this).closest("form").attr("data-url");
+        let countryId = $(this).val();
 
         $.ajax({
             url: url,
@@ -17,6 +17,26 @@ $(document).ready(function () {
                 $("#id_prospect-state").html(data);
             }
         });
+    });
+
+    $("input[type=radio][name=plan], #id_duration").change(function () {
+        let url = $(this).closest("form").attr("data-url");
+        let plan_id = $('input[type=radio][name=plan]:checked').val();;
+        let duration = $('#id_duration').val();
+
+        if (plan_id !=='' && duration !=='' ) {
+            $.ajax({
+                url: url,
+                data: {
+                    "plan_id": plan_id,
+                    "duration": duration
+    
+                },
+                success: function (data) {
+                    $("#payableAmount").html(`Rs. ${data.payable_amount}`);
+                }
+            });
+        }
     });
 });
 

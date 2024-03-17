@@ -4,6 +4,7 @@ from plan import models as planModels
 from misc import models as miscModels
 from prospect import models as prospectModels
 
+from tabernacle_customer_success import constants
 import uuid
 
 
@@ -12,7 +13,7 @@ class Profile(models.Model):
     Customer Profile
     """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    prospect = models.ForeignKey(
+    prospect = models.OneToOneField(
         prospectModels.Profile, to_field="uuid", on_delete=models.SET_NULL, null=True
     )
     legal_name = models.CharField(max_length=55, verbose_name="Legal Name")
@@ -32,26 +33,31 @@ class SubscribedPlan(models.Model):
     """
     Plan the customer is subscribed to
     """
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    customer = models.ForeignKey(
+    customer = models.OneToOneField(
         Profile,
         to_field="uuid",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         related_name="customer_plan",
     )
     subscription_plan = models.ForeignKey(
         planModels.Tariff,
         to_field="uuid",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
     )
     duration = models.IntegerField(default=0) # Duration in months
+    payment_status = models.CharField(max_length=55, choices=constants.PAYMENT_STATUS_CHOICES, verbose_name="Payment Status", default=constants.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.customer}"
+
+    class Meta:
+        ordering = ('customer__legal_name',)
 
 
 class User(models.Model):
@@ -65,10 +71,10 @@ class User(models.Model):
         to_field="uuid",
         on_delete=models.CASCADE,
     )
-    full_name = models.CharField(max_length=100, blank=True, null=True)
-    designation = models.CharField(max_length=100, blank=True, null=True)
-    mobile_no = models.CharField(max_length=15, blank=True, null=True)
-    email = models.EmailField( max_length=254, blank=True, null=True)
+    full_name = models.CharField(max_length=100)
+    designation = models.CharField(max_length=100)
+    mobile_no = models.CharField(max_length=15)
+    email = models.EmailField(max_length=254)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -99,4 +105,27 @@ class UserAppPermissions(models.Model):
     class Meta:
         unique_together = ["user", "module"]
         ordering = ('user__full_name', )
+
+
+
+class PaymentHistory(models.Model):
+    """
+    Customer's Payment History
+    """
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    customer = models.ForeignKey(
+        Profile,
+        related_name="customer_payment",
+        to_field="uuid",
+        on_delete=models.CASCADE,
+    )
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    payment_date = models.DateField()
+    due_date = models.DateField()
+    invoice_no = models.CharField(max_length=25, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.customer.legal_name} | {self.payment_date}"
 
