@@ -102,7 +102,8 @@ class CustomerSelectPlanView(View):
             amount = int(tariff.amount) * duration
             payment_date = datetime.today()
             due_date = payment_date + relativedelta(months=duration)
-            if duration == constants.PAID:
+
+            if payment_status == constants.PAID:
                 payment_data = {
                     'customer_id': customer_id,
                     'amount': amount,
@@ -158,11 +159,12 @@ class CustomerListView(ListView):
 
                 query.days_difference = abs(days_difference)
             except:
-                if query.customer_plan.duration == 0:
-                    query.due_date = query.created_at.date() + timedelta(days=constants.TRIAL_DURATION)
-                    query.payment_status = constants.EXPIRY
-                    query.days_difference = (query.due_date - datetime.now().date()).days
-                else:
+                try:
+                    if query.customer_plan.duration == 0:
+                        query.due_date = query.created_at.date() + timedelta(days=constants.TRIAL_DURATION)
+                        query.payment_status = constants.EXPIRY
+                        query.days_difference = (query.due_date - datetime.now().date()).days
+                except:
                     query.payment_status = constants.PENDING
 
                 

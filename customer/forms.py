@@ -63,7 +63,7 @@ class CustomerPlanForm(forms.ModelForm):
 class SubscriptionPlanOptionsForm(forms.Form):
     plan = forms.ModelChoiceField(
         queryset=planModels.Tariff.objects.all(),
-        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
     )
     duration = forms.ChoiceField(
         choices=constants.PLAN_DURATION_CHOICES,

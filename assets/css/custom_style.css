@@ -1,10 +1,59 @@
-body, html {
-    font-size: 14px !important;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 400;
+    background: #f0f3f6;
+    color: #3a3a3a;
+}
+
+hr {
+    margin: 20px 0;
+    border: none;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+label,
+input {
+    cursor: pointer;
+}
+
+h2,
+h3,
+h4,
+h5 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: #1f2949;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+h4 {
+    font-size: 14px;
+}
+
+h5 {
+    font-size: 12px;
+    font-weight: 400;
 }
 
 a {
     text-decoration: none;
-    cursor: pointer;;
+    cursor: pointer;
+    ;
 }
 
 .btn {
@@ -25,14 +74,18 @@ table th {
     line-height: 1.5rem;
 }
 
-.name-group .description, .contact-group .contact-details-sm {
+.name-group .description,
+.contact-group .contact-details-sm {
     padding-top: 0.5rem;
-    font-size:  0.75rem;
+    font-size: 0.75rem;
     line-height: 1.25rem;
 }
 
 
-.name-group .description, .name-group .description i, .contact-group .contact-details, .contact-group .contact-details-sm {
+.name-group .description,
+.name-group .description i,
+.contact-group .contact-details,
+.contact-group .contact-details-sm {
     color: #8f9091;
 }
 
@@ -41,11 +94,12 @@ table th {
     margin-right: 0.5rem;
 }
 
-.address, .address p {
+.address,
+.address p {
     line-height: 1.25rem;
     margin: 0;
     color: #8f9091;
-    font-size:  0.75rem;
+    font-size: 0.75rem;
 }
 
 .table-photo {
@@ -72,7 +126,8 @@ table .remarks-col {
     text-align: center;
 }
 
-table .actions-col, table .status-col {
+table .actions-col,
+table .status-col {
     text-align: center;
 }
 
@@ -118,7 +173,8 @@ table .sl-col {
 }
 
 
-.pagination-sm .page-link, .pagination-sm-desc  {
+.pagination-sm .page-link,
+.pagination-sm-desc {
     font-size: 0.75rem;
 }
 
@@ -126,7 +182,8 @@ textarea.form-control {
     line-height: 1.25rem !important;
 }
 
-table .org-col, table .name-col {
+table .org-col,
+table .name-col {
     width: 20rem;
 }
 
@@ -136,4 +193,8 @@ table .address-col {
 
 .text-faded {
     color: #8f9091;
+}
+
+.w-100 {
+    width: 100%;
 }

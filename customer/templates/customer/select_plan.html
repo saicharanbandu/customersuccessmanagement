@@ -33,26 +33,36 @@
         <form class="forms-sample border-top py-5" action="{% url 'customer:select-plan' customer_id %}" method="POST"
           enctype="multipart/form-data" data-url="{% url 'plan:get-plan-amount' %}">
           {% csrf_token %}
-          
-          <div class="text-center">Select Plan</div>
 
-          {{ plan_options_form.plan.label_tag }}
-          <div class="row">
-              {% for plan in plan_options_form.plan %}
-              <div class="col-3">
-                  <div class="py-1">
-                      {{ plan.tag }}
-                      <label class="form-check-label ms-2" for="{{ plan.id_for_label }}">
-                          {{ plan.choice_label }}
-                      </label>
-                  </div>
-              </div>
-              {% endfor %}
-          </div>
+          <div class="text-center">Select Plan</div>
 
           {{ plan_options_form.duration.label_tag }}
           {{ plan_options_form.duration }}
 
+          <div class="d-flex">
+            <div class="container">
+              <div class="grid-wrapper grid-col-auto">
+              {% for plan in plan_options_form.plan %}
+                <label for="{{ plan.id_for_label }}" class="radio-card">
+                  {{ plan.tag }}
+                  <div class="card-content-wrapper">
+                    <span class="check-icon"></span>
+                    <div class="card-content">
+                      <img src="{% static 'images/small-church.svg' %}"/>
+                      <h5 class="pt-2">{{ plan.choice_label }}</h5>
+                      <h4>₹2999/month</h4>
+                    </div>
+                  </div>
+                </label>
+                <!-- /.radio-card -->
+                {% endfor %}
+              </div>
+              <!-- /.grid-wrapper -->
+            </div>
+            <!-- /.container -->
+            
+            
+          </div>
 
           <hr>
           <div class="fw-bold">Payable Amount</div>
@@ -62,19 +72,19 @@
 
           {{ plan_options_form.payment_status.label_tag }}
           <div class="row">
-              {% for payment_status in plan_options_form.payment_status %}
-              <div class="col-6">
-                  <div class="py-1">
-                      {{ payment_status.tag }}
-                      <label class="form-check-label ms-2" for="{{ payment_status.id_for_label }}">
-                          {{ payment_status.choice_label }}
-                      </label>
-                  </div>
+            {% for payment_status in plan_options_form.payment_status %}
+            <div class="col-6">
+              <div class="py-1">
+                {{ payment_status.tag }}
+                <label class="form-check-label ms-2" for="{{ payment_status.id_for_label }}">
+                  {{ payment_status.choice_label }}
+                </label>
               </div>
-              {% endfor %}
+            </div>
+            {% endfor %}
           </div>
           <a href="{% url 'customer:onboard'%}" class="btn btn-light me-3">Go Back</a>
-            <button type="submit" class="btn btn-gradient-primary me-3" name="action" value="continue">Continue</button>
+          <button type="submit" class="btn btn-gradient-primary me-3" name="action" value="continue">Continue</button>
         </form>
       </div>
     </div>

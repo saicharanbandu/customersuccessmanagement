@@ -70,26 +70,21 @@
               </td>
               <td>{{ customer.legal_name }}</td>
               <td>
-                {% if customer.customer_plan.duration == 0 %}
-                <label class="badge badge-danger">Trial</label>
-                {% else %}
-                  <div class="text-faded">
-                    {{ customer.customer_plan.subscription_plan.name }}
-                  </div>
-                  <div class="mt-1">
-                    <span class="fs-6">
-                      ₹{{ customer.customer_plan.subscription_plan.amount }}
-                    </span>
-                    <small>
-                    {% if customer.customer_plan.duration == '12' %}
-                    /year
-                    {% else %}
-                    /month
-                    {% endif %}
-                    </small>
-                  </div>
-                {% endif %}
-
+                <div class="text-faded">
+                  {{ customer.customer_plan.subscription_plan.name }}
+                </div>
+                <div class="mt-1">
+                  <span class="fs-6">
+                    ₹{{ customer.customer_plan.subscription_plan.amount }}
+                  </span>
+                  <small>
+                  {% if customer.customer_plan.duration == '12' %}
+                  /year
+                  {% else %}
+                  /month
+                  {% endif %}
+                  </small>
+                </div>
               </td>
               <td>{{ customer.created_at| date:'d/m/Y' }}</td>
               <td>
@@ -97,10 +92,6 @@
                 {% if customer.payment_status == 'due' %}
                 <div class="text-info text-uppercase text-small fw-bold">
                     due in {{ customer.days_difference }} days
-                </div>
-                {% elif customer.payment_status == 'expiry' %}
-                <div class="text-danger text-uppercase text-small fw-bold">
-                    expires in {{ customer.days_difference }} days
                 </div>
                 {% elif customer.payment_status == 'overdue' %}
                 <div class="text-danger text-uppercase text-small fw-bold">
