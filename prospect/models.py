@@ -2,6 +2,7 @@ from django.db import models
 from misc import models as miscModels
 import uuid
 
+from tabernacle_customer_success import constants
 
 class Profile(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
@@ -52,9 +53,29 @@ class PointOfContact(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name")
     email = models.EmailField(max_length=255, verbose_name="Email ID", blank=True, null=True)
     mobile = models.CharField(max_length=10, verbose_name="Mobile Number", blank=True, null=True)
-    remarks = models.TextField(verbose_name="Remarks", blank=True, null=True)
+    remarks = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name} - {self.prospect.name}"
+
+
+class StatusHistory(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    prospect = models.ForeignKey(
+        Profile,
+        to_field="uuid",
+        on_delete=models.CASCADE,
+        related_name="prospect_history",
+        null=True,
+    )
+    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES, null=True)
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
+    remarks = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.prospect} : {self.status}"

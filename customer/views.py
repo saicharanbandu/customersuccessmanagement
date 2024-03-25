@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 
 # Project Imports
 from . import models as customerModels, forms as customerForms
+from prospect import models as prospectModels, forms as prospectForms
 from plan import models as planModels
 from django.contrib import messages
 
@@ -189,36 +190,46 @@ class CustomerListView(ListView):
 
 class CustomerEditView(View):
     template_name = 'customer/edit_view.html'
-    title = 'Edit Customer'
+    title = 'Edit Customer Details'
     active_tab = 'customer'
 
     def get(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
         customer_object = get_object_or_404(customerModels.Profile, uuid=customer_id)
-        customer_info_form = customerForms.CustomerProfileForm(instance=customer_object)
+        customer_profile_form = customerForms.CustomerProfileForm(instance=customer_object)
+
+        prospect_object = get_object_or_404(prospectModels.Profile, uuid=customer_object.prospect_id)
+        prospect_profile_form = prospectForms.ProspectProfileForm(instance=prospect_object)
 
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
-            'customer_info_form': customer_info_form,
+            'customer_profile_form': customer_profile_form,
+            'prospect_profile_form': prospect_profile_form,
         }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
+
         customer_object = get_object_or_404(customerModels.Profile, uuid=customer_id)
-        customer_info_form = customerForms.CustomerProfileForm(
+        customer_profile_form = customerForms.CustomerProfileForm(
             request.POST, request.FILES, instance=customer_object
         )
 
-        if customer_info_form.is_valid():
-            customer_info_form.save()
-            return redirect(reverse('customer:list'))
+        prospect_object = get_object_or_404(prospectModels.Profile, uuid=customer_object.prospect_id)
+        prospect_profile_form = prospectForms.ProspectProfileForm(request.POST, instance=prospect_object)
 
+        if customer_profile_form.is_valid() and prospect_profile_form.is_valid():
+            customer_object = customer_profile_form.save()
+            prospect_object = prospect_profile_form.save(commit=False)
+            prospect_object.name = customer_object.legal_name
+            prospect_object.save()
+            return redirect(reverse('customer:list'))
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
-            'customer_info_form': customer_info_form,
+            'customer_profile_form': customer_profile_form,
         }
         return render(request, self.template_name, context)
 

@@ -4,6 +4,7 @@ from django.views.generic import ListView
 from prospect import models as prospectModels, forms as prospectForms
 from django.http import HttpResponse
 from tabernacle_customer_success import constants
+from django.contrib import messages
 
 from django.db.models import Q
 
@@ -71,10 +72,10 @@ class ProspectCreateView(View):
                 point_of_contact_info = poc_form.save(commit=False)
                 point_of_contact_info.prospect = prospect_object
                 point_of_contact_info.save()
+                messages.success(request, 'Prospect has been successfully created')
                 return redirect('prospect:list')
         except Exception as e:
-            error_message = f'An error occurred: {e}'
-            return HttpResponse(error_message, status=500)
+            messages.error(request, 'Unsuccessful, try again')
         
         context = {
             'title': self.title,

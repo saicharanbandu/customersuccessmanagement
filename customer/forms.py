@@ -15,11 +15,7 @@ class CustomerProfileForm(forms.ModelForm):
         ]
 
         widgets = {
-            'prospect': forms.Select(
-                attrs={
-                    'class': 'form-select',
-                }
-            ),
+            'prospect': forms.HiddenInput(),
             'legal_name': forms.TextInput(attrs={'class': 'form-control'}),
             'display_name': forms.TextInput(attrs={'class': 'form-control'}),
             'short_name': forms.TextInput(
@@ -29,27 +25,6 @@ class CustomerProfileForm(forms.ModelForm):
             ),
             'profile_picture': forms.ClearableFileInput(
                 attrs={'class': 'form-control', 'accept': 'image/*'}
-            ),
-            'address': forms.TextInput(attrs={'class': 'form-control'}),
-            'country': forms.Select(
-                attrs={
-                    'class': 'form-select',
-                }
-            ),
-            'state': forms.Select(
-                attrs={
-                    'class': 'form-select',
-                }
-            ),
-            'city': forms.TextInput(
-                attrs={
-                    'class': 'form-control',
-                }
-            ),
-            'zip_code': forms.NumberInput(
-                attrs={
-                    'class': 'form-control',
-                }
             ),
         }
 

@@ -11,5 +11,6 @@ urlpatterns = [
     path('customer/<uuid:customer_id>/user/create/', customerViews.UserCreateView.as_view(), name='user-create'),
     path('customer/<uuid:customer_id>/user/add/', customerViews.AnotherUserCreateView.as_view(), name='user-add'),
 
-    path('customer/<uuid:customer_id>/edit/', customerViews.CustomerEditView.as_view(), name='customer_edit'),
+    path('customer/<uuid:customer_id>/edit/', customerViews.CustomerEditView.as_view(), name='edit-info'),
+
 ]   

@@ -1,0 +1,23 @@
+{% if messages %}
+<div class="position-relative">
+    <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 100;">
+        {% for message in messages %}
+            {% if message.tags == "success" %}
+                <!-- Green variant -->
+                <div class="toast toast-success fade show">
+                <div class="toast-body d-flex justify-content-between">{{ message }}!
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                </div>
+            {% else %}
+                <!-- Red variant -->
+                <div class="toast toast-danger fade show">
+                <div class="toast-body d-flex justify-content-between">{{ message }}!
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

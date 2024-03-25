@@ -8,5 +8,5 @@ urlpatterns = [
     path("create/", views.ContactCreateView.as_view(), name="create"),
     path("edit/<uuid:contact_id>/", views.ContactEditView.as_view(), name="edit"),
 
-    path("delete/<uuid:contact_id>/", actions.delete_contact.as_view(), name="delete"),
+    path("delete/<uuid:contact_id>/", actions.delete_contact, name="delete"),
 ]

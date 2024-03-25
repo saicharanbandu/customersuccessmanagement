@@ -16,10 +16,9 @@ body {
 hr {
     margin: 20px 0;
     border: none;
-    border-bottom: 1px solid #d9d9d9;
+    border-bottom: 1px solid #6e6e6e !important;
 }
 
-label,
 input {
     cursor: pointer;
 }
@@ -53,7 +52,14 @@ h5 {
 a {
     text-decoration: none;
     cursor: pointer;
-    ;
+}
+
+td a, .page-link, .breadcrumb-item a {
+    color: #9a55ff;
+}
+
+.page-item.active .page-link {
+    color: #ffffff !important;
 }
 
 .btn {
@@ -160,13 +166,19 @@ table .sl-col {
     color: #ffffff;
 }
 
+.status-accepted, .toast-success {
+    border: 1px solid #44af24;
+    background: #44af24;
+    color: #ffffff;
+}
+
 .status-awaiting {
     border: 1px solid #198ae3;
     background: #198ae3;
     color: #ffffff;
 }
 
-.status-rejected {
+.status-rejected, .toast-danger {
     border: 1px solid #fe7c96;
     background: #fe7c96;
     color: #ffffff;
@@ -197,4 +209,11 @@ table .address-col {
 
 .w-100 {
     width: 100%;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background: linear-gradient(to right, #da8cff, #9a55ff) !important;
+    border-color: #da8cff;
 }

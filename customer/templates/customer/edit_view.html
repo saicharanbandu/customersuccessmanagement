@@ -4,44 +4,51 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block top_nav %}
-{% include '_partials/top_nav.html' %}
+{% block navbar %}
+{% include '_partials/_navbar.html' %}
 {% endblock %}
 
-{% block side_nav %}
-{% include '_partials/sidebar.html' %}
+{% block sidebar %}
+{% include '_partials/_sidebar.html' %}
+{% endblock %}
+
+{% block page_title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'customer:list' %}">Customers Overview</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+</ol>
 {% endblock %}
 
 {% block content %}
 
 <div class="form-container">
-    <h1>{{ title }}</h1>
-    <form class="" method="POST" data-url="{% url 'customer:ajax-load-states' %}"  enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ customer_info_form.as_p }}
-      <input type="submit" class="btn btn-primary" value="Save Changes">
-      <a href="{{ request.META.HTTP_REFERER }}" type="button" class="btn btn-secondary cancel-btn">Cancel</a>
-    </form>
-  </div>
-    <script>
-      $(document).ready(function() {
-        $('form').on('submit', function(event) {
-          event.preventDefault();
-          var form = $(this);
-          var url = form.data('url');
-          var country_id = form.find('#id_country').val();
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        
+        <form method="POST"
+        data-url="{% url 'misc:ajax-load-states' %}"  enctype="multipart/form-data">
+          {% csrf_token %}
+          <h4 class="card-title">SaaS Information</h4>
+          <p class="card-description">Update details related to SaaS subscription </p>
 
-          $.ajax({
-            url: url,
-            data: {
-              'country_id': country_id
-            },
-            success: function(data) {
-              form.find('#id_state').html(data);
-            }
-          });
-        });
-      });
-    </script>
+          {% include 'customer/profile_form.html' %}
+
+          <hr>
+          <h4 class="card-title">Customer Information</h4>
+          <p class="card-description">Update other details </p>
+
+          {% include 'customer/customer_prospect_form.html' %}
+          
+          <button type="submit" class="btn btn-gradient-primary me-2">Continue</button>
+          <a href="{% url 'customer:list' %}" type="button" class="btn btn-light">Cancel</a>
+        </form>
+      </div>
+    </div>
   </div>
+</div>
 {% endblock %}

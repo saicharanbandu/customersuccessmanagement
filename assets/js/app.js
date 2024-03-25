@@ -53,3 +53,18 @@ $(".module-permission").on("change", function () {
 
     }
 })
+
+
+/** Notification using bootstrap toast */
+document.addEventListener("DOMContentLoaded", function () {
+    var toastElements = document.querySelectorAll(".toast");
+    var toastList = [].map.call(toastElements, function (element) {
+        return new bootstrap.Toast(element, {
+            autohide: true
+        });
+    });
+
+    toastList.forEach(function (toast) {
+        toast.show();
+    });
+});

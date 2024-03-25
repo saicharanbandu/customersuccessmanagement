@@ -85,7 +85,6 @@
                       {{ contact.mobile | default_if_none:"--" }}
                     </div>
                   </div>
-
                 </div>
                 {% if not forloop.last %}
                 <hr>
@@ -94,7 +93,7 @@
               </td>
               <td class="status-col">
                 {% if prospect.status %}
-                <label class="badge status-{{ prospect.status }}">{{ prospect.status }}</label>
+                <label class="badge status-{{ prospect.status }} text-capitalize">{{ prospect.status }}</label>
                 {% else %}
                 --
                 {% endif %}
@@ -134,7 +133,6 @@
                   </div>
                 </div>
               </td>
-
             </tr>
             {% endfor %}
           </tbody>

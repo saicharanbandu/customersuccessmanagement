@@ -2,6 +2,7 @@ from django import forms
 from . import models as prospectModels
 from misc import models as miscModels
 
+from tabernacle_customer_success import constants
 
 class ProspectProfileForm(forms.ModelForm):
     class Meta:
@@ -84,3 +85,25 @@ class PointOfContactForm(forms.ModelForm):
             ),
             'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
+
+
+
+class ProspectStatusForm(forms.ModelForm):
+   class Meta:
+        model = prospectModels.StatusHistory
+        exclude = [
+            'uuid',
+            'created_at',
+            'updated_at',
+        ]
+        widgets = {
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'date': forms.TextInput(attrs={'class': 'form-control'}),
+            'time': forms.EmailInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+        }
+
