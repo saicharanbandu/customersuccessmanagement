@@ -15,7 +15,7 @@ class CustomerProfileForm(forms.ModelForm):
         ]
 
         widgets = {
-            'prospect': forms.HiddenInput(),
+            'prospect': forms.Select(),
             'legal_name': forms.TextInput(attrs={'class': 'form-control'}),
             'display_name': forms.TextInput(attrs={'class': 'form-control'}),
             'short_name': forms.TextInput(
