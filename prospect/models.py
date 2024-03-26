@@ -1,4 +1,5 @@
 from django.db import models
+from misc import models as miscModels
 import uuid
 
 
@@ -8,8 +9,12 @@ class ProspectInfo(models.Model):
     name = models.CharField(max_length=255, verbose_name="Name")
     street = models.CharField(max_length=255, verbose_name="Street/Locality")
     city = models.CharField(max_length=50, verbose_name="City/Town/Village")
-    country = models.CharField(max_length=255, verbose_name="Country")
-    state = models.CharField(max_length=255, verbose_name="State")
+    country = models.ForeignKey(
+        miscModels.Country, to_field="uuid", on_delete=models.SET_NULL, null=True
+    )
+    state = models.ForeignKey(
+        miscModels.State, to_field="uuid", on_delete=models.SET_NULL, null=True
+    )
     email = models.EmailField(max_length=255, verbose_name="Email ID")
     website = models.CharField(
         max_length=200, blank=True, null=True, verbose_name="Website"
