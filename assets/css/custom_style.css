@@ -198,10 +198,6 @@ table .address-col {
 .w-100 {
     width: 100%;
 }
-.modal-body{
-    color: #000000;
-}
-
 .modal-body input[type="time"],
 .modal-body input[type="date"],
 .modal-body select[name="Status"]
@@ -211,8 +207,4 @@ table .address-col {
    margin-bottom: 0.5em;
    font-size: 1.1em;
 }
-.modal-body input[type="radio"] {
-    margin: 0.5em; 
-}
-
 
