@@ -20830,6 +20830,7 @@ dl li {
 }
 
 .sidebar .nav {
+  position: fixed;
   overflow: hidden;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
