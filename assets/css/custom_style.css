@@ -66,6 +66,7 @@ td a, .page-link, .breadcrumb-item a {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-size: 0.8rem;
+    align-items: center;
 }
 
 table th {
@@ -227,3 +228,11 @@ table .address-col {
    font-size: 1.1em;
 }
 
+.img-fluid {
+    width: 90%;
+    height: auto;
+ }/*For making illustration Big */
+
+ .transparent-text {
+    color: rgba(0, 0, 0, 0.5); /* 60% transparent black color */
+}
