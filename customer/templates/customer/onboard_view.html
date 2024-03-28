@@ -62,9 +62,10 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #ffffff;
+  background: #D3D3D3;
   border: 1px solid;
   margin-bottom: 6px;
+  color: white;
 }
 
 .stepper-item .step-counter i {
@@ -72,7 +73,8 @@
   font-size: 20px;
 }
 
-.stepper-item .step-counter::before {
+.stepper-item.active  .step-counter::before,
+.stepper-item.completed .step-counter::before  {
   content: "";
   position: absolute;
   width: calc(100% - 4px); 
@@ -80,12 +82,6 @@
   border-radius: 50%;
   border: 2px solid #ffffff; 
 }
-
-.stepper-item.active .step-counter::before,
-.stepper-item.completed .step-counter::before {
-  background-color: inherit;
-}
-
 .stepper-item.active .step-counter {
   color: #ffffff;
   background-color: #9e58ff;
