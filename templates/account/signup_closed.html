@@ -1,12 +1,48 @@
-{% extends "account/base_entrance.html" %}
+{% extends "../account_base.html" %}    
+{% load static %}
 {% load i18n %}
 {% load allauth %}
 {% block head_title %}
     {% trans "Sign Up Closed" %}
 {% endblock head_title %}
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign Up Closed" %}
-    {% endelement %}
-    <p>{% trans "We are sorry, but the sign up is currently closed." %}</p>
+<div class="row justify-content-center">
+    <div class="col-md-10 bg-white py-5" style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="text-center">
+                <img src="{% static 'images/Signup_closed.svg' %}" alt="Illustration" style="width: 14%; height: auto;">
+            </div>
+            <div class="text-center">
+
+                    {% element h2 %}
+                    <h2 class="my-3 card-title">{% trans "Sign Up Closed" %}</h2>
+                    {% endelement %}
+                    {% if user.is_authenticated %}
+                        {% include "account/snippets/already_logged_in.html" %}
+                    {% endif %}
+                    <p class="my-3 font-weight-light">
+                        {% trans "We are sorry, but the sign up is currently closed." %}
+                    </p>
+
+        </div>
+        <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>
+    </div>
+{% comment %} </div>
+    <div class="row justify-content-center">
+        <div class="col-md-5 bg-white">
+            <div class="py-5">
+                <div class="text-center">
+                    
+                </div>
+                <div class="text-center">
+                       
+                        {% if user.is_authenticated %}
+                            {% include "account/snippets/already_logged_in.html" %}
+                        {% endif %}
+                        
+                       
+                </div>
+            </div>
+            <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>
+        </div>
+    </div> {% endcomment %}
 {% endblock content %}
