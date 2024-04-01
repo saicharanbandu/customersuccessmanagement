@@ -60,3 +60,24 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ['full_name']
+
+
+
+class Profile(models.Model):
+    """
+        User profile model
+    """
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,
+                            primary_key=True)
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE,
+                                related_name='profile_user')
+    image = models.ImageField(upload_to='images/user/',
+                              blank=True,
+                              null=True)
+    designation = models.CharField(max_length=50, unique=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.full_name)

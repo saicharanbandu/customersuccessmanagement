@@ -20816,6 +20816,11 @@ dl li {
 }
 
 /* Sidebar */
+
+.sidebar-icon-only .nav {
+  width: unset !important;
+}
+
 .sidebar {
   min-height: calc(100vh - 70px);
   background: #ffffff;
@@ -20831,6 +20836,7 @@ dl li {
 
 .sidebar .nav {
   position: fixed;
+  width: 260px;
   overflow: hidden;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
@@ -21180,7 +21186,7 @@ dl li {
     align-items: center;
     background: #fcfcfc;
     padding: 0.5rem 1.4rem;
-    left: 70px;
+    left: 45px;
     position: absolute;
     text-align: left;
     top: 0;
