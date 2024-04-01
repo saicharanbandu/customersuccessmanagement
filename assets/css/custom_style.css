@@ -55,8 +55,12 @@ a {
 }
 
 
-td a, .page-link, .breadcrumb-item a, .action-link {
+td a, .page-link, .breadcrumb-item a, .action-link, .auth-link {
     color: #9a55ff;
+}
+
+.auth-link:hover {
+    color: #b66dff !important;
 }
 
 .page-item.active .page-link {
@@ -225,14 +229,7 @@ table .address-col {
     background: linear-gradient(to right, #da8cff, #9a55ff) !important;
     border-color: #da8cff;
 }
-.img-fluid {
-    width: 70%;
-    height: auto;
- }/*For making illustration Big */
 
- .transparent-text {
-    color: rgba(0, 0, 0, 0.9); /* 60% transparent black color */
-}
 .modal-body input[type="time"],
 .modal-body input[type="date"],
 .modal-body select[name="Status"]
@@ -248,3 +245,11 @@ table .address-col {
 }
 
 
+.img-fluid {
+    width: 90%;
+    height: auto;
+ }/*For making illustration Big */
+
+ .transparent-text {
+    color: rgba(0, 0, 0, 0.5); /* 60% transparent black color */
+}
