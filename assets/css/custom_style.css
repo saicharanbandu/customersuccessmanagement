@@ -226,3 +226,13 @@ table .address-col {
  .transparent-text {
     color: rgba(0, 0, 0, 0.9); /* 60% transparent black color */
 }
+.modal-body input[type="time"],
+.modal-body input[type="date"],
+.modal-body select[name="Status"]
+ {
+   width: 100%; 
+   margin-top: 0.5em;
+   margin-bottom: 0.5em;
+   font-size: 1.1em;
+}
+

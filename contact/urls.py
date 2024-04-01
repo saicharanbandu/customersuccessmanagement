@@ -1,5 +1,6 @@
 from django.urls import path
-from contact import views, actions
+from contact import views
+from contact import actions
 
 app_name = "contact"
 
