@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 import uuid
 
@@ -14,6 +15,23 @@ class Contact(models.Model):
     alt_number = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+        related_name='contact_created_by'
+    )
+
+    updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+        related_name='contact_updated_by'
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

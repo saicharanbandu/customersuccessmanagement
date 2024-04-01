@@ -11,9 +11,11 @@ class ProspectProfileForm(forms.ModelForm):
             'uuid',
             'created_at',
             'updated_at',
+            'status',
         ]
 
         widgets = {
+            'manager': forms.HiddenInput(),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(
                 attrs={

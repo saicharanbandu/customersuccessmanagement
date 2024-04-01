@@ -70,7 +70,8 @@
               <td>
                 {% for contact in prospect.prospect_poc.all %}
                 <div class="contact-group">
-                  {{ contact.name }}{% if contact.remarks %}
+                  {{ contact.name }}
+                  {% if contact.remarks %}
                   <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ contact.remarks }}">
                     <i class="mdi mdi-information-outline"></i>
                   </a>
@@ -98,7 +99,7 @@
                 --
                 {% endif %}
               </td>
-              <td></td>
+              <td><span class="text-faded">{{ prospect.manager.full_name }}</span></td>
               <td class="remarks-col">
                 {% if prospect.remarks %}
                 <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ prospect.remarks }}">
@@ -217,9 +218,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Update</button>
-              
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  
           </div>
       </div>
   </div>

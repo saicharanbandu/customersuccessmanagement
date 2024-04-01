@@ -11,6 +11,10 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'country'
+        verbose_name_plural = 'countries'
+        ordering = ('name',)
 
 class State(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
@@ -21,3 +25,8 @@ class State(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name = 'state'
+        verbose_name_plural = 'states'
+        ordering = ('name',)

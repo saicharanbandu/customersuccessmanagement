@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-+br!hd#inw%%ojzs$doryqf&xh(im=1sg!x+8=cad@7%e$2#pj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.29.248']
 
 
 # Application definition
@@ -157,11 +157,13 @@ MEDIA_URL = '/media/'
 
 SITE_ID = 1
 
+AUTH_USER_MODEL = 'user.User'
+
 ACCOUNT_ADAPTER = 'user.adapters.NoSignupAccountAdapter'
 
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none" 
-ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 ACCOUNT_LOGOUT_REDIRECT_URL ="account_login"

@@ -16,6 +16,10 @@
 {{ title }}
 {% endblock %}
 
+{% block app_stylesheets %}
+<link rel="stylesheet" href="{% static 'customer/css/style.css' %}">
+{% endblock %}
+
 {% block breadcrumbs %}
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a href="{% url 'contact:list' %}">Customers Overview</a></li>
@@ -24,118 +28,6 @@
 {% endblock %}
 
 {% block content %}
-<style>
-.stepper-wrapper {
-  margin-top: auto;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-.stepper-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
-}
-
-.stepper-item::before {
-  position: absolute;
-  content: "";
-  border: 3px solid #c8c8c8;
-  width: 100%;
-  top: 21px;
-  left: -50%;
-  z-index: 2;
-}
-
-.stepper-item .step-counter {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #D3D3D3;
-  border: 1px solid;
-  margin-bottom: 6px;
-  color: white;
-}
-
-.stepper-item .step-counter i {
-  z-index: 10;
-  font-size: 20px;
-}
-
-.stepper-item.active  .step-counter::before,
-.stepper-item.completed .step-counter::before  {
-  content: "";
-  position: absolute;
-  width: calc(100% - 4px); 
-  height: calc(100% - 4px); 
-  border-radius: 50%;
-  border: 2px solid #ffffff; 
-}
-.stepper-item.active .step-counter {
-  color: #ffffff;
-  background-color: #9e58ff;
-}
-
-.stepper-item.completed .step-counter {
-  color: #ffffff;
-  background-color: #3fd08f;
-}
-
-.stepper-item.active {
-  font-weight: bold;
-}
-
-
-.stepper-item.completed .step-counter {
-  color: #ffffff;
-  background-color: #d789ff;
-}
-
-
-.stepper-item.completed::after {
-  
-  position: absolute;
-  content: "";
-  border: 3px solid; 
-  border-image: linear-gradient(to right, #d789ff, #9e58ff); 
-  border-image-slice: 1; 
-  width: 100%;
-  top: 21px;
-  left: 50%;
-  z-index: 3;
-}
-.stepper-item.completed + .stepper-item.completed::before {
-  position: absolute;
-  content: "";
-  border: 3px solid; 
-  border-image: linear-gradient(to right, #d789ff, #d789ff); 
-  border-image-slice: 1; 
-  width: 100%; 
-  top: 21px;
-  left: 50%;
-  transform: translateX(-100%);
-  z-index: 3;
-}
-
-
-.stepper-item:first-child::before {
-  content: none;
-}
-.stepper-item:last-child::after {
-  content: none;
-}
-</style>
 
 <div class="form-container">
   <div class="col-12 grid-margin stretch-card">
@@ -144,55 +36,23 @@
         <h4 class="card-title text-center">Let's get started with the onboarding process</h4>
         <p class="card-description text-center">Follow the 3-step process to onboard the client</p>
 
+        <div class="stepper-wrapper">
+          <div class="stepper-item active">
+            <div class="step-counter"><i class="mdi mdi-file-document"></i></div>
+            <div class="step-name">Customer Info</div>
+          </div>
+          <div class="stepper-item ">
+            <div class="step-counter"><i class="mdi mdi-cash" ></i></div>
+            <div class="step-name">Select Plan</div>
+          </div>
+          <div class="stepper-item">
+            <div class="step-counter"><i class="mdi mdi-account-multiple-plus"></i></div>
+            <div class="step-name">Completed</div>
+          </div>
+        </div>
+
         <form class="forms-sample border-top py-5" action="{% url 'customer:onboard' %}" method="POST"
           enctype="multipart/form-data">
-
-          <div class="stepper-wrapper">
-            <div class="stepper-item active">
-              <div class="step-counter"><i class="mdi mdi-file-document"></i></div>
-              <div class="step-name">Client Information</div>
-            </div>
-            <div class="stepper-item ">
-              <div class="step-counter"><i class="mdi mdi-cash" ></i></div>
-              <div class="step-name">Select Plan</div>
-            </div>
-            <div class="stepper-item">
-              <div class="step-counter"><i class="mdi mdi-apple"></i></div>
-              <div class="step-name">Completed</div>
-            </div>
-          </div>
-
-          <div class="stepper-wrapper">
-            <div class="stepper-item completed">
-              <div class="step-counter"><i class="mdi mdi-file-document"></i></div>
-              <div class="step-name">Client Information</div>
-            </div>
-            <div class="stepper-item active">
-              <div class="step-counter"><i class="mdi mdi-cash" ></i></div>
-              <div class="step-name">Select Plan</div>
-            </div>
-            <div class="stepper-item">
-              <div class="step-counter"><i class="mdi mdi-apple"></i></div>
-              <div class="step-name">Completed</div>
-            </div>
-          </div>
-
-          <div class="stepper-wrapper">
-            <div class="stepper-item completed">
-              <div class="step-counter"><i class="mdi mdi-file-document"></i></div>
-              <div class="step-name">Client Information</div>
-            </div>
-            <div class="stepper-item completed">
-              <div class="step-counter"><i class="mdi mdi-cash" ></i></div>
-              <div class="step-name">Select Plan</div>
-            </div>
-            <div class="stepper-item active">
-              <div class="step-counter"><i class="mdi mdi-apple"></i></div>
-              <div class="step-name">Completed</div>
-            </div>
-          </div>
-
- 
           {% csrf_token %}
           <div class="text-center">Customer Info</div>
           {% include 'customer/profile_form.html' %}

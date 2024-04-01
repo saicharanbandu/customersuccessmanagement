@@ -9,5 +9,7 @@ class LoginRequiredMiddleware:
         if not request.user.is_authenticated and not request.path.startswith('/accounts') and not request.path.startswith('/admin'):
             return redirect(reverse('account_login'))
         
+        if request.user.is_authenticated and request.path == '/':
+            return redirect(reverse('customer:list'))
         response = self.get_response(request)
         return response

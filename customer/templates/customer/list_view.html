@@ -49,9 +49,9 @@
               <th class="table-photo">LOGO</th>
               <th>CUSTOMER NAME</th>
               <th>PLAN</th>
-              <th>ONBOARDED ON</th>
-              <th>STATUS</th>
-              <th>DUE DATE</th>
+              <th class="text-center">ONBOARDED ON</th>
+              <th class="text-center">PAYMENT STATUS</th>
+              <th class="text-center">DUE DATE</th>
               <th>CSM</th>
               <th class="text-center">ACTIONS</th>
             </tr>
@@ -68,46 +68,52 @@
                   {% endif %}
                 </div>
               </td>
-              <td>{{ customer.legal_name }}</td>
+              <td><a class="view-customer-info" data-url="{% url 'customer:get-customer-info' customer.uuid %}" href=""
+                  data-bs-toggle="modal" data-bs-target="#customerInfo">{{ customer.prospect.name }}</a></td>
               <td>
+                {% if customer.legal_name %}
+                {% if customer.customer_plan.subscription_plan.name %}
                 <div class="text-faded">
                   {{ customer.customer_plan.subscription_plan.name }}
                 </div>
-                <div class="mt-1">
-                  <span class="fs-6">
-                    ₹{{ customer.customer_plan.subscription_plan.amount }}
-                  </span>
-                  <small>
-                  {% if customer.customer_plan.duration == '12' %}
-                  /year
-                  {% else %}
-                  /month
-                  {% endif %}
-                  </small>
-                </div>
-              </td>
-              <td>{{ customer.created_at| date:'d/m/Y' }}</td>
-              <td>
-
-                {% if customer.payment_status == 'due' %}
-                <div class="text-info text-uppercase text-small fw-bold">
-                    due in {{ customer.days_difference }} days
-                </div>
-                {% elif customer.payment_status == 'overdue' %}
-                <div class="text-danger text-uppercase text-small fw-bold">
-                    overdue by {{ customer.days_difference }} days
-                </div>
-                {% elif customer.payment_status == 'paid' %}
-                <div class="text-success text-uppercase text-small fw-bold">
-                  {{ customer.payment_status }}
+                <div class="mt-2">
+                  <span class="fs-6">₹{{ customer.customer_plan.subscription_plan.amount }}</span><small
+                    class="text-faded">{% if customer.customer_plan.duration == 12 %}/year{% else %}/month{% endif %}</small>
                 </div>
                 {% else %}
-                <div class="text-danger text-uppercase text-small fw-bold">
-                  Pending
+                <button class="btn btn-sm btn-gradient-danger">Select Plan</button>
+                {% endif%}
+                {% endif%}
+              </td>
+              <td class="text-center">
+                {% if customer.legal_name %}
+                <span class="text-faded">{{ customer.customer_plan.created_at| date:'d/m/Y' }}</span>
+                {% else %}
+                <button class="btn btn-sm btn-gradient-success">Onboard Now</button>
+                {% endif%}
+              </td>
+              <td class="text-center">
+                {% if customer.legal_name %}
+                {% if customer.payment_status == 'due' %}
+                <div class="badge payment-due">
+                  Due in {{ customer.days_difference }} days
                 </div>
+                {% elif customer.payment_status == 'overdue' %}
+                <div class="badge payment-pending">
+                  Overdue by {{ customer.days_difference }} days
+                </div>
+                {% elif customer.payment_status == 'paid' %}
+                <div class="badge payment-paid">Paid</div>
+                {% endif %}
                 {% endif %}
               </td>
-              <td>{{ customer.due_date| date:'d/m/Y' }}</td>
+              <td class="text-center">
+                {% if customer.legal_name %}
+                <span class="text-faded">
+                  {{ customer.due_date| date:'d/m/Y' }}
+                </span>
+                {% endif %}
+              </td>
               <td></td>
               <td class="actions-col">
                 <div class="dropdown">
@@ -152,68 +158,10 @@
     </div>
   </div>
 </div>
-
-{% comment %} <div class="container">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <form class="w-auto" method="GET" action="{% url 'customer:list' %}">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search" name="search" value="{{ request.GET.search}}">
-        <button type="submit" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Search">
-          <span class="input-group-text" id="search-addon">
-            <i class="fas fa-search"></i>
-          </span>
-      </div>
-    </form>
-    <a href="{% url 'customer:onboard' %}" class="btn btn-primary">
-      <i class="fa-solid fa-plus me-2"></i>
-      New customer
-    </a>
+<div class="modal fade" id="customerInfo" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    </div>
   </div>
-  <br>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th> </th>
-        <th>NAME</th>
-        <th>ADDRESS</th>
-        <th>Plan Details</th>
-        <th scope="col">ACTIONS</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for customer in customers %}
-      <tr>
-        <td>
-          {% if customer.profile_picture %}
-          <img src="{{ customer.profile_picture.url }}" alt="Profile Picture" width="50">
-          {% else %}
-          <img src="{% static 'default/image.png' %}" alt="Default Profile Picture" width="50">
-          {% endif %}
-        </td>
-        <td>{{ customer.legal_name }}<br>{{ customer.display_name }}</td>
-
-        <td>
-          {{ customer.address }}<br>{{ customer.city }}<br>{{ customer.state }}<br>{{ customer.country }}<br>{{ customer.zip_code }}
-        </td>
-        <td>
-          {% for plan in customer.plans.all %}
-          {{ plan.subscription_plan }} ({{ plan.duration_in_months }})
-          {% endfor %}
-        </td>
-        <td>
-          <button type="button" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top"
-            title="Edit contact">
-
-            <a href="{% url 'customer:customer_edit' customer.uuid %}">
-              <span class="material-symbols-outlined" style="font-size:24px;">
-                edit_square
-              </span>
-          </button>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% include '_partials/_pagination.html' %} {% endcomment %}
-
-  {% endblock %}
+</div>
+{% endblock %}

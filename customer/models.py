@@ -1,7 +1,7 @@
 from django.db import models
+from django.conf import settings
 
 from plan import models as planModels
-from misc import models as miscModels
 from prospect import models as prospectModels
 
 from tabernacle_customer_success import constants
@@ -21,6 +21,13 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=55, verbose_name="Display Name")
     short_name = models.CharField(
         max_length=50, verbose_name="Short Name or Abbreviation"
+    )
+    manager = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+        related_name='customer_manager'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

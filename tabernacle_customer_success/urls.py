@@ -29,7 +29,7 @@ urlpatterns = [
     path("misc/", include("misc.urls")),
     path("plan/", include("plan.urls")),
     path("prospect/", include("prospect.urls")),
-    # path('user/',include('user.urls')),
+    path('user/',include('user.urls')),
     # path('', RedirectView.as_view(pattern_name='customer:list')),
 ]
 

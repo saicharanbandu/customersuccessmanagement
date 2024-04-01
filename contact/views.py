@@ -16,7 +16,7 @@ class ContactCreateView(View):
     active_tab = "contact"
 
     def get(self, request, *args, **kwargs):
-        contact_form = contactForm.ContactForm(request.GET)
+        contact_form = contactForm.ContactForm(initial={'created_by': request.user})
 
         context = {
             "title": self.title,
@@ -93,7 +93,7 @@ class ContactEditView(View):
 
     def get(self, request, contact_id, *args, **kwargs):
         contact = get_object_or_404(contactModel.Contact, uuid=contact_id)
-        contact_form = contactForm.ContactForm(instance=contact)
+        contact_form = contactForm.ContactForm(instance=contact, initial={'updated_by': request.user})
 
         context = {
             "title": self.title,

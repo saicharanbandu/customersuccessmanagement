@@ -54,7 +54,8 @@ a {
     cursor: pointer;
 }
 
-td a, .page-link, .breadcrumb-item a {
+
+td a, .page-link, .breadcrumb-item a, .action-link {
     color: #9a55ff;
 }
 
@@ -155,34 +156,40 @@ table .sl-col {
 }
 
 
+.badge {
+    border-radius: 10px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
 .status-initiated {
     border: 1px solid #ce82ff;
     background: #ce82ff;
     color: #ffffff;
 }
 
-.status-meeting {
+.status-meeting, .payment-due {
     border: 1px solid #1bcfb4;
     background: #1bcfb4;
     color: #ffffff;
 }
 
-.status-accepted, .toast-success {
-    border: 1px solid #44af24;
-    background: #44af24;
-    color: #ffffff;
+.status-accepted, .toast-success, .payment-paid {
+    border: 1px solid #d7ffcb;
+    background: #d7ffcb;
+    color: #009126;
 }
 
-.status-awaiting {
-    border: 1px solid #198ae3;
-    background: #198ae3;
-    color: #ffffff;
+.status-awaiting, .payment-due {
+    border: 1px solid #c5e8fe;
+    background: #c5e8fe;
+    color: #0748be;
 }
 
-.status-rejected, .toast-danger {
-    border: 1px solid #fe7c96;
-    background: #fe7c96;
-    color: #ffffff;
+.status-rejected, .toast-danger, .payment-pending {
+    border: 1px solid #fadbe1;
+    background: #fadbe1;
+    color: #f80808;
 }
 
 
@@ -235,4 +242,9 @@ table .address-col {
    margin-bottom: 0.5em;
    font-size: 1.1em;
 }
+
+.btn.btn-sm {
+    font-size: 0.65rem !important;
+}
+
 

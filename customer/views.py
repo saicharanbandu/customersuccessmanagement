@@ -149,7 +149,6 @@ class CustomerListView(ListView):
             try:
                 last_payment = customerModels.PaymentHistory.objects.filter(customer_id=query.uuid).order_by('-created_at').first()
                 query.due_date = last_payment.due_date
-                
                 days_difference = (query.due_date - datetime.now().date()).days
                 if days_difference > 0 and days_difference < 30:
                     query.payment_status = constants.DUE
@@ -158,15 +157,18 @@ class CustomerListView(ListView):
                 else:
                     query.payment_status = constants.PAID
 
-                query.days_difference = abs(days_difference)
             except:
-                try:
-                    if query.customer_plan.duration == 0:
-                        query.due_date = query.created_at.date() + timedelta(days=constants.TRIAL_DURATION)
-                        query.payment_status = constants.EXPIRY
-                        query.days_difference = (query.due_date - datetime.now().date()).days
-                except:
-                    query.payment_status = constants.PENDING
+                # try:
+                #     if query.customer_plan.duration == 0:
+                #         query.due_date = query.created_at.date() + timedelta(days=constants.TRIAL_DURATION)
+                #         query.payment_status = constants.EXPIRY
+                #         query.days_difference = (query.due_date - datetime.now().date()).days
+                # except:
+                query.due_date = query.created_at.date()
+                query.payment_status = constants.OVERDUE
+
+            days_difference = (query.due_date - datetime.now().date()).days
+            query.days_difference = abs(days_difference)
 
                 
         return queryset

@@ -1,5 +1,7 @@
 from django.db import models
 from misc import models as miscModels
+from django.conf import settings
+
 import uuid
 
 from tabernacle_customer_success import constants
@@ -32,6 +34,16 @@ class Profile(models.Model):
     congregation = models.IntegerField(blank=True, null=True, verbose_name="Congregation Size (Approx)")
     
     remarks = models.TextField( blank=True, null=True, verbose_name="Remarks")
+
+    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES, null=True)
+
+    manager = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+        related_name='prospect_manager'
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

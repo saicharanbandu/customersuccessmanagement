@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView
 from prospect import models as prospectModels, forms as prospectForms
-from django.http import HttpResponse
 from tabernacle_customer_success import constants
 from django.contrib import messages
 
@@ -44,14 +43,13 @@ class ProspectsListView(ListView):
         return context
 
 
-
 class ProspectCreateView(View):
     template_name = 'prospect/create_view.html'
     title = 'New Prospect'
     active_tab = 'prospect'
 
     def get(self, request, *args, **kwargs):
-        prospect_form = prospectForms.ProspectProfileForm(prefix='prospect')
+        prospect_form = prospectForms.ProspectProfileForm(prefix='prospect', initial={'manager': request.user})
         poc_form = prospectForms.PointOfContactForm(prefix='poc')
         context = {
             'title': self.title,
@@ -66,6 +64,7 @@ class ProspectCreateView(View):
         prospect_form = prospectForms.ProspectProfileForm(request.POST, prefix='prospect')
         poc_form = prospectForms.PointOfContactForm(request.POST, prefix='poc')
 
+        print(prospect_form.errors)
         try:
             if prospect_form.is_valid() and poc_form.is_valid():
                 prospect_object = prospect_form.save()
