@@ -157,7 +157,7 @@ MEDIA_URL = '/media/'
 
 SITE_ID = 1
 
-ACCOUNT_ADAPTER = 'user.adapters.NoSignupAccountAdapter'
+# ACCOUNT_ADAPTER = 'user.adapters.NoSignupAccountAdapter'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none" 
