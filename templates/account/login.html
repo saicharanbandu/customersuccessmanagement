@@ -1,17 +1,12 @@
 {% extends "../account_base.html" %}
-
 {% load static %}
-
-
 {% load i18n %}
 {% load allauth account %}
-
 {% block content %}
-
     <div class="col-lg-4 mx-auto">
         <div class="auth-form-light text-left p-5">
-        <div class="brand-logo">
-            <a class="navbar-brand brand-logo" href="index.html"><img src="{% static 'images/logo.png' %}" alt="logo" /></a>
+            <div class="brand-logo">
+                <a class="navbar-brand brand-logo" href="index.html"><img src="{% static 'images/logo.png' %}" alt="logo" /></a>
             </div>
             <h2 class = "my-3 font-weight-light" >Sign In</h2>
                 
@@ -60,22 +55,28 @@
                 {% if SOCIALACCOUNT_ENABLED %}
                 {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
                 {% endif %}
+            {% endslot %}                  
+            {% slot actions %}          
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <div class="my-2 d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                    <label class="form-check-label text-muted">
+                    <input type="checkbox" class="form-check-input"> Keep me signed in </label>
+                </div>
+                <a href="{% url 'account_reset_password'%}" class="auth-link">Forgot password?</a>
+            </div>
+            <p class="text-center mt-4 font-weight-light">
+                {% blocktrans %}Don't have an account yet?
+                <a href="{{ signup_url }}">Sign Up</a> {% endblocktrans %}   
+            </p>
+            <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>                    
+            {% endslot %}
+            {% endelement %}
+            {% if SOCIALACCOUNT_ENABLED %}
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+            {% endif %}
         </div>
-    
-        </div>
-        <!-- content-wrapper ends -->
-        
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="../../assets/js/off-canvas.js"></script>
-    <script src="../../assets/js/hoverable-collapse.js"></script>
-    <script src="../../assets/js/misc.js"></script>
-    <!-- endinject -->
+    </div>
 {% endblock content %}
 
 
