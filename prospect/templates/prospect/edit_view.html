@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block navbar %} {% include '_partials/_navbar.html' %} {% endblock %}
+
+{% block sidebar %} {% include '_partials/_sidebar.html' %} {% endblock %}
+
+{% block page_title %} {{ title }} {% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'prospect:list' %}">Prospect List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+          <div class="card-body">
+              <form class="forms-sample" method="POST" enctype="multipart/form-data" data-url="{% url 'misc:ajax-load-states' %}">
+                  {% csrf_token %}
+                  <h4 class="card-title">Prospect Information</h4>
+                  <p class="card-description">Update prospect details</p>
+                  {% include 'prospect/prospect_form.html' %}
+                  <button type="submit" class="btn btn-primary me-3">Update Prospect</button>
+                  <a href="{% url 'prospect:list' %}" type="button" class="btn btn-light">Cancel</a>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

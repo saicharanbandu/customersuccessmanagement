@@ -114,17 +114,17 @@
                     <i class="mdi mdi-dots-vertical"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{% url 'prospect:edit' prospect.uuid %}">
                       <i class="mdi mdi-pencil-box-outline me-2"></i>
-                      Edit info
-                    </a>
-                    <a class="dropdown-item" href="#">
+                      Edit Prospect Info
+                  </a>
+                  <a class="dropdown-item" href="">
                       <i class="mdi mdi mdi-contacts me-2"></i>
-                      Update contacts persons
+                      Update Contacts Persons
                     </a>
                     <a class="dropdown-item" data-bs-toggle="modal"  data-bs-target="#UpdateRemarks">
                       <i class="mdi mdi-information-outline me-2"></i>
-                      Update remarks
+                      Update Remarks
                     </a>
                     <a class="dropdown-item" href="#">
                       <i class="mdi mdi-account-convert me-2"></i>
@@ -133,7 +133,7 @@
 
                     <a class="dropdown-item border-top" data-bs-toggle="modal"  data-bs-target="#changeStatus">
                       <i class="mdi mdi-refresh me-2"></i>
-                      Change status
+                      Change Status
                     </a>
                   </div>                
                 </div>

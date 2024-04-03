@@ -37,6 +37,8 @@ class CustomerOnboardingView(View):
             request.POST, request.FILES
         )
         if customer_profile_form.is_valid():
+            form_data = customer_profile_form.cleaned_data
+            request.session['customer_profile_form_data'] = form_data
             customer_info_object = customer_profile_form.save()
             return redirect(
                 reverse(
@@ -49,6 +51,7 @@ class CustomerOnboardingView(View):
             'title': self.title,
             'active_tab': self.active_tab,
             'customer_profile_form': customer_profile_form,
+            
         }
         return render(request, self.template_name, context)
 
@@ -60,10 +63,15 @@ class CustomerSelectPlanView(View):
 
     def get(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
-
-        customer_plan_form = customerForms.CustomerPlanForm()
+        form_data = request.session.get('customer_profile_form_data', {})
+        customer_plan_form = customerForms.CustomerPlanForm(initial=form_data)
         plan_options_form = customerForms.SubscriptionPlanOptionsForm()
+        if 'customer_profile_form_data' in request.session:
+        # Remove the form data from the session to avoid using it again
+            customer_profile_data = request.session.pop('customer_profile_form_data')
 
+        # Set the form fields based on the stored data
+        customer_plan_form = customerForms.CustomerPlanForm(initial=customer_profile_data)
         context = {
             'title': self.title,
             'active_tab': self.active_tab,

@@ -4,6 +4,8 @@ from django.views.generic import ListView
 from prospect import models as prospectModels, forms as prospectForms
 from tabernacle_customer_success import constants
 from django.contrib import messages
+from django.forms import formset_factory
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.db.models import Q
 
@@ -50,27 +52,30 @@ class ProspectCreateView(View):
 
     def get(self, request, *args, **kwargs):
         prospect_form = prospectForms.ProspectProfileForm(prefix='prospect', initial={'manager': request.user})
-        poc_form = prospectForms.PointOfContactForm(prefix='poc')
+        
+        PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, extra=2)
+        poc_formset = PointOfContactFormSet()
+
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
             'prospect_form': prospect_form,
-            'poc_form': poc_form
-
+            'poc_formset': poc_formset,
         }
         return render(request, self.template_name, context)
-    
+
     def post(self, request, *args, **kwargs):
         prospect_form = prospectForms.ProspectProfileForm(request.POST, prefix='prospect')
-        poc_form = prospectForms.PointOfContactForm(request.POST, prefix='poc')
+        PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, extra=2)
+        poc_formset = PointOfContactFormSet(request.POST)
 
-        print(prospect_form.errors)
         try:
-            if prospect_form.is_valid() and poc_form.is_valid():
+            if prospect_form.is_valid() and poc_formset.is_valid():
                 prospect_object = prospect_form.save()
-                point_of_contact_info = poc_form.save(commit=False)
-                point_of_contact_info.prospect = prospect_object
-                point_of_contact_info.save()
+                for form in poc_formset:
+                    point_of_contact_info = form.save(commit=False)
+                    point_of_contact_info.prospect = prospect_object
+                    point_of_contact_info.save()
                 messages.success(request, 'Prospect has been successfully created')
                 return redirect('prospect:list')
         except Exception as e:
@@ -80,6 +85,103 @@ class ProspectCreateView(View):
             'title': self.title,
             'active_tab': self.active_tab,
             'prospect_form': prospect_form,
-            'poc_form': poc_form
+            'poc_formset': poc_formset,
+        }
+        return render(request, self.template_name, context)
+
+class ProspectEditView(View):
+    template_name = 'prospect/edit_view.html'
+    title = 'Edit Prospect'
+    active_tab = 'prospect'
+
+    def get(self, request, *args, **kwargs):
+        prospect_id = kwargs.get('prospect_id')
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        prospect_form = prospectForms.ProspectProfileForm(instance=prospect_instance, prefix='prospect')
+
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'prospect_form': prospect_form,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        prospect_id = kwargs.get('prospect_id')
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        prospect_form = prospectForms.ProspectProfileForm(request.POST, instance=prospect_instance, prefix='prospect')
+        
+        if prospect_form.is_valid():
+            prospect_form.save()
+            
+            messages.success(request, 'Prospect information has been successfully updated')
+            return redirect('prospect:list')
+        else:
+            print(prospect_form.errors)
+            
+            messages.error(request, 'Unsuccessful! Please check the form and try again.')
+
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'prospect_form': prospect_form,
+        }
+        return render(request, self.template_name, context)
+
+    
+class UpdatePointOfContactView(View):
+    model = prospectModels.PointOfContact
+    form_class = prospectForms.PointOfContactForm
+    template_name = 'prospect/update_poc.html'
+
+    def get(self, request, *args, **kwargs):
+        prospect_id = self.request.GET.get('prospect_id')
+        poc_id = self.request.GET.get('poc_id')
+
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+
+        try:
+            poc_instance = prospect_instance.prospect_poc.get(uuid=poc_id)
+        except (prospectModels.PointOfContact.DoesNotExist, IndexError):
+            poc_instance = None
+
+        form = self.form_class(instance=poc_instance)
+
+        context = {
+            'title': 'Edit Point of Contact',
+            'prospect_form': form,
+            'prospect_instance': prospect_instance,
+            'poc_instance': poc_instance,
+            'active_tab': 'prospect',
+            'poc_id': poc_instance.uuid if poc_instance else "",
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        poc_id = self.request.GET.get('poc_id')
+        poc_instance = get_object_or_404(self.model, uuid=poc_id) if poc_id else None
+
+        form = self.form_class(request.POST, instance=poc_instance)
+        if form.is_valid():
+            obj = form.save(commit=False)
+
+            # Retrieve the prospect object using the prospect ID from the form
+            prospect_id = request.POST.get('prospect_id')
+            prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+
+            obj.prospect = prospect_instance
+            obj.save()
+
+            messages.success(request, 'Point of Contact updated successfully')
+            return redirect('prospect:view', ob=prospect_instance.slug)
+        else:
+            messages.error(request, 'Unable to update Point of Contact. Try again.')
+
+        context = {
+            'title': 'Edit Point of Contact',
+            'prospect_form': form,
+            'poc_instance': poc_instance,
+            'active_tab': 'prospect',
+            'poc_id': poc_instance.uuid if poc_instance else ""
         }
         return render(request, self.template_name, context)

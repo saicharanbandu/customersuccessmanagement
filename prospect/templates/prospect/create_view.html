@@ -1,53 +1,42 @@
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block navbar %}
-{% include '_partials/_navbar.html' %}
-{% endblock %}
+{% block navbar %} {% include '_partials/_navbar.html' %} {% endblock %}
 
-{% block sidebar %}
-{% include '_partials/_sidebar.html' %}
-{% endblock %}
+{% block sidebar %} {% include '_partials/_sidebar.html' %} {% endblock %}
 
-{% block page_title %}
-{{ title }}
-{% endblock %}
+{% block page_title %} {{ title }} {% endblock %}
 
 {% block breadcrumbs %}
 <ol class="breadcrumb">
-  <li class="breadcrumb-item"><a href="{% url 'prospect:list' %}">Prospect List</a></li>
-  <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+    <li class="breadcrumb-item"><a href="{% url 'prospect:list' %}">Prospect List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
 </ol>
 {% endblock %}
 
 {% block content %}
 <div class="form-container">
     <div class="col-12 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <form class="forms-sample" method="POST" enctype="multipart/form-data" data-url="{% url 'misc:ajax-load-states' %}" >
-            {% csrf_token %}
-            <h4 class="card-title">Prospect Information</h4>
-            <p class="card-description">Enter prospect details </p>
-            {% include 'prospect/prospect_form.html' %}
-            <hr>
-
-            <h4 class="card-title">Point of Contact</h4>
-            
-            <p class="card-description">Contact Person 1</p>
-            {% include 'prospect/poc_form.html' %}
-            
-            <p class="card-description">Contact Person 2</p>
-
-
-            <button type="submit" class="btn btn-primary me-3">Save Prospect</button>
-            <a href="{% url 'prospect:list' %}" type="button" class="btn btn-light">Cancel</a>
-          </form>
+        <div class="card">
+            <div class="card-body">
+                <form class="forms-sample" method="POST" enctype="multipart/form-data" data-url="{% url 'misc:ajax-load-states' %}">
+                    {% csrf_token %}
+                    <h4 class="card-title">Prospect Information</h4>
+                    <p class="card-description">Enter prospect details</p>
+                    {% include 'prospect/prospect_form.html' %}
+                    <hr>
+                    <h4 class="card-title">Point of Contact</h4>
+                    {{ poc_formset.management_form }}
+                    {% for form in poc_formset %}
+                        {% include 'prospect/poc_form.html' with index=forloop.counter %}
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary me-3">Save Prospect</button>
+                    <a href="{% url 'prospect:list' %}" type="button" class="btn btn-light">Cancel</a>
+                </form>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 {% endblock %}
