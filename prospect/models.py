@@ -62,7 +62,7 @@ class PointOfContact(models.Model):
         related_name="prospect_poc",
         null=True,
     )
-    name = models.CharField(max_length=255, verbose_name="Name")
+    name = models.CharField(max_length=255, verbose_name="Name",  blank=True)
     email = models.EmailField(max_length=255, verbose_name="Email ID", blank=True, null=True)
     mobile = models.CharField(max_length=10, verbose_name="Mobile Number", blank=True, null=True)
     remarks = models.TextField(blank=True, null=True)

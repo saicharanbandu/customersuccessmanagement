@@ -38,7 +38,7 @@ class CustomerOnboardingView(View):
         )
         if customer_profile_form.is_valid():
             form_data = customer_profile_form.cleaned_data
-            request.session['customer_profile_form_data'] = form_data
+            request.session['customer_profile_form_data'] = form_data.legal_name
             customer_info_object = customer_profile_form.save()
             return redirect(
                 reverse(

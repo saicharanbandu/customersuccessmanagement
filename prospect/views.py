@@ -53,7 +53,7 @@ class ProspectCreateView(View):
     def get(self, request, *args, **kwargs):
         prospect_form = prospectForms.ProspectProfileForm(prefix='prospect', initial={'manager': request.user})
         
-        PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, extra=2)
+        PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, min_num=1, validate_min=True, extra=1, can_delete=True)
         poc_formset = PointOfContactFormSet()
 
         context = {
@@ -73,9 +73,10 @@ class ProspectCreateView(View):
             if prospect_form.is_valid() and poc_formset.is_valid():
                 prospect_object = prospect_form.save()
                 for form in poc_formset:
-                    point_of_contact_info = form.save(commit=False)
-                    point_of_contact_info.prospect = prospect_object
-                    point_of_contact_info.save()
+                    if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+                        point_of_contact_info = form.save(commit=False)
+                        point_of_contact_info.prospect = prospect_object
+                        point_of_contact_info.save()
                 messages.success(request, 'Prospect has been successfully created')
                 return redirect('prospect:list')
         except Exception as e:
