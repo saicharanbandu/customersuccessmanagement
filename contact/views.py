@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import View
 from django.db.models import Q
 from django.views.generic import ListView
+from django.contrib import messages
+
 from . import models as contactModel, forms as contactForm
 
 from tabernacle_customer_success import constants
@@ -28,15 +30,16 @@ class ContactCreateView(View):
         contact_info_form = contactForm.ContactForm(request.POST, request.FILES)
         if contact_info_form.is_valid():
             contact_info_form.save()
+            messages.success(request, 'Contact has been successfully created')
             return redirect(reverse("contact:list"))
         else:
-            print(contact_info_form.errors)
             contact_info_form = contactForm.ContactForm(request.POST, request.FILES)
             context = {
                 "title": self.title,
                 "active_tab": self.active_tab,
                 "contact_info_form": contact_info_form,
             }
+            messages.error(request, 'Contact has been successfully created')
             return render(request, self.template_name, context)
 
 
@@ -81,8 +84,6 @@ class ContactListView(ListView):
         return context
 
 
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
 
 
 class ContactEditView(View):
@@ -91,7 +92,7 @@ class ContactEditView(View):
     active_tab = "contact"
 
     def get(self, request, contact_id, *args, **kwargs):
-        contact = get_object_or_404(contactModel.Contact, id=contact_id)
+        contact = get_object_or_404(contactModel.Contact, uuid=contact_id)
         contact_form = contactForm.ContactForm(instance=contact)
 
         context = {
@@ -104,7 +105,7 @@ class ContactEditView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, contact_id, *args, **kwargs):
-        contact = get_object_or_404(contactModel.Contact, id=contact_id)
+        contact = get_object_or_404(contactModel.Contact, uuid=contact_id)
         contact_info_form = contactForm.ContactForm(
             request.POST, request.FILES, instance=contact
         )
@@ -112,7 +113,6 @@ class ContactEditView(View):
             contact_info_form.save()
             return redirect(reverse("contact:list"))
         else:
-            print(contact_info_form.errors)
             contact_info_form = contactForm.ContactForm(instance=contact)
             context = {
                 "title": self.title,

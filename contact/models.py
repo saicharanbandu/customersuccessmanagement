@@ -1,7 +1,9 @@
 from django.db import models
 
+import uuid
 
 class Contact(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     name = models.CharField(max_length=55)
     profile_picture = models.ImageField(
         upload_to="profile_pictures", null=True, blank=True

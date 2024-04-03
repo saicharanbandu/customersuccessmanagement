@@ -25,22 +25,23 @@
 
 {% block content %}
 <div class="form-container">
-    <div class="col-12 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title text-center">Let's get started with the onboarding process</h4>
-          <p class="card-description text-center">Follow the 3-step process to onboard the client</p>
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-center">Let's get started with the onboarding process</h4>
+        <p class="card-description text-center">Follow the 3-step process to onboard the client</p>
+
+        <form class="forms-sample border-top py-5" action="{% url 'customer:onboard' %}" method="POST"
+          enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="text-center">Customer Info</div>
+          {% include 'customer/profile_form.html' %}
           
-          <form class="forms-sample border-top py-5" id="customerForm" action="{% url 'customer:onboard' %}" method="POST" data-url="{% url 'customer:ajax-load-states' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h4 class="card-title text-center">Customer Info</h4>
-            {% include 'customer/legal_info_form.html' %}
-            <button type="submit" class="btn btn-gradient-primary me-2">Save Contact</button>
-            <a href="{% url 'customer:list' %}" type="button" class="btn btn-light">Cancel</a>
-          </form>
-          
-        </div>
+          <button type="submit" class="btn btn-gradient-primary me-2">Continue</button>
+          <a href="{% url 'customer:list' %}" type="button" class="btn btn-light">Cancel</a>
+        </form>
       </div>
     </div>
+  </div>
 </div>
 {% endblock %}

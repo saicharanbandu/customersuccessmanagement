@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .import models
+from .import models as prospectModels
 # Register your models here.
 
-admin.site.register(models.ProspectInfo)
-admin.site.register(models.PointOfContactInfo)
+admin.site.register(prospectModels.Profile)
+admin.site.register(prospectModels.PointOfContact)

@@ -18,13 +18,16 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom_style.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
   </head>
   <body>
     <div class="container-scroller">
-    
+
+        {% include '_partials/_snackbar.html' %}
+
         {% block navbar %}
         {% endblock %}
 
@@ -384,6 +387,7 @@
     <!-- Custom js for this page -->
     <script src="{% static 'js/dashboard.js' %}"></script>
     <script src="{% static 'js/todolist.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
     <!-- End custom js for this page -->
   </body>
 </html>

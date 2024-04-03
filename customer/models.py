@@ -1,29 +1,27 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 
 from plan import models as planModels
 from misc import models as miscModels
+from prospect import models as prospectModels
 
+from tabernacle_customer_success import constants
 import uuid
 
 
-class CustomerInfo(models.Model):
+class Profile(models.Model):
+    """
+    Customer Profile
+    """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    legal_name = models.CharField(max_length=55, verbose_name="Legal Name")
+    prospect = models.OneToOneField(
+        prospectModels.Profile, to_field="uuid", on_delete=models.SET_NULL, null=True
+    )
     profile_picture = models.ImageField(upload_to="pictures", blank=True)
+    legal_name = models.CharField(max_length=55, verbose_name="Legal Name")
     display_name = models.CharField(max_length=55, verbose_name="Display Name")
     short_name = models.CharField(
         max_length=50, verbose_name="Short Name or Abbreviation"
     )
-    address = models.CharField(max_length=255, verbose_name="Address")
-    city = models.CharField(max_length=50, verbose_name="City/Town/Village")
-    country = models.ForeignKey(
-        miscModels.Country, to_field="uuid", on_delete=models.SET_NULL, null=True
-    )
-    state = models.ForeignKey(
-        miscModels.State, to_field="uuid", on_delete=models.SET_NULL, null=True
-    )
-    zip_code = models.IntegerField(verbose_name="Zip/Postal Code")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -31,65 +29,67 @@ class CustomerInfo(models.Model):
         return self.legal_name
 
 
-class CustomerPlan(models.Model):
+class SubscribedPlan(models.Model):
+    """
+    Plan the customer is subscribed to
+    """
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    customer = models.ForeignKey(
-        CustomerInfo,
+    customer = models.OneToOneField(
+        Profile,
         to_field="uuid",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
-        related_name="plans",
+        related_name="customer_plan",
     )
     subscription_plan = models.ForeignKey(
-        planModels.SubscriptionPlan,
+        planModels.Tariff,
         to_field="uuid",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
     )
-    duration_in_months = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0) # Duration in months
+    payment_status = models.CharField(max_length=55, choices=constants.PAYMENT_STATUS_CHOICES, verbose_name="Payment Status", default=constants.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.customer}"
 
+    class Meta:
+        ordering = ('customer__legal_name',)
 
-class CustomerUser(models.Model):
-    """
-    Staff Model
-    """
 
+class User(models.Model):
+    """
+    User created for a customer
+    """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     customer = models.ForeignKey(
-        CustomerInfo,
-        related_name="customer",
+        Profile,
+        related_name="customer_user",
         to_field="uuid",
         on_delete=models.CASCADE,
     )
-    full_name = models.CharField(max_length=100, blank=True, null=True)
-    designation = models.CharField(max_length=100, blank=True, null=True)
-    mobile_no = models.CharField(max_length=15, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True, max_length=254)
+    full_name = models.CharField(max_length=100)
+    designation = models.CharField(max_length=100)
+    mobile_no = models.CharField(max_length=15)
+    email = models.EmailField(max_length=254)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.full_name}"
-
-    class Meta:
-        verbose_name = "staff"
-        verbose_name_plural = "staff"
 
 
 
 class UserAppPermissions(models.Model):
     """
-    Member Family Relation Model
+    User App Permissions
     """
-
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     user = models.ForeignKey(
-        CustomerUser,
+        User,
         related_name="user_app_permissions_customer",
         to_field="uuid",
         on_delete=models.CASCADE,
@@ -105,4 +105,27 @@ class UserAppPermissions(models.Model):
     class Meta:
         unique_together = ["user", "module"]
         ordering = ('user__full_name', )
+
+
+
+class PaymentHistory(models.Model):
+    """
+    Customer's Payment History
+    """
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    customer = models.ForeignKey(
+        Profile,
+        related_name="customer_payment",
+        to_field="uuid",
+        on_delete=models.CASCADE,
+    )
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    payment_date = models.DateField()
+    due_date = models.DateField()
+    invoice_no = models.CharField(max_length=25, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.customer.legal_name} | {self.payment_date}"
 

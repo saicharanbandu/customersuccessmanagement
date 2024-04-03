@@ -34,10 +34,9 @@
         <form class="forms-sample" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           {% include 'contact/contact_form.html' %}
-          <button type="submit" class="btn btn-gradient-primary me-2">Save Contact</button>
+          <button type="submit" class="btn btn-gradient-primary me-3">Save Contact</button>
           <a href="{% url 'contact:list' %}" type="button" class="btn btn-light">Cancel</a>
         </form>
-        
       </div>
     </div>
   </div>
