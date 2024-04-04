@@ -36,12 +36,6 @@
               </div>
             </form>
           </div>
-          <div class="col-4 col-lg-6">
-            <a href="{% url 'customer:onboard' %}" class="btn btn-gradient-primary float-end">
-              <i class="mdi mdi-plus me-2"></i>
-              New Customer
-            </a>
-          </div>
         </div>
         <table class="table table-hover mt-3">
           <thead>
@@ -89,11 +83,11 @@
                 {% if customer.legal_name %}
                 <span class="text-faded">{{ customer.customer_plan.created_at| date:'d/m/Y' }}</span>
                 {% else %}
-                <button class="btn btn-sm btn-gradient-success">Onboard Now</button>
+                <a href="{% url 'customer:onboard' customer.uuid %}" class="btn btn-sm btn-gradient-success">Onboard Now</a>
                 {% endif%}
               </td>
               <td class="text-center">
-                {% if customer.legal_name %}
+                {% if customer.customer_plan %}
                 {% if customer.payment_status == 'due' %}
                 <div class="badge payment-due">
                   Due in {{ customer.days_difference }} days
@@ -108,7 +102,7 @@
                 {% endif %}
               </td>
               <td class="text-center">
-                {% if customer.legal_name %}
+                {% if customer.customer_plan %}
                 <span class="text-faded">
                   {{ customer.due_date| date:'d/m/Y' }}
                 </span>

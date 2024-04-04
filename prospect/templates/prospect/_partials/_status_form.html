@@ -1,0 +1,21 @@
+<form method="POST" action="{% url 'prospect:update-status-ajax' prospect.uuid %}" data-url="{% url 'prospect:get-status-options' %}">
+    {% csrf_token %}
+    {{ prospect_status_form.prospect }}
+    <div class="modal-header">
+        <h3 class="modal-title" id="changeStatusLabel">Change Status</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="{{ prospect_status_form.status.id_for_label }}">Status</label>
+            {{ prospect_status_form.status }}
+        </div>
+
+        <div id="statusOptions">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-gradient-success">Update</button>
+    </div>
+</form>

@@ -80,9 +80,8 @@ class StatusHistory(models.Model):
         to_field="uuid",
         on_delete=models.CASCADE,
         related_name="prospect_history",
-        null=True,
     )
-    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES, null=True)
+    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES)
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     remarks = models.TextField(blank=True, null=True)

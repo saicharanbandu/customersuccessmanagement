@@ -27,7 +27,7 @@ h2,
 h3,
 h4,
 h5 {
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.3;
     color: #1f2949;
 }
@@ -164,18 +164,19 @@ table .sl-col {
     border-radius: 10px;
     font-size: 11px;
     letter-spacing: 0.5px;
+    cursor: unset;
 }
 
 .status-initiated {
-    border: 1px solid #ce82ff;
-    background: #ce82ff;
-    color: #ffffff;
+    border: 1px solid #edd1ff;
+    background: #edd1ff;
+    color: #9600bb;
 }
 
 .status-meeting, .payment-due {
-    border: 1px solid #1bcfb4;
-    background: #1bcfb4;
-    color: #ffffff;
+    border: 1px solid #b1fce5;
+    background: #b1fce5;
+    color: #068689;
 }
 
 .status-accepted, .toast-success, .payment-paid {

@@ -13,5 +13,7 @@ urlpatterns = [
 
     path('<uuid:prospect_id>/update/remarks/', actions.update_remarks_ajax, name='update-remarks-ajax'),
     path('<uuid:prospect_id>/update/crm/', actions.update_customer_relationship_manager, name='update-crm-ajax'),
-    path('<uuid:prospect_id>/update/status/', actions.update_status, name='update-status'),
+    path('<uuid:prospect_id>/update/status/', actions.update_status, name='update-status-ajax'),
+    path('get-status-options', actions.get_status_options, name='get-status-options'),
+
 ]

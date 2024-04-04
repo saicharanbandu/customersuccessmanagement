@@ -9,63 +9,63 @@ class ProspectProfileForm(forms.ModelForm):
     class Meta:
         model = prospectModels.Profile
         exclude = [
-            "uuid",
-            "created_at",
-            "updated_at",
-            "status",
+            'uuid',
+            'created_at',
+            'updated_at',
+            'status',
         ]
 
         widgets = {
-            "manager": forms.HiddenInput(),
-            "name": forms.TextInput(attrs={"class": "form-control"}),
-            "email": forms.EmailInput(
+            'manager': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
                 }
             ),
-            "website": forms.TextInput(
+            'website': forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
                 }
             ),
-            "denomination": forms.TextInput(
+            'denomination': forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
                 }
             ),
-            "congregation": forms.NumberInput(
+            'congregation': forms.NumberInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
                 }
             ),
-            "address": forms.TextInput(attrs={"class": "form-control"}),
-            "city": forms.TextInput(
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
                 }
             ),
-            "country": forms.Select(attrs={"class": "form-select"}),
-            "state": forms.Select(attrs={"class": "form-select"}),
-            "remarks": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+            'country': forms.Select(attrs={'class': 'form-select'}),
+            'state': forms.Select(attrs={'class': 'form-select'}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
 
     def __init__(self, *args, **kwargs):
         super(ProspectProfileForm, self).__init__(*args, **kwargs)
-        self.fields["state"].queryset = miscModels.State.objects.none()
+        self.fields['state'].queryset = miscModels.State.objects.none()
 
-        if "prospect-country" in self.data:
-            country_id = self.data.get("prospect-country")
+        if 'prospect-country' in self.data:
+            country_id = self.data.get('prospect-country')
 
             try:
-                self.fields["state"].queryset = miscModels.State.objects.filter(
+                self.fields['state'].queryset = miscModels.State.objects.filter(
                     country_id=country_id
-                ).order_by("name")
+                ).order_by('name')
             except (ValueError, TypeError):
                 pass
         elif self.instance.pk:
             if self.instance.state:
-                self.fields["state"].queryset = (
-                    self.instance.country.state_set.order_by("name")
+                self.fields['state'].queryset = (
+                    self.instance.country.state_set.order_by('name')
                 )
 
 
@@ -73,20 +73,20 @@ class PointOfContactForm(forms.ModelForm):
     class Meta:
         model = prospectModels.PointOfContact
         exclude = [
-            "uuid",
-            "prospect",
-            "created_at",
-            "updated_at",
+            'uuid',
+            'prospect',
+            'created_at',
+            'updated_at',
         ]
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control"}),
-            "mobile": forms.TextInput(attrs={"class": "form-control"}),
-            "email": forms.EmailInput(
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'mobile': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
                 }
             ),
-            "remarks": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
 
 
@@ -97,30 +97,36 @@ class ProspectStatusForm(forms.ModelForm):
     class Meta:
         model = prospectModels.StatusHistory
         exclude = [
-            "uuid",
-            "created_at",
-            "updated_at",
+            'uuid',
+            'created_at',
+            'updated_at',
         ]
         widgets = {
-            "status": forms.Select(attrs={"class": "form-control"}),
-            "date": forms.TextInput(attrs={"class": "form-control"}),
-            "time": forms.EmailInput(
+            'prospect': forms.HiddenInput(),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'time': forms.TimeInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
+                    'type': 'time',
                 }
             ),
-            "remarks": forms.Textarea(attrs={"class": "form-control", "rows": 2}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ProspectStatusForm, self).__init__(*args, **kwargs)
+        self.fields['status'].choices = [('', '--Select--'),] + list(self.fields['status'].choices)[1:]
 
 
 class ProspectRemarksForm(forms.ModelForm):
     class Meta:
         model = prospectModels.Profile
         fields = [
-            "remarks",
+            'remarks',
         ]
         widgets = {
-            "remarks": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
 
 
@@ -128,10 +134,10 @@ class ProspectManagerForm(forms.ModelForm):
     class Meta:
         model = prospectModels.Profile
         fields = [
-            "manager",
+            'manager',
         ]
         widgets = {
-            "manager": forms.Select(attrs={"class": "form-select"}),
+            'manager': forms.Select(attrs={'class': 'form-select'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -140,5 +146,5 @@ class ProspectManagerForm(forms.ModelForm):
 
     def get_manager_choices(self):
         choices = userModels.User.objects.all().values_list('uuid', 'full_name')
-        formatted_choices = [(user_id, f"{full_name}") for user_id, full_name in choices]
+        formatted_choices = [(user_id, f'{full_name}') for user_id, full_name in choices]
         return [('', '--Select--')] + formatted_choices

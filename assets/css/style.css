@@ -8171,6 +8171,7 @@ fieldset:disabled .btn {
 
 .card-title {
   margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .card-subtitle {

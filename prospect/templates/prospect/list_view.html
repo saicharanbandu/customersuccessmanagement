@@ -19,7 +19,6 @@
 {{ title }}
 {% endblock %}
 
-
 {% block app_scripts %}
 <script src="{% static 'prospect/js/app.js' %}"></script>
 {% endblock %}
@@ -127,18 +126,19 @@
                       <i class="mdi mdi mdi-contacts me-2"></i>
                       Update Contacts Persons
                     </a>
-                    <a class="dropdown-item update-remarks" data-bs-toggle="modal" data-bs-target="#updateModal" 
-                    data-url="{% url "prospect:update-remarks-ajax" prospect.uuid %}">
+                    <a class="dropdown-item prospect-action" data-bs-toggle="modal" data-bs-target="#updateModal"
+                      data-url="{% url "prospect:update-remarks-ajax" prospect.uuid %}">
                       <i class="mdi mdi-information-outline me-2"></i>
                       Update Remarks
                     </a>
-                    <a class="dropdown-item update-crm" data-bs-toggle="modal" data-bs-target="#updateModal" 
-                    data-url="{% url "prospect:update-crm-ajax" prospect.uuid %}">
+                    <a class="dropdown-item prospect-action" data-bs-toggle="modal" data-bs-target="#updateModal"
+                      data-url="{% url "prospect:update-crm-ajax" prospect.uuid %}">
                       <i class="mdi mdi-account-convert me-2"></i>
                       Re-assign CRM
                     </a>
 
-                    <a class="dropdown-item border-top" data-bs-toggle="modal" data-bs-target="#changeStatus">
+                    <a class="dropdown-item border-top status-action" data-bs-toggle="modal"
+                      data-bs-target="#updateModal" data-url="{% url "prospect:update-status-ajax" prospect.uuid %}">
                       <i class="mdi mdi-refresh me-2"></i>
                       Change Status
                     </a>
@@ -155,99 +155,10 @@
   </div>
 </div>
 
-<!-- Modal for changing status -->
-<div class="modal fade" id="changeStatus" tabindex="-1" aria-labelledby="changeStatusLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="changeStatusLabel">Change Status</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Status<br>
-        <select name="Status" id="statusSelect" class="form-select">
-          <option value="Appointment">Appointment Requested</option>
-          <option value="Meeting_Scheduled">Meeting Scheduled</option>
-          <option value="Awaiting_Response">Awaiting Response</option>
-          <option value="Responded">Responded</option>
-        </select>
-
-        <div id="meetingDate">
-          Date
-          <br>
-          <input type="date" class="form-control form-control-sm">
-        </div>
-
-        <div id="meetingTime" style="display: none;">
-          Time<br>
-          <input type="time" class="form-control form-control-sm">
-          <br>
-        </div>
-
-        <div id="ResponseCustomer" style="display: none;">
-          Response<br>
-          <div style="margin-bottom: 1em; margin-top: 0.5em;">
-            <input type="radio" id="contactChoice1" name="response" class="form-check-input" />
-            <label for="contactChoice1" class="form-check-label">Yes(Prospect to Customer)</label>
-          </div>
-          <div style="margin-bottom: 1em;">
-            <input type="radio" id="contactChoice2" name="response" class="form-check-input" />
-            <label for="contactChoice2" class="form-check-label">No</label>
-          </div>
-        </div>
-
-        <div id="ResponseDate" style="display: none;">
-          Response on Date
-          <br>
-          <input type="date" class="form-control form-control-sm">
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-gradient-primary">Update</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="modal fade" id="updateModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
     </div>
   </div>
 </div>
-
-<script>
-  document.getElementById("statusSelect").addEventListener("change", function() {
-    var meetingTime = document.getElementById("meetingTime");
-    var meetingDate = document.getElementById("meetingDate");
-    var response = document.getElementById("ResponseDate");
-    ResponseCustomer
-    var ResponseCustomer = document.getElementById("ResponseCustomer");
-    var selectedValue = this.value;
-    if (selectedValue === "Meeting_Scheduled") {
-      meetingTime.style.display = "block";
-      meetingDate.style.display = "block";
-      ResponseCustomer.style.display = "none";
-      response.style.display = "none";
-    } else if (selectedValue === "Awaiting_Response") {
-      meetingTime.style.display = "none";
-      meetingDate.style.display = "none";
-      response.style.display = "none";
-      ResponseCustomer.style.display = "none";
-    } else if (selectedValue === "Responded") {
-      meetingTime.style.display = "none";
-      meetingDate.style.display = "none";
-      response.style.display = "block";
-      ResponseCustomer.style.display = "block";
-    } else if (selectedValue === "Appointment") {
-      meetingTime.style.display = "none";
-      meetingDate.style.display = "block";
-      response.style.display = "none";
-      ResponseCustomer.style.display = "none";
-    }
-  });
-</script>
 {% endblock %}

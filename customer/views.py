@@ -24,24 +24,32 @@ class CustomerOnboardingView(View):
     template_name = 'customer/onboard_view.html'
     title = 'Onboarding'
     active_tab = 'customer'
-
-    def get(self, request, *args, **kwargs):
-        customer_profile_form = customerForms.CustomerProfileForm()
-
+       
+    
+    def get_context_data(self):
+        customer_id = self.kwargs.get('customer_id')
+        customer_profile = customerModels.Profile.objects.get(uuid=customer_id)
         context = {
-            'title': self.title,
+            'title': f'{self.title}: {customer_profile.prospect.name}',
             'active_tab': self.active_tab,
-            'customer_profile_form': customer_profile_form,
+            'customer': customer_profile,
         }
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        customer_profile_form = customerForms.CustomerProfileForm(instance=context['customer'])
+        more_context = {
+            'customer_profile_form': customer_profile_form
+        }
+        context.update(more_context)
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        customer_profile_form = customerForms.CustomerProfileForm(
-            request.POST, request.FILES
-        )
+        context = self.get_context_data()
+        customer_profile_form = customerForms.CustomerProfileForm(request.POST, request.FILES, instance=context['customer'])
+
         if customer_profile_form.is_valid():
-            form_data = customer_profile_form.cleaned_data
-            request.session['customer_profile_form_data'] = form_data
             customer_info_object = customer_profile_form.save()
             return redirect(
                 reverse(
@@ -49,13 +57,10 @@ class CustomerOnboardingView(View):
                     kwargs={'customer_id': customer_info_object.uuid},
                 )
             )
-
-        context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
-            'customer_profile_form': customer_profile_form,
-            
+        more_context = {
+            'customer_profile_form': customer_profile_form
         }
+        context.update(more_context)
         return render(request, self.template_name, context)
 
 
