@@ -4,8 +4,8 @@
       <li class="nav-item nav-profile">
         <a href="#" class="nav-link">
           <div class="nav-profile-image">
-            {% if request.profile_user.image %}
-            <img src=" {{ request.profile_user.image.url }}" alt="{{ request.user.full_name }}">
+            {% if request.user.profile_user.image %}
+            <img src=" {{ request.user.profile_user.image.url }}" alt="{{ request.user.full_name }}">
             {% else %}
             <img src=" {% static 'images/avatar.jpg' %}" alt="{{ request.user.full_name }}">
             {% endif %}
@@ -13,7 +13,7 @@
           <div class="nav-profile-text d-flex flex-column">
             <span class="font-weight-bold mb-2">{{ request.user.full_name }}</span>
             <span class="text-secondary text-small">
-              {{ request.profile_user.designation | default:"--" }}
+              {{ request.user.profile_user.designation | default:"--" }}
             </span>
           </div>
           <i class="mdi mdi-check-decagram text-success nav-profile-badge"></i>

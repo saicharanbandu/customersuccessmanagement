@@ -80,4 +80,4 @@ class Profile(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return str(self.full_name)
+        return str(self.user.full_name)

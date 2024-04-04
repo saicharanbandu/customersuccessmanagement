@@ -20,6 +20,10 @@
 <link rel="stylesheet" href="{% static 'customer/css/style.css' %}">
 {% endblock %}
 
+{% block app_scripts %}
+<script src="{% static 'customer/js/app.js' %}"></script>
+{% endblock %}
+
 {% block breadcrumbs %}
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a href="{% url 'contact:list' %}">Customers Overview</a></li>
@@ -64,4 +68,5 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
