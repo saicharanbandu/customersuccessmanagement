@@ -5,8 +5,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 # Project Imports
 from . import models as customerModels, forms as customerForms
@@ -17,6 +19,7 @@ from django.contrib import messages
 from tabernacle_customer_success import constants
 
 
+@method_decorator(login_required, name='dispatch')
 class CustomerOnboardingView(View):
     template_name = 'customer/onboard_view.html'
     title = 'Onboarding'
@@ -38,7 +41,7 @@ class CustomerOnboardingView(View):
         )
         if customer_profile_form.is_valid():
             form_data = customer_profile_form.cleaned_data
-            request.session['customer_profile_form_data'] = form_data.legal_name
+            request.session['customer_profile_form_data'] = form_data
             customer_info_object = customer_profile_form.save()
             return redirect(
                 reverse(
@@ -56,6 +59,7 @@ class CustomerOnboardingView(View):
         return render(request, self.template_name, context)
 
 
+@method_decorator(login_required, name='dispatch')
 class CustomerSelectPlanView(View):
     template_name = 'customer/select_plan.html'
     title = 'Select Plan'
@@ -134,6 +138,7 @@ class CustomerSelectPlanView(View):
         return render(request, self.template_name, context)
 
 
+@method_decorator(login_required, name='dispatch')
 class CustomerListView(ListView):
     model = customerModels.Profile
     template_name = 'customer/list_view.html'
@@ -198,6 +203,7 @@ class CustomerListView(ListView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class CustomerEditView(View):
     template_name = 'customer/edit_view.html'
     title = 'Edit Customer Details'
@@ -244,6 +250,7 @@ class CustomerEditView(View):
         return render(request, self.template_name, context)
 
 
+@method_decorator(login_required, name='dispatch')
 class UserCreateView(View):
     model = customerModels.User
     template_name = 'customer/admin_user.html'
@@ -335,6 +342,7 @@ class UserCreateView(View):
         return render(request, self.template_name, context)
 
 
+@method_decorator(login_required, name='dispatch')
 class AnotherUserCreateView(View):
     model = customerModels.User
     template_name = 'customer/assign_user_form.html'

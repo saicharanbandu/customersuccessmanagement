@@ -6,9 +6,12 @@ from tabernacle_customer_success import constants
 from django.contrib import messages
 from django.forms import formset_factory
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
+
+@method_decorator(login_required, name='dispatch')
 class ProspectsListView(ListView):
     template_name = 'prospect/list_view.html'
     title = 'Prospect List'
@@ -45,6 +48,7 @@ class ProspectsListView(ListView):
         return context
 
 
+@method_decorator(login_required, name='dispatch')
 class ProspectCreateView(View):
     template_name = 'prospect/create_view.html'
     title = 'New Prospect'
@@ -90,6 +94,8 @@ class ProspectCreateView(View):
         }
         return render(request, self.template_name, context)
 
+
+@method_decorator(login_required, name='dispatch')
 class ProspectEditView(View):
     template_name = 'prospect/edit_view.html'
     title = 'Edit Prospect'
@@ -129,7 +135,8 @@ class ProspectEditView(View):
         }
         return render(request, self.template_name, context)
 
-    
+
+@method_decorator(login_required, name='dispatch')
 class UpdatePointOfContactView(View):
     model = prospectModels.PointOfContact
     form_class = prospectForms.PointOfContactForm

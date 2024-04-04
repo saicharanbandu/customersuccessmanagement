@@ -2,9 +2,11 @@ import os
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from . import models as contactModel
 
+@login_required
 def delete_contact(request, contact_id):
     if request.method == 'POST':
         contact = contactModel.Contact.objects.get(uuid=contact_id)

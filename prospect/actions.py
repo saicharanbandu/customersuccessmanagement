@@ -1,7 +1,9 @@
 from prospect import models as prospectModels, forms as prospectForms
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def change_status(request):
     if request.method == 'POST':
         prospect_status_form = prospectForms.ProspectStatusForm()
