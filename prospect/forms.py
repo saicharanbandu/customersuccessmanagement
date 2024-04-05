@@ -86,7 +86,7 @@ class PointOfContactForm(forms.ModelForm):
             'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
 
-PointOfContactFormSet = forms.formset_factory(PointOfContactForm, extra=1)
+PointOfContactFormSet = forms.modelformset_factory(prospectModels.PointOfContact,PointOfContactForm, extra=1)
 
 class ProspectStatusForm(forms.ModelForm):
    class Meta:

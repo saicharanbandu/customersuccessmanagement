@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from tabernacle_customer_success import constants
 from django.contrib import messages
 from django.forms import formset_factory
+from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 
 from django.db.models import Q
@@ -150,60 +151,49 @@ class ProspectEditView(View):
 
 
 
-    
+PointOfContactFormSet = modelformset_factory(prospectModels.PointOfContact, form=prospectForms.PointOfContactForm, extra=0, exclude=())   
 class UpdatePointOfContactView(View):
     model = prospectModels.PointOfContact
     form_class = prospectForms.PointOfContactForm
     template_name = 'prospect/update_poc.html'
 
     def get(self, request, *args, **kwargs):
-        prospect_id = self.request.GET.get('prospect_id')
-        poc_id = self.request.GET.get('poc_id')
-
+        prospect_id = kwargs.get('prospect_id')
         prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
-
-        try:
-            poc_instance = prospect_instance.prospect_poc.get(uuid=poc_id)
-        except (prospectModels.PointOfContact.DoesNotExist, IndexError):
-            poc_instance = None
-
-        form = self.form_class(instance=poc_instance)
+        
+        prospect_formset = PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all(), prefix='form')
 
         context = {
-            'title': 'Edit Point of Contact',
-            'prospect_form': form,
-            'prospect_instance': prospect_instance,
-            'poc_instance': poc_instance,
-            'active_tab': 'prospect',
-            'poc_id': poc_instance.uuid if poc_instance else "",
-        }
+        'title': 'Edit Point of Contact',
+        'prospect_formset': prospect_formset,
+        'prospect_instance': prospect_instance,
+        'active_tab': 'prospect',
+    }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        poc_id = self.request.GET.get('poc_id')
-        poc_instance = get_object_or_404(self.model, uuid=poc_id) if poc_id else None
-
-        form = self.form_class(request.POST, instance=poc_instance)
-        if form.is_valid():
-            obj = form.save(commit=False)
-
-            # Retrieve the prospect object using the prospect ID from the form
-            prospect_id = request.POST.get('prospect_id')
-            prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
-
-            obj.prospect = prospect_instance
-            obj.save()
-
+        prospect_id = kwargs.get('prospect_id')
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        # print(prospect_instance)
+        prospect_formset =PointOfContactFormSet(request.POST, queryset=prospect_instance.prospect_poc.all(), prefix='form')
+        print(prospect_formset)
+        print(request.POST)
+        queryset=prospect_instance.prospect_poc.all()
+        print(queryset)
+        if prospect_formset.is_valid():
+            print('valid')
+            prospect_formset.save()
             messages.success(request, 'Point of Contact updated successfully')
             return redirect('prospect:view', ob=prospect_instance.slug)
         else:
+            print(prospect_formset.errors)
+            prospect_formset = PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all(), prefix='form')
             messages.error(request, 'Unable to update Point of Contact. Try again.')
 
         context = {
             'title': 'Edit Point of Contact',
-            'prospect_form': form,
-            'poc_instance': poc_instance,
+            'prospect_formset': prospect_formset,
+            'prospect_instance': prospect_instance,
             'active_tab': 'prospect',
-            'poc_id': poc_instance.uuid if poc_instance else ""
         }
         return render(request, self.template_name, context)

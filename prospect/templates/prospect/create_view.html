@@ -32,7 +32,7 @@
                     {{ poc_formset.management_form }}
                     {% for form in poc_formset %}
                     <div class="form-group">
-                      <p class="card-description">Contact Person {{ form.name.value}}</p>
+                      <p class="card-description">Contact Person {{ forloop.parentloop.counter }}{{ form.cleaned_data.name }}</p>
                         <label for="{{ form.name.id_for_label }}">Name *</label>
                         {{ form.name }}
                     </div>

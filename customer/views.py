@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import ListView
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-
+from uuid import UUID
 # Project Imports
 from . import models as customerModels, forms as customerForms
 from prospect import models as prospectModels, forms as prospectForms
@@ -23,12 +23,28 @@ class CustomerOnboardingView(View):
     active_tab = 'customer'
 
     def get(self, request, *args, **kwargs):
-        customer_profile_form = customerForms.CustomerProfileForm()
-
+        
+        customer_profile_uuid_str = request.session.get('customer_profile_uuid')
+        print(customer_profile_uuid_str)
+        if customer_profile_uuid_str:
+            try:
+                customer_profile_uuid = UUID(customer_profile_uuid_str)
+                profile = customerModels.Profile.objects.get(uuid=customer_profile_uuid)
+                customer_profile_form = customerForms.CustomerProfileForm(instance=profile)
+                print(profile.uuid)
+                print(profile.legal_name)
+                print(profile.display_name)
+                print(profile.short_name)
+            except customerModels.Profile.DoesNotExist:
+                profile = None
+        else:
+            profile = None
+            customer_profile_form = customerForms.CustomerProfileForm()
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
             'customer_profile_form': customer_profile_form,
+            
         }
         return render(request, self.template_name, context)
 
@@ -37,9 +53,10 @@ class CustomerOnboardingView(View):
             request.POST, request.FILES
         )
         if customer_profile_form.is_valid():
-            form_data = customer_profile_form.cleaned_data
-            request.session['customer_profile_form_data'] = form_data
+           
             customer_info_object = customer_profile_form.save()
+            profile_uuid = customer_info_object.uuid
+            request.session['customer_profile_uuid'] = str(profile_uuid)
             return redirect(
                 reverse(
                     'customer:select-plan',
@@ -51,7 +68,6 @@ class CustomerOnboardingView(View):
             'title': self.title,
             'active_tab': self.active_tab,
             'customer_profile_form': customer_profile_form,
-            
         }
         return render(request, self.template_name, context)
 
@@ -63,15 +79,32 @@ class CustomerSelectPlanView(View):
 
     def get(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
-        form_data = request.session.get('customer_profile_form_data', {})
-        customer_plan_form = customerForms.CustomerPlanForm(initial=form_data)
-        plan_options_form = customerForms.SubscriptionPlanOptionsForm()
-        if 'customer_profile_form_data' in request.session:
-        # Remove the form data from the session to avoid using it again
-            customer_profile_data = request.session.pop('customer_profile_form_data')
-
-        # Set the form fields based on the stored data
-        customer_plan_form = customerForms.CustomerPlanForm(initial=customer_profile_data)
+        customer_profile_uuid_str = request.session.get('customer_profile_uuid')
+        if customer_profile_uuid_str:
+            try:
+                print(customer_profile_uuid_str)
+                customer_profile_uuid = UUID(customer_profile_uuid_str)
+                profile = customerModels.Profile.objects.get(uuid=customer_profile_uuid)
+                
+                profile2=customerModels.SubscribedPlan.objects.get(customer=profile)
+                
+                customer_plan_form = customerForms.CustomerPlanForm(instance=profile2)
+                
+                plan_options_form = customerForms.SubscriptionPlanOptionsForm( initial={
+                        'plan': profile2.subscription_plan,
+                        'duration': profile2.duration,
+                        'payment_status': profile2.payment_status
+                    })
+                
+            except:
+                customer_plan_form = customerForms.CustomerPlanForm()
+                plan_options_form = customerForms.SubscriptionPlanOptionsForm()
+        else:
+            customer_plan_form = customerForms.CustomerPlanForm()
+            
+            plan_options_form = customerForms.SubscriptionPlanOptionsForm()
+          
+        
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
@@ -80,7 +113,6 @@ class CustomerSelectPlanView(View):
             'customer_id': customer_id,
         }
         return render(request, self.template_name, context)
-
     def post(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
 
@@ -91,7 +123,7 @@ class CustomerSelectPlanView(View):
             plan = request.POST.get('plan')
             duration = int(request.POST.get('duration'))
             payment_status = request.POST.get('payment_status')
-
+            customer_profile_uuid=request.POST.get('customer_id')
             tariff = planModels.Tariff.objects.get(uuid=plan)
 
             try:
@@ -100,7 +132,10 @@ class CustomerSelectPlanView(View):
                 )
                 subscribed_plan.subscription_plan = tariff
                 subscribed_plan.duration = duration
+                
                 subscribed_plan.save()
+                
+                
             except:
                 customerModels.SubscribedPlan.objects.create(
                     customer_id=customer_id,
@@ -120,7 +155,10 @@ class CustomerSelectPlanView(View):
                     'due_date': due_date,
                 }
                 customerModels.PaymentHistory.objects.create(**payment_data)
-            request.session['subscribed_plan'] = str(tariff.uuid)
+            customer_profile_uuid = customer_id
+            print(request.POST)
+            print(customer_profile_uuid)
+            request.session['customer_profile_uuid'] = str(customer_profile_uuid)
             return redirect(
                 reverse('customer:user-create', kwargs={'customer_id': customer_id})
             )
@@ -133,7 +171,7 @@ class CustomerSelectPlanView(View):
         }
         return render(request, self.template_name, context)
 
-
+            
 class CustomerListView(ListView):
     model = customerModels.Profile
     template_name = 'customer/list_view.html'
@@ -142,6 +180,9 @@ class CustomerListView(ListView):
     context_object_name = 'customers'
 
     def get_queryset(self):
+        request=self.request
+        if 'customer_profile_uuid' in request.session:
+            del request.session['customer_profile_uuid']
         queryset = super().get_queryset()
         search_query = self.request.GET.get('search')
         if search_query:
@@ -187,7 +228,7 @@ class CustomerListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+    
         more_context = {
             'title': self.title,
             'active_tab': self.active_tab,
