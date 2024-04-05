@@ -12,5 +12,7 @@ urlpatterns = [
     path('customer/<uuid:customer_id>/user/add/', customerViews.AnotherUserCreateView.as_view(), name='user-add'),
 
     path('customer/<uuid:customer_id>/edit/', customerViews.CustomerEditView.as_view(), name='edit-info'),
-
+    path('<uuid:customer_id>/update_poc/',
+         customerViews.UpdatePointOfContactView.as_view(),
+         name='update_poc'),
 ]   

@@ -1,6 +1,6 @@
 # Dango Imports
 from django.db.models import Q
-from django.forms import formset_factory
+from django.forms import modelformset_factory,formset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -457,4 +457,41 @@ class AnotherUserCreateView(View):
             'user_app_permissions_formset': user_app_permissions_formset,
         }
 
+        return render(request, self.template_name, context)
+PointOfContactFormSet = modelformset_factory(prospectModels.PointOfContact, form=prospectForms.PointOfContactForm, extra=0, exclude=()) 
+class UpdatePointOfContactView(View):
+    template_name = 'prospect/update_poc.html'
+
+    def get(self, request, *args, **kwargs):
+        customer_id = kwargs.get('customer_id')
+        prospect_id=customerModels.Profile.objects.get(uuid=customer_id).prospect.uuid
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        prospect_formset = PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all(), prefix='form')
+
+        context = {
+            'title': 'Edit Point of Contact',
+            'prospect_formset': prospect_formset,
+            'prospect_instance': prospect_instance,
+            'active_tab': 'prospect',
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        prospect_id = request.POST.get('prospect_id')
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        prospect_formset = PointOfContactFormSet(request.POST, queryset=prospect_instance.prospect_poc.all(), prefix='form')
+
+        if prospect_formset.is_valid():
+            prospect_formset.save()
+            messages.success(request, 'Point of Contact updated successfully')
+            return redirect('prospect:list')
+        else:
+            messages.error(request, 'Unable to update Point of Contact. Try again.')
+
+        context = {
+            'title': 'Edit Point of Contact',
+            'prospect_formset': prospect_formset,
+            'prospect_instance': prospect_instance,
+            'active_tab': 'prospect',
+        }
         return render(request, self.template_name, context)
