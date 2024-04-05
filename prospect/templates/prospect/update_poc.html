@@ -11,8 +11,11 @@
         <div class="card-body">
           <form method="post">
             {% csrf_token %}
+            {{ prospect_formset.management_form }}
             {% for form in prospect_formset %}
-              {{ form.as_p }}
+              <div class="formset-form">
+                {{ form.as_p }}
+              </div>
             {% endfor %}
             <input type="hidden" name="prospect_id" value="{{ prospect_instance.uuid }}">
             <button type="submit" class="btn btn-primary">Update</button>

@@ -174,7 +174,7 @@ class UpdatePointOfContactView(View):
     def post(self, request, *args, **kwargs):
         prospect_id = kwargs.get('prospect_id')
         prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
-        # print(prospect_instance)
+        print(request.POST)
         prospect_formset =PointOfContactFormSet(request.POST, queryset=prospect_instance.prospect_poc.all(), prefix='form')
         print(prospect_formset)
         print(request.POST)
@@ -188,6 +188,45 @@ class UpdatePointOfContactView(View):
         else:
             print(prospect_formset.errors)
             prospect_formset = PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all(), prefix='form')
+            messages.error(request, 'Unable to update Point of Contact. Try again.')
+
+        context = {
+            'title': 'Edit Point of Contact',
+            'prospect_formset': prospect_formset,
+            'prospect_instance': prospect_instance,
+            'active_tab': 'prospect',
+        }
+        return render(request, self.template_name, context)
+    
+    
+    
+    
+class UpdatePointOfContactView(View):
+    template_name = 'prospect/update_poc.html'
+
+    def get(self, request, *args, **kwargs):
+        prospect_id = kwargs.get('prospect_id')
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        prospect_formset = PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all(), prefix='form')
+
+        context = {
+            'title': 'Edit Point of Contact',
+            'prospect_formset': prospect_formset,
+            'prospect_instance': prospect_instance,
+            'active_tab': 'prospect',
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        prospect_id = request.POST.get('prospect_id')
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        prospect_formset = PointOfContactFormSet(request.POST, queryset=prospect_instance.prospect_poc.all(), prefix='form')
+
+        if prospect_formset.is_valid():
+            prospect_formset.save()
+            messages.success(request, 'Point of Contact updated successfully')
+            return redirect('prospect:list')
+        else:
             messages.error(request, 'Unable to update Point of Contact. Try again.')
 
         context = {
