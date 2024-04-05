@@ -254,3 +254,8 @@ table .address-col {
  .transparent-text {
     color: rgba(0, 0, 0, 0.5); /* 60% transparent black color */
 }
+
+
+.page-item.disabled .page-link {
+    color: #a1a1a1;
+}

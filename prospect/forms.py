@@ -90,9 +90,6 @@ class PointOfContactForm(forms.ModelForm):
         }
 
 
-PointOfContactFormSet = forms.formset_factory(PointOfContactForm, extra=1)
-
-
 class ProspectStatusForm(forms.ModelForm):
     class Meta:
         model = prospectModels.StatusHistory

@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
+from uuid import UUID
 # Project Imports
 from . import models as customerModels, forms as customerForms
 from prospect import models as prospectModels, forms as prospectForms
@@ -24,7 +25,6 @@ class CustomerOnboardingView(View):
     template_name = 'customer/onboard_view.html'
     title = 'Onboarding'
     active_tab = 'customer'
-       
     
     def get_context_data(self):
         customer_id = self.kwargs.get('customer_id')
@@ -36,6 +36,7 @@ class CustomerOnboardingView(View):
         }
         return context
     
+
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         customer_profile_form = customerForms.CustomerProfileForm(instance=context['customer'])
@@ -50,7 +51,10 @@ class CustomerOnboardingView(View):
         customer_profile_form = customerForms.CustomerProfileForm(request.POST, request.FILES, instance=context['customer'])
 
         if customer_profile_form.is_valid():
+           
             customer_info_object = customer_profile_form.save()
+            profile_uuid = customer_info_object.uuid
+            request.session['customer_profile_uuid'] = str(profile_uuid)
             return redirect(
                 reverse(
                     'customer:select-plan',
@@ -72,15 +76,31 @@ class CustomerSelectPlanView(View):
 
     def get(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
-        form_data = request.session.get('customer_profile_form_data', {})
-        customer_plan_form = customerForms.CustomerPlanForm(initial=form_data)
-        plan_options_form = customerForms.SubscriptionPlanOptionsForm()
-        if 'customer_profile_form_data' in request.session:
-        # Remove the form data from the session to avoid using it again
-            customer_profile_data = request.session.pop('customer_profile_form_data')
-
-        # Set the form fields based on the stored data
-        customer_plan_form = customerForms.CustomerPlanForm(initial=customer_profile_data)
+        customer_profile_uuid_str = request.session.get('customer_profile_uuid')
+        if customer_profile_uuid_str:
+            try:
+                customer_profile_uuid = UUID(customer_profile_uuid_str)
+                profile = customerModels.Profile.objects.get(uuid=customer_profile_uuid)
+                
+                profile2=customerModels.SubscribedPlan.objects.get(customer=profile)
+                
+                customer_plan_form = customerForms.CustomerPlanForm(instance=profile2)
+                
+                plan_options_form = customerForms.SubscriptionPlanOptionsForm( initial={
+                        'plan': profile2.subscription_plan,
+                        'duration': profile2.duration,
+                        'payment_status': profile2.payment_status
+                    })
+                
+            except:
+                customer_plan_form = customerForms.CustomerPlanForm()
+                plan_options_form = customerForms.SubscriptionPlanOptionsForm()
+        else:
+            customer_plan_form = customerForms.CustomerPlanForm()
+            
+            plan_options_form = customerForms.SubscriptionPlanOptionsForm()
+          
+        
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
@@ -89,7 +109,7 @@ class CustomerSelectPlanView(View):
             'customer_id': customer_id,
         }
         return render(request, self.template_name, context)
-
+    
     def post(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
 
@@ -100,7 +120,7 @@ class CustomerSelectPlanView(View):
             plan = request.POST.get('plan')
             duration = int(request.POST.get('duration'))
             payment_status = request.POST.get('payment_status')
-
+            customer_profile_uuid=request.POST.get('customer_id')
             tariff = planModels.Tariff.objects.get(uuid=plan)
 
             try:
@@ -109,7 +129,10 @@ class CustomerSelectPlanView(View):
                 )
                 subscribed_plan.subscription_plan = tariff
                 subscribed_plan.duration = duration
+                
                 subscribed_plan.save()
+                
+                
             except:
                 customerModels.SubscribedPlan.objects.create(
                     customer_id=customer_id,
@@ -129,7 +152,8 @@ class CustomerSelectPlanView(View):
                     'due_date': due_date,
                 }
                 customerModels.PaymentHistory.objects.create(**payment_data)
-            request.session['subscribed_plan'] = str(tariff.uuid)
+            customer_profile_uuid = customer_id
+            request.session['customer_profile_uuid'] = str(customer_profile_uuid)
             return redirect(
                 reverse('customer:user-create', kwargs={'customer_id': customer_id})
             )
@@ -152,6 +176,9 @@ class CustomerListView(ListView):
     context_object_name = 'customers'
 
     def get_queryset(self):
+        request=self.request
+        if 'customer_profile_uuid' in request.session:
+            del request.session['customer_profile_uuid']
         queryset = super().get_queryset()
         search_query = self.request.GET.get('search')
         if search_query:
@@ -199,7 +226,7 @@ class CustomerListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+    
         more_context = {
             'title': self.title,
             'active_tab': self.active_tab,

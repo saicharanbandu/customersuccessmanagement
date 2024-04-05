@@ -121,8 +121,9 @@
                     <a class="dropdown-item" href="{% url 'prospect:edit' prospect.uuid %}">
                       <i class="mdi mdi-pencil-box-outline me-2"></i>
                       Edit Prospect Info
-                    </a>
-                    <a class="dropdown-item" href="">
+                  </a>
+                  <a class="dropdown-item" href="{% url 'prospect:update_poc' prospect.uuid %}">
+                    
                       <i class="mdi mdi mdi-contacts me-2"></i>
                       Update Contacts Persons
                     </a>

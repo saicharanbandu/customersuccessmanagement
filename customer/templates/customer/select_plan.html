@@ -53,7 +53,7 @@
         <form class="forms-sample border-top py-5" action="{% url 'customer:select-plan' customer_id %}" method="POST"
           enctype="multipart/form-data" data-url="{% url 'plan:get-plan-amount' %}">
           {% csrf_token %}
-
+          
           <div class="text-center">Select Plan</div>
 
           {{ plan_options_form.duration.label_tag }}

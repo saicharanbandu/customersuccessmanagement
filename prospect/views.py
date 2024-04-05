@@ -4,9 +4,11 @@ from django.views.generic import ListView
 from prospect import models as prospectModels, forms as prospectForms
 from tabernacle_customer_success import constants
 from django.contrib import messages
-from django.forms import formset_factory
+from django.forms import formset_factory, modelformset_factory
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+
 from django.db.models import Q
 
 
@@ -140,154 +142,41 @@ class UpdatePointOfContactView(View):
     model = prospectModels.PointOfContact
     form_class = prospectForms.PointOfContactForm
     template_name = 'prospect/update_poc.html'
+    PointOfContactFormSet = modelformset_factory(prospectModels.PointOfContact, form=prospectForms.PointOfContactForm, extra=0, exclude=())   
 
     def get(self, request, *args, **kwargs):
-        prospect_id = self.request.GET.get('prospect_id')
-        poc_id = self.request.GET.get('poc_id')
-
+        prospect_id = kwargs.get('prospect_id')
         prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
-
-        try:
-            poc_instance = prospect_instance.prospect_poc.get(uuid=poc_id)
-        except (prospectModels.PointOfContact.DoesNotExist, IndexError):
-            poc_instance = None
-
-        form = self.form_class(instance=poc_instance)
+        
+        prospect_formset = self.PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all())
 
         context = {
-            'title': 'Edit Point of Contact',
-            'prospect_form': form,
-            'prospect_instance': prospect_instance,
-            'poc_instance': poc_instance,
-            'active_tab': 'prospect',
-            'poc_id': poc_instance.uuid if poc_instance else "",
-        }
+        'title': 'Edit Point of Contact',
+        'prospect_formset': prospect_formset,
+        'prospect_instance': prospect_instance,
+        'active_tab': 'prospect',
+    }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        poc_id = self.request.GET.get('poc_id')
-        poc_instance = get_object_or_404(self.model, uuid=poc_id) if poc_id else None
+        prospect_id = kwargs.get('prospect_id')
+        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+        queryset=prospect_instance.prospect_poc.all()
 
-        form = self.form_class(request.POST, instance=poc_instance)
-        if form.is_valid():
-            obj = form.save(commit=False)
-
-            # Retrieve the prospect object using the prospect ID from the form
-            prospect_id = request.POST.get('prospect_id')
-            prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
-
-            obj.prospect = prospect_instance
-            obj.save()
-
+        prospect_formset = self.PointOfContactFormSet(request.POST, queryset=queryset)
+        print(prospect_formset.errors)
+        if prospect_formset.is_valid():
+            prospect_formset.save()
             messages.success(request, 'Point of Contact updated successfully')
             return redirect('prospect:view', ob=prospect_instance.slug)
         else:
-            messages.error(request, 'Unable to update Point of Contact. Try again!')
+            prospect_formset = self.PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all(), prefix='form')
+            messages.error(request, 'Unable to update Point of Contact. Try again.')
 
         context = {
             'title': 'Edit Point of Contact',
-            'prospect_form': form,
-            'poc_instance': poc_instance,
+            'prospect_formset': prospect_formset,
+            'prospect_instance': prospect_instance,
             'active_tab': 'prospect',
-            'poc_id': poc_instance.uuid if poc_instance else ""
         }
         return render(request, self.template_name, context)
-
-
-
-
-
-
-# @method_decorator(login_required, name='dispatch')
-# class UpdateCRMView(View):
-#     template_name = 'prospect/create_view.html'
-#     title = 'New Prospect'
-#     active_tab = 'prospect'
-
-#     def get(self, request, *args, **kwargs):
-#         prospect_form = prospectForms.ProspectProfileForm(prefix='prospect', initial={'manager': request.user})
-        
-#         PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, min_num=1, validate_min=True, extra=1, can_delete=True)
-#         poc_formset = PointOfContactFormSet()
-
-#         context = {
-#             'title': self.title,
-#             'active_tab': self.active_tab,
-#             'prospect_form': prospect_form,
-#             'poc_formset': poc_formset,
-#         }
-#         return render(request, self.template_name, context)
-
-#     def post(self, request, *args, **kwargs):
-#         prospect_form = prospectForms.ProspectProfileForm(request.POST, prefix='prospect')
-#         PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, extra=2)
-#         poc_formset = PointOfContactFormSet(request.POST)
-
-#         try:
-#             if prospect_form.is_valid() and poc_formset.is_valid():
-#                 prospect_object = prospect_form.save()
-#                 for form in poc_formset:
-#                     if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
-#                         point_of_contact_info = form.save(commit=False)
-#                         point_of_contact_info.prospect = prospect_object
-#                         point_of_contact_info.save()
-#                 messages.success(request, 'Prospect has been successfully created')
-#                 return redirect('prospect:list')
-#         except Exception as e:
-#             messages.error(request, 'Unsuccessful, try again')
-        
-#         context = {
-#             'title': self.title,
-#             'active_tab': self.active_tab,
-#             'prospect_form': prospect_form,
-#             'poc_formset': poc_formset,
-#         }
-#         return render(request, self.template_name, context)
-
-
-
-# @method_decorator(login_required, name='dispatch')
-# class UpdateStatusView(View):
-#     template_name = 'prospect/create_view.html'
-#     title = 'New Prospect'
-#     active_tab = 'prospect'
-
-#     def get(self, request, *args, **kwargs):
-#         prospect_form = prospectForms.ProspectProfileForm(prefix='prospect', initial={'manager': request.user})
-        
-#         PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, min_num=1, validate_min=True, extra=1, can_delete=True)
-#         poc_formset = PointOfContactFormSet()
-
-#         context = {
-#             'title': self.title,
-#             'active_tab': self.active_tab,
-#             'prospect_form': prospect_form,
-#             'poc_formset': poc_formset,
-#         }
-#         return render(request, self.template_name, context)
-
-#     def post(self, request, *args, **kwargs):
-#         prospect_form = prospectForms.ProspectProfileForm(request.POST, prefix='prospect')
-#         PointOfContactFormSet = formset_factory(prospectForms.PointOfContactForm, extra=2)
-#         poc_formset = PointOfContactFormSet(request.POST)
-
-#         try:
-#             if prospect_form.is_valid() and poc_formset.is_valid():
-#                 prospect_object = prospect_form.save()
-#                 for form in poc_formset:
-#                     if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
-#                         point_of_contact_info = form.save(commit=False)
-#                         point_of_contact_info.prospect = prospect_object
-#                         point_of_contact_info.save()
-#                 messages.success(request, 'Prospect has been successfully created')
-#                 return redirect('prospect:list')
-#         except Exception as e:
-#             messages.error(request, 'Unsuccessful, try again')
-        
-#         context = {
-#             'title': self.title,
-#             'active_tab': self.active_tab,
-#             'prospect_form': prospect_form,
-#             'poc_formset': poc_formset,
-#         }
-#         return render(request, self.template_name, context)
