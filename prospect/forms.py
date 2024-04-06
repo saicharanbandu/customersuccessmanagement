@@ -89,6 +89,21 @@ class PointOfContactForm(forms.ModelForm):
             'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(PointOfContactForm, self).__init__(*args, **kwargs)
+        if 'prospect' in self.fields:
+            self.fields['prospect'].required = False
+
+    def is_empty(self):
+        """
+        Check if the form is empty (all fields are empty).
+        """
+        for field_name, field in self.fields.items():
+            if field_name not in ['uuid', 'DELETE']:
+                value = self.cleaned_data.get(field_name)
+                if value is not None and value != '':
+                    return False
+        return True
 
 class ProspectStatusForm(forms.ModelForm):
     class Meta:

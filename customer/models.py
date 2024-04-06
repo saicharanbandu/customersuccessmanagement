@@ -17,10 +17,10 @@ class Profile(models.Model):
         prospectModels.Profile, to_field="uuid", on_delete=models.SET_NULL, null=True
     )
     profile_picture = models.ImageField(upload_to="pictures", blank=True)
-    legal_name = models.CharField(max_length=55, verbose_name="Legal Name")
-    display_name = models.CharField(max_length=55, verbose_name="Display Name")
+    legal_name = models.CharField(max_length=255, verbose_name="Legal Name")
+    display_name = models.CharField(max_length=255, verbose_name="Display Name")
     short_name = models.CharField(
-        max_length=50, verbose_name="Short Name or Abbreviation"
+        max_length=30, verbose_name="Short Name or Abbreviation"
     )
     manager = models.ForeignKey(
         settings.AUTH_USER_MODEL,

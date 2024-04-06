@@ -23,10 +23,11 @@
       <div class="card-body">
         <form method="post">
           {% csrf_token %}
-          {% for form in prospect_formset %}
-          {{ form.as_p }}
+          {{ poc_formset.management_form }}
+          {% for form in poc_formset %}
+          {{ form.uuid }}
+          {% include 'prospect/poc_form.html' with index=forloop.counter %}
           {% endfor %}
-          <input type="hidden" name="prospect_id" value="{{ prospect_instance.uuid }}">
           <button type="submit" class="btn btn-gradient-primary">Update</button>
           <a href="{% url 'prospect:list' %}" class="btn btn-outline-success">Cancel</a>
         </form>
