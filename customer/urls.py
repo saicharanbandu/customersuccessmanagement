@@ -12,9 +12,14 @@ urlpatterns = [
     path('<uuid:customer_id>/user/create/', customerViews.UserCreateView.as_view(), name='user-create'),
     path('<uuid:customer_id>/user/add/', customerViews.AnotherUserCreateView.as_view(), name='user-add'),
 
-    path('<uuid:customer_id>/edit/', customerViews.CustomerEditView.as_view(), name='edit-info'),
-    path('<uuid:customer_id>/update_poc/', customerViews.UpdatePointOfContactView.as_view(), name='update_poc'),
+    path('<uuid:customer_id>/info/update/', customerViews.CustomerEditView.as_view(), name='update-info'),
+
+    path('<uuid:prospect_id>/crm/update/', customerActions.update_customer_success_manager, name='update-csm-ajax'),
 
     path('<uuid:customer_id>/info/', customerActions.get_customer_info, name='get-customer-info'),
+    path('<uuid:customer_id>/poc/', customerActions.get_poc, name='get-poc'),
+
+    path("<uuid:customer_id>/delete/", customerActions.delete_customer, name="delete"),
+
 
 ]   

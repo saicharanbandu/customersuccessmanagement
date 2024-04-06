@@ -9,6 +9,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from uuid import UUID
 # Project Imports
@@ -51,8 +52,10 @@ class CustomerOnboardingView(View):
         customer_profile_form = customerForms.CustomerProfileForm(request.POST, request.FILES, instance=context['customer'])
 
         if customer_profile_form.is_valid():
-           
-            customer_info_object = customer_profile_form.save()
+            customer_info_object = customer_profile_form.save(commit=False)
+            customer_info_object.manager = request.user
+            customer_info_object.save()
+            
             profile_uuid = customer_info_object.uuid
             request.session['customer_profile_uuid'] = str(profile_uuid)
             return redirect(
@@ -61,10 +64,12 @@ class CustomerOnboardingView(View):
                     kwargs={'customer_id': customer_info_object.uuid},
                 )
             )
+            
         more_context = {
             'customer_profile_form': customer_profile_form
         }
         context.update(more_context)
+
         return render(request, self.template_name, context)
 
 
@@ -194,7 +199,7 @@ class CustomerListView(ListView):
             try:
                 last_payment = customerModels.PaymentHistory.objects.filter(customer_id=query.uuid).order_by('-created_at').first()
                 query.due_date = last_payment.due_date
-                days_difference = (query.due_date - datetime.now().date()).days
+                days_difference = (query.due_date - timezone.now()).days
                 if days_difference > 0 and days_difference < 30:
                     query.payment_status = constants.DUE
                 elif days_difference < 0:
@@ -209,13 +214,18 @@ class CustomerListView(ListView):
                 #         query.payment_status = constants.EXPIRY
                 #         query.days_difference = (query.due_date - datetime.now().date()).days
                 # except:
-                query.due_date = query.created_at.date()
-                query.payment_status = constants.OVERDUE
-
-            days_difference = (query.due_date - datetime.now().date()).days
-            query.days_difference = abs(days_difference)
-
+                try:
+                    query.due_date = query.customer_plan.updated_at
+                    query.payment_status = constants.OVERDUE
+                except:
+                    query.due_date = None
                 
+            if query.due_date:
+                if query.due_date > timezone.now():
+                    query.days_difference = (query.due_date - timezone.now()).days
+                else:
+                    query.days_difference = (timezone.now() - query.due_date).days
+        
         return queryset
 
     def get_paginate_by(self, queryset):
@@ -459,40 +469,4 @@ class AnotherUserCreateView(View):
         }
 
         return render(request, self.template_name, context)
-PointOfContactFormSet = modelformset_factory(prospectModels.PointOfContact, form=prospectForms.PointOfContactForm, extra=0, exclude=()) 
-class UpdatePointOfContactView(View):
-    template_name = 'prospect/update_poc.html'
 
-    def get(self, request, *args, **kwargs):
-        customer_id = kwargs.get('customer_id')
-        prospect_id=customerModels.Profile.objects.get(uuid=customer_id).prospect.uuid
-        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
-        prospect_formset = PointOfContactFormSet(queryset=prospect_instance.prospect_poc.all(), prefix='form')
-
-        context = {
-            'title': 'Edit Point of Contact',
-            'prospect_formset': prospect_formset,
-            'prospect_instance': prospect_instance,
-            'active_tab': 'prospect',
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        prospect_id = request.POST.get('prospect_id')
-        prospect_instance = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
-        prospect_formset = PointOfContactFormSet(request.POST, queryset=prospect_instance.prospect_poc.all(), prefix='form')
-
-        if prospect_formset.is_valid():
-            prospect_formset.save()
-            messages.success(request, 'Point of Contact updated successfully')
-            return redirect('prospect:list')
-        else:
-            messages.error(request, 'Unable to update Point of Contact. Try again.')
-
-        context = {
-            'title': 'Edit Point of Contact',
-            'prospect_formset': prospect_formset,
-            'prospect_instance': prospect_instance,
-            'active_tab': 'prospect',
-        }
-        return render(request, self.template_name, context)

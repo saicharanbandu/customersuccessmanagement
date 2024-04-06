@@ -51,14 +51,13 @@
           </div>
           <div class="stepper-item">
             <div class="step-counter"><i class="mdi mdi-account-multiple-plus"></i></div>
-            <div class="step-name">Completed</div>
+            <div class="step-name">Add Users</div>
           </div>
         </div>
 
         <form class="forms-sample border-top py-5" action="{% url 'customer:onboard' customer.uuid %}" method="POST"
           enctype="multipart/form-data">
           {% csrf_token %}
-          <div class="text-center">Customer Info</div>
           {% include 'customer/profile_form.html' with customer_profile_form=customer_profile_form profile=profile %}
           
           <button type="submit" class="btn btn-gradient-primary me-2">Continue</button>

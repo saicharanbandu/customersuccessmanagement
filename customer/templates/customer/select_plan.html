@@ -41,20 +41,18 @@
             <div class="step-name">Customer Info</div>
           </div>
           <div class="stepper-item active">
-            <div class="step-counter"><i class="mdi mdi-cash" ></i></div>
+            <div class="step-counter"><i class="mdi mdi-cash"></i></div>
             <div class="step-name">Select Plan</div>
           </div>
           <div class="stepper-item">
             <div class="step-counter"><i class="mdi mdi-account-multiple-plus"></i></div>
-            <div class="step-name">Completed</div>
+            <div class="step-name">Add Users</div>
           </div>
         </div>
 
         <form class="forms-sample border-top py-5" action="{% url 'customer:select-plan' customer_id %}" method="POST"
           enctype="multipart/form-data" data-url="{% url 'plan:get-plan-amount' %}">
           {% csrf_token %}
-          
-          <div class="text-center">Select Plan</div>
 
           {{ plan_options_form.duration.label_tag }}
           {{ plan_options_form.duration }}
@@ -103,7 +101,7 @@
             </div>
             {% endfor %}
           </div>
-          <a href="{% url 'customer:onboard'%}" class="btn btn-light me-3">Go Back</a>
+          <a href="{% url 'customer:onboard' customer_id %}" class="btn btn-light me-3">Go Back</a>
           <button type="submit" class="btn btn-gradient-primary me-3" name="action" value="continue">Continue</button>
         </form>
       </div>

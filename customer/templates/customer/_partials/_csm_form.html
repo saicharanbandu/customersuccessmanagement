@@ -1,18 +1,18 @@
-<form method="POST" action="{% url 'prospect:update-crm-ajax' prospect.uuid %}">
+<form method="POST" action="{% url 'customer:update-csm-ajax' customer.uuid %}">
     {% csrf_token %}
       <div class="modal-header">
         <h3 class="modal-title">Change Manager</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p class="mb-0">Currently assigned to CRM</p>
+        <p class="mb-0">Currently assigned to CSM</p>
         <div class="fw-bold">
-          {{ prospect.manager.full_name }}
+          {{ customer.manager.full_name }}
         </div>
         <hr>
-        <p>Re-assign prospect to CRM</p>
+        <p>Re-assign customer to CSM</p>
         <div class="mb-3">
-          {{ prospect_crm_form.manager }}
+          {{ customer_csm_form.manager }}
         </div>
       </div>
       <div class="modal-footer">

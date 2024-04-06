@@ -4,12 +4,12 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from . import models as contactModel
+from . import models as contactModels
 
 @login_required
 def delete_contact(request, contact_id):
     if request.method == 'POST':
-        contact = contactModel.Contact.objects.get(uuid=contact_id)
+        contact = contactModels.Contact.objects.get(uuid=contact_id)
         try:
             if contact.profile_picture:
                 os.remove(contact.profile_picture.path)
@@ -20,3 +20,5 @@ def delete_contact(request, contact_id):
         return redirect(reverse('contact:list'))
     else:
         messages.error(request,'Unsuccessful, try again')
+
+

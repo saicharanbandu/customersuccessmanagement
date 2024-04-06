@@ -26,10 +26,10 @@
           {{ poc_formset.management_form }}
           {% for form in poc_formset %}
           {{ form.uuid }}
-          {% include 'prospect/poc_form.html' with index=forloop.counter %}
+          {% include 'prospect/_partials/_poc_form.html' with index=forloop.counter %}
           {% endfor %}
           <button type="submit" class="btn btn-gradient-primary">Update</button>
-          <a href="{% url 'prospect:list' %}" class="btn btn-outline-success">Cancel</a>
+          <a href="{% url 'prospect:list' %}" class="btn btn-outline-primary">Cancel</a>
         </form>
       </div>
     </div>

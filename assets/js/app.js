@@ -38,16 +38,6 @@ $(document).ready(function () {
             });
         }
     });
-
-    $(".view-customer-info").on('click', function () {
-        let url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            success: function (data) {
-                $("#customerInfo .modal-content").html(data);
-            }
-        });
-    });
 });
 
 

@@ -14,7 +14,7 @@ class Profile(models.Model):
     """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     prospect = models.OneToOneField(
-        prospectModels.Profile, to_field="uuid", on_delete=models.SET_NULL, null=True
+        prospectModels.Profile, to_field="uuid", on_delete=models.CASCADE, null=True, related_name='customer_prospect',
     )
     profile_picture = models.ImageField(upload_to="pictures", blank=True)
     legal_name = models.CharField(max_length=255, verbose_name="Legal Name")
@@ -127,8 +127,8 @@ class PaymentHistory(models.Model):
         on_delete=models.CASCADE,
     )
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    payment_date = models.DateField()
-    due_date = models.DateField()
+    payment_date = models.DateTimeField()
+    due_date = models.DateTimeField()
     invoice_no = models.CharField(max_length=25, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

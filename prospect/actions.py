@@ -142,3 +142,14 @@ def get_prospect_info(request, prospect_id):
         'prospect': prospect_profile
     }
     return render(request, template, context)
+
+
+@login_required
+def delete_prospect(request, prospect_id):
+    if request.method == 'POST':
+        prospect = prospectModels.Profile.objects.get(uuid=prospect_id)
+        prospect.delete()
+        messages.success(request, 'Prospect has been successfully deleted')
+        return redirect(reverse('prospect:list'))
+    else:
+        messages.error(request,'Unsuccessful, try again')

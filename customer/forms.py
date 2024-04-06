@@ -1,6 +1,7 @@
 from django import forms
 from . import models as customerModels
 from plan import models as planModels
+from user import models as userModels
 
 from tabernacle_customer_success import constants
 
@@ -117,3 +118,24 @@ class EditUserAppPermissionsForm(forms.ModelForm):
     # class Meta:
     #     model = customerModels.UserAppPermissions
     #     fields = ['module', 'access_role']
+
+
+
+class CustomerManagerForm(forms.ModelForm):
+    class Meta:
+        model = customerModels.Profile
+        fields = [
+            'manager',
+        ]
+        widgets = {
+            'manager': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CustomerManagerForm, self).__init__(*args, **kwargs)
+        self.fields['manager'].choices = self.get_manager_choices()
+
+    def get_manager_choices(self):
+        choices = userModels.User.objects.all().values_list('uuid', 'full_name')
+        formatted_choices = [(user_id, f'{full_name}') for user_id, full_name in choices]
+        return [('', '--Select--')] + formatted_choices
