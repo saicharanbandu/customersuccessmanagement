@@ -59,7 +59,7 @@ td a, .page-link, .breadcrumb-item a, .action-link, .auth-link {
     color: #9a55ff;
 }
 
-.auth-link:hover {
+.auth-link:hover, .action-link:hover {
     color: #b66dff !important;
 }
 
@@ -258,4 +258,12 @@ table .address-col {
 
 .page-item.disabled .page-link {
     color: #a1a1a1;
+}
+
+label {
+    display: block;
+    cursor: default !important;
+    color: #8f9091;
+    font-size: 0.85rem;
+    font-weight: 500;
 }

@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="UpdateRemarksLabel">Remarks for {{ prospect.name }}</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      {{ prospect.remarks|linebreaks }}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="action-link prospect-action" data-bs-toggle="modal" data-bs-target="#updateModal"
+        data-url="{% url "prospect:update-remarks-ajax" prospect.uuid %}">
+        <i class="mdi mdi-pen"></i>
+        Edit Remarks
+    </a>
+  </div>

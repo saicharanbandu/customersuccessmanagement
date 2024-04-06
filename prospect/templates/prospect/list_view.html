@@ -65,7 +65,7 @@
               <td class="sl-col">{{ forloop.counter0 | add:page_obj.start_index }}</td>
               <td>
                 <div class="name-group">
-                  {{ prospect.name }}
+                  <a class="action-link view-action" data-bs-toggle="modal" data-bs-target="#viewModal" data-url="{% url 'prospect:get-prospect-info' prospect.uuid %}">{{ prospect.name }}</a>
                   <div class="description">
                     {{ prospect.address }}, {{ prospect.city }}, <br>{{ prospect.state }} {{ prospect.country }}
                   </div>
@@ -106,7 +106,7 @@
               <td><span class="text-faded">{{ prospect.manager.full_name }}</span></td>
               <td class="remarks-col">
                 {% if prospect.remarks %}
-                <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ prospect.remarks }}">
+                <a class="action-link view-action" data-bs-toggle="modal" data-bs-target="#viewModal" data-url="{% url 'prospect:get-prospect-remarks' prospect.uuid %}">
                   <i class="mdi mdi-information-outline fs-4"></i>
                 </a>
                 {% endif %}
@@ -157,6 +157,13 @@
 </div>
 
 <div class="modal fade" id="updateModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="viewModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
     </div>

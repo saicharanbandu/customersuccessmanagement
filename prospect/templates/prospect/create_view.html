@@ -32,8 +32,8 @@
                     {% for form in poc_formset %}
                         {% include 'prospect/poc_form.html' with index=forloop.counter %}
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary me-3">Save Prospect</button>
-                    <a href="{% url 'prospect:list' %}" type="button" class="btn btn-light">Cancel</a>
+                    <button type="submit" class="btn btn-gradient-primary me-3">Save Prospect</button>
+                    <a href="{% url 'prospect:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
                 </form>
             </div>
         </div>

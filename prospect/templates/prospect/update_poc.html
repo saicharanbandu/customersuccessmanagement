@@ -27,8 +27,8 @@
           {{ form.as_p }}
           {% endfor %}
           <input type="hidden" name="prospect_id" value="{{ prospect_instance.uuid }}">
-          <button type="submit" class="btn btn-primary">Update</button>
-          <a href="{% url 'prospect:list' %}" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-gradient-primary">Update</button>
+          <a href="{% url 'prospect:list' %}" class="btn btn-outline-success">Cancel</a>
         </form>
       </div>
     </div>

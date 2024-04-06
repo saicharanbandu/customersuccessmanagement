@@ -1,0 +1,73 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="UpdateRemarksLabel">Prospect information</h3>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <div class="mb-3 d-flex">
+    <div>
+      <i class="mdi mdi-account-card-details me-2 text-faded"></i>
+    </div>
+    <div>
+      <label for="{{ form.name.id_for_label }}">Name</label>
+      {{ prospect.name }}
+    </div>
+  </div>
+  <div class="mb-3 d-flex">
+    <div>
+      <i class="mdi mdi-home-map-marker me-2 text-faded"></i>
+    </div>
+    <div>
+      <label for="{{ form.address.id_for_label }}">Address</label>
+      <div class="description">
+        {{ prospect.address }}, {{ prospect.city }}, <br>{{ prospect.state }} {{ prospect.country }}
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3 d-flex">
+    <div>
+      <i class="mdi mdi-email me-2 text-faded"></i>
+    </div>
+    <div>
+      <label for="{{ form.email.id_for_label }}">Email</label>
+      {{ prospect.email }}
+    </div>
+  </div>
+
+  <div class="mb-3 d-flex">
+    <div>
+      <i class="mdi mdi-web me-2 text-faded"></i>
+    </div>
+    <div>
+      <label for="{{ form.website.id_for_label }}">Website</label>
+      {{ prospect.website }}
+    </div>
+  </div>
+
+  <div class="mb-3 d-flex">
+    <div>
+      <i class="mdi mdi-home-modern me-2 text-faded"></i>
+    </div>
+    <div>
+      <label for="{{ form.denomination.id_for_label }}">Denomination</label>
+      {{ prospect.denomination }}
+    </div>
+  </div>
+
+  <div class="mb-3 d-flex">
+    <div>
+      <i class="mdi mdi-account-multiple me-2 text-faded"></i>
+    </div>
+    <div>
+      <label for="{{ form.congregation.id_for_label }}">Congregation</label>
+      {{ prospect.congregation }}
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <a class="auth-link" href="{% url 'prospect:edit' prospect.uuid %}">
+    <i class="mdi mdi-pencil-box-outline me-2"></i>
+    Edit Prospect Info
+  </a>
+</div>

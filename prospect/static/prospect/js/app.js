@@ -6,6 +6,21 @@ $(document).ready(function () {
         });
     });
 
+    $(".view-action").on("click", function () {
+        let url = $(this).attr("data-url");
+        $.get(url, function(data) {
+            $("#viewModal .modal-content").html(data);
+        }).done(() =>{
+            $(".prospect-action").on("click", function () {
+                let url = $(this).attr("data-url");
+                $.get(url, function(data) {
+                    $("#updateModal .modal-content").html(data);
+                });
+            });
+        });
+    });
+
+    
     $(".status-action").on("click", function () {
         let url = $(this).attr("data-url");
         $.get(url, function(data) {
@@ -19,5 +34,5 @@ $(document).ready(function () {
         });
     });
 
-    
+   
 });

@@ -96,8 +96,6 @@ def update_status(request, prospect_id):
             return redirect(reverse('prospect:list'))
         
 
-
-
 @login_required
 def get_status_options(request):
     prospect_status_form = prospectForms.ProspectStatusForm(initial={'date': date.today()})
@@ -122,5 +120,25 @@ def get_status_options(request):
 
     context = {
         'prospect_status_form': prospect_status_form
+    }
+    return render(request, template, context)
+
+
+@login_required
+def get_prospect_remarks(request, prospect_id):
+    template = 'prospect/_partials/_remarks_view.html'
+    prospect_profile = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+    context = {
+        'prospect': prospect_profile
+    }
+    return render(request, template, context)
+
+
+@login_required
+def get_prospect_info(request, prospect_id):
+    template = 'prospect/_partials/_info_view.html'
+    prospect_profile = get_object_or_404(prospectModels.Profile, uuid=prospect_id)
+    context = {
+        'prospect': prospect_profile
     }
     return render(request, template, context)
