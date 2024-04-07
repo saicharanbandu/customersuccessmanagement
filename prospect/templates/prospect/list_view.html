@@ -98,7 +98,7 @@
               </td>
               <td class="status-col">
                 {% if prospect.status %}
-                <label class="badge status-{{ prospect.status }} text-capitalize">{{ prospect.status }}</label>
+                <label class="badge status-{{ prospect.status }} text-capitalize">{{ prospect.get_status_display }}</label>
                 {% else %}
                 --
                 {% endif %}

@@ -92,7 +92,7 @@
                 {% if customer.legal_name %}
                 <span class="text-faded">{{ customer.customer_plan.created_at| date:'d/m/Y' }}</span>
                 {% else %}
-                <a href="{% url 'customer:onboard' customer.uuid %}" class="btn btn-sm btn-gradient-success">Onboard
+                <a href="{% url 'customer:onboard' customer.uuid %}" class="btn btn-sm btn-gradient-primary">Onboard
                   Now</a>
                 {% endif%}
               </td>

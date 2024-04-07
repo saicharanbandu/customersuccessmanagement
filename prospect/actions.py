@@ -64,15 +64,15 @@ def update_status(request, prospect_id):
     prospect_status = prospectModels.StatusHistory.objects.filter(prospect_id=prospect_id).order_by('-updated_at')
     
     if request.method == 'GET':
-        if prospect_status.exists():
-            prospect_status_form = prospectForms.ProspectStatusForm(instance=prospect_status.first())
-        else:
-            prospect_status_form = prospectForms.ProspectStatusForm(initial={'prospect': prospect_profile})
+        prospect_status_form = prospectForms.ProspectStatusForm(initial={'prospect': prospect_profile})
 
         context = {
             'prospect': prospect_profile,
             'prospect_status_form': prospect_status_form,
         }
+        if prospect_status.exists():
+            context.update({'prospect_status': prospect_status.first()})
+            
         return render(request, template, context)
     
     if request.method == 'POST':

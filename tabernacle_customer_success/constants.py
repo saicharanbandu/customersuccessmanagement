@@ -23,7 +23,7 @@ PLAN_DURATION_CHOICES = [('1', 'Monthly'), ('12', 'Yearly')]
 
 PAYMENT_STATUS_CHOICES = [(PAID, 'Paid'), (PENDING, 'Pending')]
 
-PROSPECT_STATUS_CHOICES = [(INITIATED, 'First Call/Appointement Requested'),
+PROSPECT_STATUS_CHOICES = [(INITIATED, 'First Call'),
                            (MEETING_SCHEDULED, 'Meeting Scheduled'),
                            (AWAITING, 'Awaiting Response'),
                            (ACCEPTED, 'Responded Yes'),
