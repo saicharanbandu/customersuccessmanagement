@@ -58,7 +58,6 @@ class ContactListView(ListView):
         queryset = super().get_queryset()
         search_query = self.request.GET.get("search")
         if search_query:
-            print("a")
             queryset = queryset.filter(
                 (
                     Q(name__istartswith=search_query)

@@ -16838,13 +16838,13 @@ code {
 }
 
 .bg-gradient-success {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167)) !important;
-  background: linear-gradient(to right, #7bc8d2, #099167) !important;
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae)) !important;
+  background: linear-gradient(to right, #84d9d2, #07cdae) !important;
 }
 
 .bg-gradient-info {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf)) !important;
-  background: linear-gradient(to right, #90caf9, #047edf 99%) !important;
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf)) !important;
+  background: linear-gradient(to right, #84c2f4, #047edf 99%) !important;
 }
 
 .bg-gradient-warning {
@@ -17428,14 +17428,14 @@ code {
 }
 
 .badge-gradient-success {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167));
-  background: linear-gradient(to right, #7bc8d2, #099167);
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae));
+  background: linear-gradient(to right, #84d9d2, #07cdae);
   color: #ffffff;
 }
 
 .badge-gradient-info {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf));
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf));
+  background: linear-gradient(to right, #84c2f4, #047edf 99%);
   color: #ffffff;
 }
 
@@ -18096,8 +18096,8 @@ code {
 .btn-outline-success:hover,
 .btn-outline-success:focus,
 .btn-outline-success:active {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167));
-  background: linear-gradient(to right, #7bc8d2, #099167);
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae));
+  background: linear-gradient(to right, #84d9d2, #07cdae);
   color: #000000;
 }
 
@@ -18156,8 +18156,8 @@ code {
 .btn-outline-info:hover,
 .btn-outline-info:focus,
 .btn-outline-info:active {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf));
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf));
+  background: linear-gradient(to right, #84c2f4, #047edf 99%);
   color: #000000;
 }
 
@@ -18460,8 +18460,8 @@ code {
 }
 
 .btn-gradient-success {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167));
-  background: linear-gradient(to right, #7bc8d2, #099167);
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae));
+  background: linear-gradient(to right, #84d9d2, #07cdae);
   border: 0;
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease;
@@ -18470,8 +18470,8 @@ code {
 .btn-gradient-success:not([disabled]):not(.disabled):active,
 .btn-gradient-success:not([disabled]):not(.disabled).active,
 .show>.btn-gradient-success.dropdown-toggle {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167));
-  background: linear-gradient(to right, #7bc8d2, #099167);
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae));
+  background: linear-gradient(to right, #84d9d2, #07cdae);
 }
 
 .btn-gradient-success:hover {
@@ -18489,8 +18489,8 @@ code {
 }
 
 .btn-gradient-info {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf));
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf));
+  background: linear-gradient(to right, #84c2f4, #047edf 99%);
   border: 0;
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease;
@@ -18499,8 +18499,8 @@ code {
 .btn-gradient-info:not([disabled]):not(.disabled):active,
 .btn-gradient-info:not([disabled]):not(.disabled).active,
 .show>.btn-gradient-info.dropdown-toggle {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf));
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf));
+  background: linear-gradient(to right, #84c2f4, #047edf 99%);
 }
 
 .btn-gradient-info:hover {
@@ -19471,8 +19471,8 @@ code {
 
 .form-check-success.form-check label input[type="checkbox"]:checked+.input-helper:before,
 .form-check-success.form-check label input[type="radio"]:checked+.input-helper:before {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167));
-  background: linear-gradient(to right, #7bc8d2, #099167);
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae));
+  background: linear-gradient(to right, #84d9d2, #07cdae);
 }
 
 .form-check-info.form-check label input[type="checkbox"]+.input-helper:before,
@@ -19482,8 +19482,8 @@ code {
 
 .form-check-info.form-check label input[type="checkbox"]:checked+.input-helper:before,
 .form-check-info.form-check label input[type="radio"]:checked+.input-helper:before {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf));
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf));
+  background: linear-gradient(to right, #84c2f4, #047edf 99%);
 }
 
 .form-check-warning.form-check label input[type="checkbox"]+.input-helper:before,
@@ -19816,8 +19816,8 @@ dl li {
 }
 
 .gradient-bullet-list li:nth-child(2):before {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf));
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf));
+  background: linear-gradient(to right, #84c2f4, #047edf 99%);
 }
 
 .gradient-bullet-list li:nth-child(3):before {
@@ -19826,8 +19826,8 @@ dl li {
 }
 
 .gradient-bullet-list li:nth-child(4):before {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167));
-  background: linear-gradient(to right, #7bc8d2, #099167);
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae));
+  background: linear-gradient(to right, #84d9d2, #07cdae);
 }
 
 .gradient-bullet-list li:nth-child(5):before {
@@ -20662,8 +20662,8 @@ dl li {
 }
 
 .navbar.navbar-success .navbar-menu-wrapper {
-  background: -webkit-gradient(linear, left top, right top, from(#7bc8d2), to(#099167));
-  background: linear-gradient(to right, #7bc8d2, #099167);
+  background: -webkit-gradient(linear, left top, right top, from(#84d9d2), to(#07cdae));
+  background: linear-gradient(to right, #84d9d2, #07cdae);
   color: #ffffff;
 }
 
@@ -20688,8 +20688,8 @@ dl li {
 }
 
 .navbar.navbar-info .navbar-menu-wrapper {
-  background: -webkit-gradient(linear, left top, right top, from(#90caf9), color-stop(99%, #047edf));
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#84c2f4), color-stop(99%, #047edf));
+  background: linear-gradient(to right, #84c2f4, #047edf 99%);
   color: #ffffff;
 }
 

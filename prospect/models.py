@@ -82,7 +82,7 @@ class StatusHistory(models.Model):
         related_name="prospect_history",
     )
     status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES)
-    date = models.DateField(null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     remarks = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

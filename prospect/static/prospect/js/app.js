@@ -26,9 +26,19 @@ $(document).ready(function () {
         $.get(url, function(data) {
             $("#updateModal .modal-content").html(data);
             $("#id_status").on("change", function() {
-                let url = `${$(this).closest("form").attr("data-url")}?status=${$(this).val()}`;
+                let status = $(this).val();
+                let url = `${$(this).closest("form").attr("data-url")}?status=${status}`;
                 $.get(url, function(data) {
                     $("#updateModal .modal-content #statusOptions").html(data);
+                    if(status === 'trial') {
+                        $("#id_date").on("change", function() {
+                            let date = $(this).val();
+                            let url = `${$(this).closest("div").attr("data-url")}?date=${date}`;
+                            $.get(url, function(data) {
+                                $("#trialEndDate").html(data);
+                            });
+                        });
+                    }
                 });
             });
         });

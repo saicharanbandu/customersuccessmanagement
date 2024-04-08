@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from tabernacle_customer_success import constants
 from customer import models as customerModels
-from datetime import date
+from datetime import date, timedelta, datetime
 
 @login_required
 def update_remarks_ajax(request, prospect_id):
@@ -98,8 +98,12 @@ def update_status(request, prospect_id):
 
 @login_required
 def get_status_options(request):
-    prospect_status_form = prospectForms.ProspectStatusForm(initial={'date': date.today()})
-    
+    today_date = date.today()
+    prospect_status_form = prospectForms.ProspectStatusForm(initial={'date': today_date})
+    context = {
+        'prospect_status_form': prospect_status_form
+    }
+
     status = request.GET.get('status')
     
     if status == constants.INITIATED:
@@ -111,16 +115,18 @@ def get_status_options(request):
     if status == constants.AWAITING:
         template = 'prospect/_partials/_option_awaiting_form.html'
     
+    if status == constants.TRIAL:
+        template = 'prospect/_partials/_option_trial_form.html'
+        context['trial_end_date'] = today_date + timedelta(days=14)
+
     if status == constants.ACCEPTED:
         template = 'prospect/_partials/_option_accepted_form.html'
     
     if status == constants.REJECTED:
         template = 'prospect/_partials/_option_rejected_form.html'
+   
 
-
-    context = {
-        'prospect_status_form': prospect_status_form
-    }
+   
     return render(request, template, context)
 
 
@@ -153,3 +159,13 @@ def delete_prospect(request, prospect_id):
         return redirect(reverse('prospect:list'))
     else:
         messages.error(request,'Unsuccessful, try again')
+
+
+
+
+@login_required
+def get_trial_end_date(request):
+    selected_date = request.GET.get('date')
+    trial_end_date = datetime.strptime(selected_date, '%Y-%m-%d') + timedelta(days=14)
+    return HttpResponse(trial_end_date.strftime('%B %d, %Y'), content_type="text/plain")
+

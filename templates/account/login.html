@@ -6,6 +6,19 @@
 {% trans "Login" %}
 {% endblock head_title %}
 {% block content %}
+
+<style>
+    .eye-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6d6d6d;
+}
+
+</style>
+
 <div class="col-lg-4 mx-auto">
     <div class="auth-form-light text-left p-5">
         <div class="brand-logo">
@@ -27,8 +40,10 @@
 
         <div class="form-group">
             <p class="text-muted font-weight-light mb-0">Password</p>
-            <input type="password" class="form-control form-control-lg" name="password" autocomplete="current-password"
-                required="" aria-describedby="id_password_helptext" id="id_password">
+            <div class="position-relative">
+                <input type="password" class="form-control form-control-lg" name="password" autocomplete="current-password" required aria-describedby="id_password_helptext" id="id_password">
+                <span class="eye-toggle mdi mdi-eye-off" onclick="togglePasswordVisibility('id_password')"></span>
+            </div>
         </div>
 
         {% if redirect_field_value %}
@@ -59,4 +74,20 @@
         {% endif %}
     </div>
 </div>
+<script>
+    function togglePasswordVisibility(inputId) {
+        var inputField = document.getElementById(inputId);
+        var eyeIcon = inputField.nextElementSibling;
+
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            eyeIcon.classList.remove("mdi-eye-off");
+            eyeIcon.classList.add("mdi-eye");
+        } else {
+            inputField.type = "password";
+            eyeIcon.classList.remove("mdi-eye");
+            eyeIcon.classList.add("mdi-eye-off");
+        }
+    }
+</script>
 {% endblock content %}

@@ -12,11 +12,12 @@
 {% include '_partials/_sidebar.html' %}
 {% endblock %}
 
-{% block page_title %}
-<span class="page-title-icon bg-gradient-primary text-white me-2">
-  <i class="mdi mdi-bullseye"></i>
-</span>
-{{ title }}
+{% block page_title %} {{ title }} {% endblock %}
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'prospect:overview' %}">Overview</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+</ol>
 {% endblock %}
 
 {% block app_scripts %}
@@ -53,7 +54,7 @@
               <th class="sl-col">#</th>
               <th class="name-col">NAME</th>
               <th>CONTACT PERSONS</th>
-              <th class="status-col">STATUS</th>
+              <th>STATUS</th>
               <th>CRM</th>
               <th class="remarks-col">REMARKS</th>
               <th class="actions-col">ACTIONS</th>
@@ -62,10 +63,15 @@
           <tbody>
             {% for prospect in prospects %}
             <tr>
+              {% if prospect.status == 'trial' %}
+              <td class="sl-col border-trial">{{ forloop.counter0 | add:page_obj.start_index }}</td>
+              {% else %}
               <td class="sl-col">{{ forloop.counter0 | add:page_obj.start_index }}</td>
+              {% endif %}
               <td>
                 <div class="name-group">
-                  <a class="action-link view-action" data-bs-toggle="modal" data-bs-target="#viewModal" data-url="{% url 'prospect:get-prospect-info' prospect.uuid %}">{{ prospect.name }}</a>
+                  <a class="action-link view-action" data-bs-toggle="modal" data-bs-target="#viewModal"
+                    data-url="{% url 'prospect:get-prospect-info' prospect.uuid %}">{{ prospect.name }}</a>
                   <div class="description">
                     {{ prospect.address }}, {{ prospect.city }}, <br>{{ prospect.state }} {{ prospect.country }}
                   </div>
@@ -96,9 +102,38 @@
                 {% endif %}
                 {% endfor %}
               </td>
-              <td class="status-col">
-                {% if prospect.status %}
-                <label class="badge status-{{ prospect.status }} text-capitalize">{{ prospect.get_status_display }}</label>
+              <td>
+                {% if prospect.status %}                
+                <label class="badge status-{{ prospect.status }} prospect-status ">
+                  <div>{{ prospect.get_status_display }}</div>
+                  {% if prospect.status == 'trial' %}
+                  <div class="status-description mt-2">
+                    <i class="mdi mdi-clock-fast"></i>
+                    {% if prospect.expiry_days > 0 %}
+                    Expires in {{ prospect.expiry_days }} days
+                    {% else %}
+                    Expired on {{ prospect.expiry_date | date:'d M, Y' }}
+                    {% endif %}
+                  </div>
+                  {% else %}
+                  <div class="status-description">
+                    {% if prospect.status_history.date %}
+                    <div class="mt-2">
+                      <i class="mdi mdi-calendar"></i>
+                      {{ prospect.status_history.date | date:'D, d M, Y' }}
+                    </div>
+                    {% endif %}
+
+                    {% if prospect.status_history.time %}
+                    <div class="mt-2">
+                      <i class="mdi mdi-calendar-clock"></i>
+                      {{ prospect.status_history.time | date:'h:i A' }}
+                    </div>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                </label>
+
                 {% else %}
                 --
                 {% endif %}
@@ -106,7 +141,8 @@
               <td><span class="text-faded">{{ prospect.manager.full_name }}</span></td>
               <td class="remarks-col">
                 {% if prospect.remarks %}
-                <a class="action-link view-action" data-bs-toggle="modal" data-bs-target="#viewModal" data-url="{% url 'prospect:get-prospect-remarks' prospect.uuid %}">
+                <a class="action-link view-action" data-bs-toggle="modal" data-bs-target="#viewModal"
+                  data-url="{% url 'prospect:get-prospect-remarks' prospect.uuid %}">
                   <i class="mdi mdi-information-outline fs-4"></i>
                 </a>
                 {% endif %}
@@ -121,9 +157,9 @@
                     <a class="dropdown-item" href="{% url 'prospect:edit' prospect.uuid %}">
                       <i class="mdi mdi-pencil-box-outline me-2"></i>
                       Edit Prospect Info
-                  </a>
-                  <a class="dropdown-item" href="{% url 'prospect:update-poc' prospect.uuid %}">
-                    
+                    </a>
+                    <a class="dropdown-item" href="{% url 'prospect:update-poc' prospect.uuid %}">
+
                       <i class="mdi mdi mdi-contacts me-2"></i>
                       Update Contacts Persons
                     </a>

@@ -8,20 +8,47 @@ from django.forms import formset_factory, modelformset_factory
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 from django.db.models import Q
 from customer import models as customerModels
 
+from datetime import timedelta
+
+
 @method_decorator(login_required, name='dispatch')
-class ProspectsListView(ListView):
+class ProspectDashboardView(View):
+    template_name = 'prospect/overview_view.html'
+    title = 'Overview'
+    active_tab = 'prospect'
+
+    def get(self, request, *args, **kwargs):
+        stats = {}
+        stats['prospects'] = prospectModels.Profile.objects.exclude(status__in=[constants.AWAITING, constants.ACCEPTED, constants.REJECTED]).count()
+        stats['opportunities'] = prospectModels.Profile.objects.filter(status=constants.AWAITING).count()
+        stats['customers'] = prospectModels.Profile.objects.filter(status=constants.ACCEPTED).count()
+        stats['lost_prospects'] = prospectModels.Profile.objects.filter(status=constants.REJECTED).count()
+
+
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'stats': stats,
+        }
+        return render(request, self.template_name, context)
+
+
+
+@method_decorator(login_required, name='dispatch')
+class ProspectListView(ListView):
     template_name = 'prospect/list_view.html'
     title = 'Prospect List'
     active_tab = 'prospect'
     model = prospectModels.Profile
     context_object_name = 'prospects'
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
+
+    def search_query(self, queryset):
         search_query = self.request.GET.get('search')
         if search_query:
             queryset = queryset.filter(
@@ -30,7 +57,19 @@ class ProspectsListView(ListView):
                     | Q(name__icontains=' ' + search_query)
                 )
             )
-        return queryset.order_by('name')
+        return queryset
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = self.search_query(queryset)
+
+        for query in queryset:
+            status_history = prospectModels.StatusHistory.objects.filter(prospect_id=query.uuid).order_by('-created_at')
+            if status_history.exists():
+                query.status_history = status_history.first()
+                query.expiry_date = query.status_history.date + timedelta(days=14)
+                query.expiry_days = (query.expiry_date - timezone.now()).days
+        return queryset
 
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)

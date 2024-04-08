@@ -5,7 +5,9 @@ from . import actions
 app_name = 'prospect'
 
 urlpatterns = [
-    path('list/', views.ProspectsListView.as_view(), name='list'),
+    path('overview/', views.ProspectDashboardView.as_view(), name='overview'),
+
+    path('list/', views.ProspectListView.as_view(), name='list'),
     path('create/', views.ProspectCreateView.as_view(), name='create'),
     path('<uuid:prospect_id>/edit/', views.ProspectEditView.as_view(), name='edit'),
 
@@ -20,5 +22,8 @@ urlpatterns = [
     path('<uuid:prospect_id>/get-prospect-remarks/', actions.get_prospect_remarks, name='get-prospect-remarks'),
     path('<uuid:prospect_id>/get-prospect-info/', actions.get_prospect_info, name='get-prospect-info'),
     path('<uuid:prospect_id>/delete/', actions.delete_prospect, name='delete'),
+
+    path('get-trial-end-date/', actions.get_trial_end_date, name='get-trial-end-date'),
+
   
 ]
