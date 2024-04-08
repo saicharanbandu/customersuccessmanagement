@@ -53,8 +53,8 @@
             <tr>
               <th class="sl-col">#</th>
               <th class="name-col">NAME</th>
-              <th>CONTACT PERSONS</th>
-              <th>STATUS</th>
+              <th class="contact-col">CONTACT PERSONS</th>
+              <th class="status-col">STATUS</th>
               <th>CRM</th>
               <th class="remarks-col">REMARKS</th>
               <th class="actions-col">ACTIONS</th>
@@ -77,33 +77,41 @@
                   </div>
                 </div>
               </td>
-              <td>
-                {% for contact in prospect.prospect_poc.all %}
-                <div class="contact-group">
-                  {{ contact.name }}
-                  {% if contact.remarks %}
-                  <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ contact.remarks }}">
-                    <i class="mdi mdi-information-outline"></i>
-                  </a>
-                  {% endif %}
-                  <div class="contact-details-sm">
-                    <div>
-                      <i class="mdi mdi-email-outline"></i>
-                      {{ contact.email | default_if_none:"--" }}
-                    </div>
-                    <div>
-                      <i class="mdi mdi-cellphone-android"></i>
-                      {{ contact.mobile | default_if_none:"--" }}
+              <td class="contact-col">
+                <div class="accordion" id="contacts">
+                  {% for contact in prospect.prospect_poc.all %}
+                  <div class="accordion-item contact-group">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#contact{{prospect.uuid}}_{{ forloop.counter}}" aria-expanded="true" aria-controls="collapseOne">
+                        <div class="contact-name">{{ contact.name }}</div>
+                        {% if contact.remarks %}
+                        <a class="ms-2" data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ contact.remarks }}">
+                          <i class="mdi mdi-information-outline"></i>
+                        </a>
+                        {% endif %}
+                      </button>
+                    </h2>
+                    <div id="contact{{prospect.uuid}}_{{ forloop.counter}}" class="accordion-collapse collapse"
+                      data-bs-parent="#contacts">
+                      <div class="accordion-body contact-details-sm">
+                        <div>
+                          <i class="mdi mdi-email-outline"></i>
+                          {{ contact.email | default_if_none:"--" }}
+                        </div>
+                        <div>
+                          <i class="mdi mdi-cellphone-android"></i>
+                          {{ contact.mobile | default_if_none:"--" }}
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {% endfor %}
                 </div>
-                {% if not forloop.last %}
-                <hr>
-                {% endif %}
-                {% endfor %}
+
               </td>
               <td>
-                {% if prospect.status %}                
+                {% if prospect.status %}
                 <label class="badge status-{{ prospect.status }} prospect-status ">
                   <div>{{ prospect.get_status_display }}</div>
                   {% if prospect.status == 'trial' %}

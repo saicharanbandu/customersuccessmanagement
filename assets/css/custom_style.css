@@ -79,6 +79,23 @@ table th {
 }
 
 
+.contact-group .accordion-button .contact-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.contact-group .accordion-button, .contact-group .accordion-button::after {
+    font-size: 0.85rem !important;
+    background-size: 0.85rem;
+    padding: 0.5rem;
+}
+
+.contact-group .accordion-button::after {
+    width: 1rem;
+    height: 1rem;
+}
+
+
 
 .contact-group .contact-details {
     padding-top: 0.5rem;
@@ -146,9 +163,12 @@ table .actions-col {
 }
 
 table .status-col {
-    width: 10rem;
+    width: 12rem;
 }
 
+table .contact-col, .contact-group .accordion-button .contact-name  {
+    width: 7rem;
+}
 
 table .sl-col {
     width: 2rem;
