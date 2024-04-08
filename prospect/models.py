@@ -64,7 +64,7 @@ class PointOfContact(models.Model):
     )
     name = models.CharField(max_length=255, verbose_name="Name",  blank=True)
     email = models.EmailField(max_length=255, verbose_name="Email ID", blank=True, null=True)
-    mobile = models.CharField(max_length=10, verbose_name="Mobile Number", blank=True, null=True)
+    mobile = models.CharField(max_length=15, verbose_name="Mobile Number", blank=True, null=True)
     remarks = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

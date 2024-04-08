@@ -4,23 +4,15 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block navbar %}
-{% include '_partials/_navbar.html' %}
-{% endblock %}
-
-{% block sidebar %}
-{% include '_partials/_sidebar.html' %}
-{% endblock %}
-
 {% block page_title %}
 {{ title }}
 {% endblock %}
 
-{% block app_stylesheets %}
+{% block styles %}
 <link rel="stylesheet" href="{% static 'customer/css/style.css' %}">
 {% endblock %}
 
-{% block app_scripts %}
+{% block scripts %}
 <script src="{% static 'customer/js/app.js' %}"></script>
 {% endblock %}
 

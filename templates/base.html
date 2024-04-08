@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{% static 'css/custom_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
 
-    {% block app_stylesheets %}
+    {% block styles %}
     {% endblock %}
 
     <!-- End layout styles -->
@@ -31,13 +31,11 @@
 
         {% include '_partials/_snackbar.html' %}
 
-        {% block navbar %}
-        {% endblock %}
+        {% include '_partials/_navbar.html' %}
+
 
       <div class="container-fluid page-body-wrapper">
-        {% block sidebar %}
-        {% endblock %}
-
+        {% include '_partials/_sidebar.html' %}
 
       <!-- partial -->
         <!-- partial -->
@@ -90,7 +88,7 @@
     <!-- End custom js for this page -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>  
     
-    {% block app_scripts %}
+    {% block scripts %}
     {% endblock %}
 
   </body>

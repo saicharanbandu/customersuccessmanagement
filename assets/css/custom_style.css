@@ -185,23 +185,30 @@ table .sl-col {
     cursor: unset;
 }
 
+
 .status-initiated {
+    border: 1px solid #e6e6e6;
+    background: #e6e6e6;
+    color: #565656;
+}
+
+.status-meeting {
     border: 1px solid #edd1ff;
     background: #edd1ff;
     color: #9600bb;
 }
 
-.status-trial {
+.status-awaiting {
     border: 1px solid #faf2b9;
     background: #faf2b9;
     color: #ff6500;
 }
 
 .border-trial {
-    border-left: 5px solid #fe7b00;
+    border-left: 5px solid #047edf;
 }
 
-.status-meeting, .payment-due {
+.payment-due {
     border: 1px solid #b1fce5;
     background: #b1fce5;
     color: #068689;
@@ -213,7 +220,7 @@ table .sl-col {
     color: #009126;
 }
 
-.status-awaiting, .payment-due {
+.status-trial, .payment-due {
     border: 1px solid #c5e8fe;
     background: #c5e8fe;
     color: #0748be;

@@ -4,14 +4,6 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block navbar %}
-{% include '_partials/_navbar.html' %}
-{% endblock %}
-
-{% block sidebar %}
-{% include '_partials/_sidebar.html' %}
-{% endblock %}
-
 {% block page_title %} {{ title }} {% endblock %}
 {% block breadcrumbs %}
 <ol class="breadcrumb">
@@ -20,7 +12,7 @@
 </ol>
 {% endblock %}
 
-{% block app_scripts %}
+{% block scripts %}
 <script src="{% static 'prospect/js/app.js' %}"></script>
 {% endblock %}
 

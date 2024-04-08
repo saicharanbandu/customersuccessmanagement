@@ -24,8 +24,8 @@ class ProspectDashboardView(View):
 
     def get(self, request, *args, **kwargs):
         stats = {}
-        stats['prospects'] = prospectModels.Profile.objects.exclude(status__in=[constants.AWAITING, constants.ACCEPTED, constants.REJECTED]).count()
-        stats['opportunities'] = prospectModels.Profile.objects.filter(status=constants.AWAITING).count()
+        stats['prospects'] = prospectModels.Profile.objects.exclude(status__in=[constants.TRIAL, constants.ACCEPTED, constants.REJECTED]).count()
+        stats['opportunities'] = prospectModels.Profile.objects.filter(status=constants.TRIAL).count()
         stats['customers'] = prospectModels.Profile.objects.filter(status=constants.ACCEPTED).count()
         stats['lost_prospects'] = prospectModels.Profile.objects.filter(status=constants.REJECTED).count()
 
@@ -67,8 +67,9 @@ class ProspectListView(ListView):
             status_history = prospectModels.StatusHistory.objects.filter(prospect_id=query.uuid).order_by('-created_at')
             if status_history.exists():
                 query.status_history = status_history.first()
-                query.expiry_date = query.status_history.date + timedelta(days=14)
-                query.expiry_days = (query.expiry_date - timezone.now()).days
+                if query.status_history.status == constants.TRIAL:
+                    query.expiry_date = query.status_history.date + timedelta(days=14)
+                    query.expiry_days = (query.expiry_date - timezone.now()).days
         return queryset
 
     def get_paginate_by(self, queryset):
