@@ -6,8 +6,9 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def get_plan_amount(request):
     plan_id = request.GET.get('plan_id')
-    duration = request.GET.get('duration')
+    is_yearly = request.GET.get('is_yearly')
 
+    duration = 12 if is_yearly else 1
     monthly_amount = planModels.Tariff.objects.get(uuid=plan_id).amount
     payable_amount = monthly_amount * int(duration)
     

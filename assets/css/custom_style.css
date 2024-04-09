@@ -54,11 +54,16 @@ a {
 }
 
 
-td a, .page-link, .breadcrumb-item a, .action-link, .auth-link {
+td a,
+.page-link,
+.breadcrumb-item a,
+.action-link,
+.auth-link {
     color: #9a55ff;
 }
 
-.auth-link:hover, .action-link:hover {
+.auth-link:hover,
+.action-link:hover {
     color: #b66dff !important;
 }
 
@@ -84,7 +89,9 @@ table th {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.contact-group .accordion-button, .contact-group .accordion-button::after {
+
+.contact-group .accordion-button,
+.contact-group .accordion-button::after {
     font-size: 0.85rem !important;
     background-size: 0.85rem;
     padding: 0.5rem;
@@ -154,7 +161,7 @@ table .remarks-col {
     text-align: center;
 }
 
-table .actions-col{
+table .actions-col {
     text-align: center;
 }
 
@@ -166,7 +173,8 @@ table .status-col {
     width: 12rem;
 }
 
-table .contact-col, .contact-group .accordion-button .contact-name  {
+table .contact-col,
+.contact-group .accordion-button .contact-name {
     width: 7rem;
 }
 
@@ -214,19 +222,24 @@ table .sl-col {
     color: #068689;
 }
 
-.status-accepted, .toast-success, .payment-paid {
+.status-accepted,
+.toast-success,
+.payment-paid {
     border: 1px solid #d7ffcb;
     background: #d7ffcb;
     color: #009126;
 }
 
-.status-trial, .payment-due {
+.status-trial,
+.payment-due {
     border: 1px solid #c5e8fe;
     background: #c5e8fe;
     color: #0748be;
 }
 
-.status-rejected, .toast-danger, .payment-pending {
+.status-rejected,
+.toast-danger,
+.payment-pending {
     border: 1px solid #fadbe1;
     background: #fadbe1;
     color: #f80808;
@@ -268,12 +281,11 @@ table .address-col {
 
 .modal-body input[type="time"],
 .modal-body input[type="date"],
-.modal-body select[name="Status"]
- {
-   width: 100%; 
-   margin-top: 0.5em;
-   margin-bottom: 0.5em;
-   font-size: 1.1em;
+.modal-body select[name="Status"] {
+    width: 100%;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.1em;
 }
 
 .btn.btn-sm {
@@ -284,10 +296,13 @@ table .address-col {
 .img-fluid {
     width: 90%;
     height: auto;
- }/*For making illustration Big */
+}
 
- .transparent-text {
-    color: rgba(0, 0, 0, 0.5); /* 60% transparent black color */
+/*For making illustration Big */
+
+.transparent-text {
+    color: rgba(0, 0, 0, 0.5);
+    /* 60% transparent black color */
 }
 
 
@@ -297,7 +312,7 @@ table .address-col {
 
 label {
     display: block;
-    cursor: default !important;
+    cursor: default;
     color: #8f9091;
     font-size: 0.85rem;
     font-weight: 500;
@@ -317,4 +332,52 @@ label {
 
 .status-description {
     font-size: 0.65rem;
+}
+
+input[type=checkbox].toggle {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+input[type=checkbox].toggle + label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 4rem;
+    height: 2rem;
+    display: block;
+    border-radius: 100px;
+    border: 2px solid #b66dff;
+    position: relative;
+}
+
+input[type=checkbox].toggle + label:after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    width: 1.3rem;
+    height: 1.3rem;
+    background: #b66dff;
+    border-radius: 90px;
+    transition: 0.3s;
+}
+/* 
+input[type=checkbox].toggle:checked+label {
+    background: #bada55;
+} */
+
+input[type=checkbox].toggle:checked+label:after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+input[type=checkbox].toggle+label:active:after {
+    width: 2rem;
+}
+
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

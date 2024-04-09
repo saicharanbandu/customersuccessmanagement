@@ -40,13 +40,20 @@ class SubscriptionPlanOptionsForm(forms.Form):
         queryset=planModels.Tariff.objects.all(),
         widget=forms.RadioSelect(attrs={'class': 'radio'}),
     )
-    duration = forms.ChoiceField(
-        choices=constants.PLAN_DURATION_CHOICES,
-        widget=forms.Select(attrs={'class': 'form-select'}),
+    is_yearly = forms.BooleanField(
+        widget=forms.CheckboxInput(),
     )
+    discount = forms.DecimalField(
+        required=False,
+        widget=forms.NumberInput(attrs={'class': 'form-control form-control-sm', 'placeholder': '0.00'}),
+    )
+    payment_mode = forms.ChoiceField(
+        choices=constants.PAYMENT_MODE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}))
+    
     payment_status = forms.ChoiceField(
         choices=constants.PAYMENT_STATUS_CHOICES,
-        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
+        widget=forms.Select(attrs={'class': 'form-select'}))
 
 class CustomerUserForm(forms.ModelForm):
     class Meta:

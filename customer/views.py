@@ -82,6 +82,15 @@ class CustomerSelectPlanView(View):
     def get(self, request, *args, **kwargs):
         customer_id = self.kwargs.get('customer_id')
         customer_profile_uuid_str = request.session.get('customer_profile_uuid')
+       
+        customer_plan_form = customerForms.CustomerPlanForm()
+        plan_options_form = customerForms.SubscriptionPlanOptionsForm()
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_id': customer_id,
+        }
+
         if customer_profile_uuid_str:
             try:
                 customer_profile_uuid = UUID(customer_profile_uuid_str)
@@ -91,28 +100,18 @@ class CustomerSelectPlanView(View):
                 
                 customer_plan_form = customerForms.CustomerPlanForm(instance=profile2)
                 
-                plan_options_form = customerForms.SubscriptionPlanOptionsForm( initial={
+                plan_options_form = customerForms.SubscriptionPlanOptionsForm(initial={
                         'plan': profile2.subscription_plan,
                         'duration': profile2.duration,
                         'payment_status': profile2.payment_status
                     })
-                
             except:
-                customer_plan_form = customerForms.CustomerPlanForm()
-                plan_options_form = customerForms.SubscriptionPlanOptionsForm()
-        else:
-            customer_plan_form = customerForms.CustomerPlanForm()
-            
-            plan_options_form = customerForms.SubscriptionPlanOptionsForm()
-          
-        
-        context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
-            'customer_plan_form': customer_plan_form,
-            'plan_options_form': plan_options_form,
-            'customer_id': customer_id,
-        }
+               pass
+
+
+        context['customer_plan_form'] = customer_plan_form
+        context['plan_options_form'] = plan_options_form
+
         return render(request, self.template_name, context)
     
     def post(self, request, *args, **kwargs):
@@ -325,7 +324,7 @@ class UserCreateView(View):
             subscribed_plan = request.session['subscribed_plan']
 
             tariff = planModels.Tariff.objects.get(uuid=subscribed_plan)
-
+            print(subscribed_plan)
             user_app_permissions_formset = self.UserAppPermissionsFormSet(
                 initial=[
                     {

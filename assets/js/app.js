@@ -22,14 +22,14 @@ $(document).ready(function () {
     $("input[type=radio][name=plan], #id_duration").change(function () {
         let url = $(this).closest("form").attr("data-url");
         let plan_id = $('input[type=radio][name=plan]:checked').val();;
-        let duration = $('#id_duration').val();
+        let is_yearly = $('#id_duration').is(':checked');
 
-        if (plan_id !=='' && duration !=='' ) {
+        if (plan_id !=='') {
             $.ajax({
                 url: url,
                 data: {
                     "plan_id": plan_id,
-                    "duration": duration
+                    "is_yearly": is_yearly
     
                 },
                 success: function (data) {

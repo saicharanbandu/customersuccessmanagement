@@ -1,20 +1,6 @@
 {% load static %}
 {{ customer_profile_form.prospect }}
 <div class="row">
-    <div class="col col-md-8">
-        <div class="form-group">
-            <label for="{{ customer_profile_form.legal_name.id_for_label }}">Subscription Name *</label>
-            {{ customer_profile_form.legal_name }}
-        </div>
-        <div class="form-group">
-            <label for="{{ customer_profile_form.display_name.id_for_label }}">Display Name*</label>
-            {{ customer_profile_form.display_name }}
-        </div>
-        <div class="form-group">
-            <label for="{{ customer_profile_form.short_name.id_for_label }}">Short Name or Abbreviation *</label>
-            {{ customer_profile_form.short_name }}
-        </div>
-    </div>
     <div class="col">
         <div class="form-group text-center">
             <label for="{{ customer_profile_form.profile_picture.id_for_label }}" class="text-uppercase fw-bold">
@@ -38,6 +24,20 @@
                     name="{{ customer_profile_form.profile_picture.html_name }}"
                     id="{{ customer_profile_form.profile_picture.id_for_label }}">
             </div>
+        </div>
+    </div>
+    <div class="col col-md-8">
+        <div class="form-group">
+            <label for="{{ customer_profile_form.legal_name.id_for_label }}">Subscription Name *</label>
+            {{ customer_profile_form.legal_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ customer_profile_form.display_name.id_for_label }}">Display Name*</label>
+            {{ customer_profile_form.display_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ customer_profile_form.short_name.id_for_label }}">Short Name or Abbreviation *</label>
+            {{ customer_profile_form.short_name }}
         </div>
     </div>
 </div>

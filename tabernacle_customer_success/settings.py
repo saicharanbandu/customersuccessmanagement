@@ -78,6 +78,8 @@ TEMPLATES = [
             ],
             'libraries': {
                 'paginator_helper': 'tabernacle_customer_success.template_tags.paginator_helper',
+                'cash_format': 'tabernacle_customer_success.template_tags.cash_format',
+                'plan_format': 'tabernacle_customer_success.template_tags.plan_format',
             },
         },
     },

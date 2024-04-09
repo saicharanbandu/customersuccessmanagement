@@ -4,6 +4,7 @@
 </div>
 <div class="modal-body">
 
+    {% if contacts %}
     {% for contact in contacts %}
     <p class="card-description">Contact Person {{ forloop.counter }}</p>
     <div class="contact-group">
@@ -26,6 +27,9 @@
       </div>
       {% if not forloop.last %}
       <hr>
+      {% endif %}
+      {% else %}
+      <div class="text-muted">No point of contacts for this customer</div>
       {% endif %}
     {% endfor%}
 </div>

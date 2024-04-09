@@ -13,6 +13,9 @@ MEETING_SCHEDULED = "meeting scheduled"
 INITIATED = "initiated"
 TRIAL = "trial"
 EXPIRY = "expiry"
+CASH = "cash"
+ONLINE = "online"
+BANK_TRANSFER = "bank_transfer"
 
 
 TRIAL_DURATION = 14
@@ -21,7 +24,9 @@ STAFF_ACCESS_ROLE_CHOICES = [(VIEWER, "Viewer"), (EDITOR, "Editor")]
 
 PLAN_DURATION_CHOICES = [("1", "Monthly"), ("12", "Yearly")]
 
-PAYMENT_STATUS_CHOICES = [(PAID, "Paid"), (PENDING, "Pending")]
+PAYMENT_MODE_CHOICES = [(CASH, "Cash"), (ONLINE, "Online"), (BANK_TRANSFER, 'Bank Transfer')]
+
+PAYMENT_STATUS_CHOICES = [(PAID, "Paid"), (PENDING, "Payment due later")]
 
 PROSPECT_STATUS_CHOICES = [
     (INITIATED, "First Call"),

@@ -38,7 +38,7 @@
             <div class="step-name">Customer Info</div>
           </div>
           <div class="stepper-item ">
-            <div class="step-counter"><i class="mdi mdi-cash" ></i></div>
+            <div class="step-counter"><i class="mdi mdi-cash"></i></div>
             <div class="step-name">Select Plan</div>
           </div>
           <div class="stepper-item">
@@ -51,9 +51,11 @@
           enctype="multipart/form-data">
           {% csrf_token %}
           {% include 'customer/profile_form.html' with customer_profile_form=customer_profile_form profile=profile %}
-          
-          <button type="submit" class="btn btn-gradient-primary me-2">Continue</button>
-          <a href="{% url 'customer:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
+
+          <div class="text-end">
+            <a href="{% url 'customer:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
+            <button type="submit" class="btn btn-gradient-primary me-2">Continue</button>
+          </div>
         </form>
       </div>
     </div>
