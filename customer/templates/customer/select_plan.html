@@ -2,7 +2,6 @@
 
 {% load static %}
 {% load plan_format %}
-{% load cash_format %}
 
 {% block head_title %}{{ title }}{% endblock %}
 
@@ -12,6 +11,10 @@
 
 {% block styles %}
 <link rel="stylesheet" href="{% static 'customer/css/style.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'customer/js/app.js' %}"></script>
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -45,42 +48,27 @@
         </div>
 
         <form class="forms-sample border-top py-4" action="{% url 'customer:select-plan' customer_id %}" method="POST"
-          enctype="multipart/form-data" data-url="{% url 'plan:get-plan-amount' %}">
+          enctype="multipart/form-data" data-url="{% url 'plan:get-plan-amount' %}"
+          plan-url="{% url 'customer:get-plan-options' %}">
           {% csrf_token %}
-
-          <div class="toggle-container text-uppercase fw-bold">
-            <small class="me-3">Monthly</small>
-            <input type="checkbox" id="switch" class="toggle" name="is_yearly" id="id_duration" />
-            <label for="switch">Is Yearly</label>
-            <small class="ms-3">Yearly</small>
+          <div class="toggle-group">
+            <div class="toggle-container text-uppercase fw-bold pt-5 py-3">
+              <small class="me-3">Monthly</small>
+              {{ plan_options_form.is_yearly }}
+              <label for="{{ plan_options_form.is_yearly.id_for_label }}">Is Yearly</label>
+              <small class="ms-3">Yearly</small>
+            </div>
+            <img src="{% static 'images/arrow.png' %}" />
+            <div class="discount-desc">
+              <label class="badge badge-success"><small>Save 15%</small></label>
+              <p>12 Months of value, Pay for only 9</p>
+            </div>
           </div>
 
           <div class="d-flex">
             <div class="container">
-              <div class="grid-wrapper grid-col-auto">
-                {% for plan in plan_options_form.plan %}
-                <label for="{{ plan.id_for_label }}" class="radio-card">
-                  {{ plan.tag }}
-                  <div class="card-content-wrapper">
-
-                    <div class="card-content">
-                      <div class="d-flex justify-content-between">
-                        <div class="title">{{ plan.choice_label|plan_name }}</div>
-                        <span class="check-icon"></span>
-                      </div>
-                      <div class="fw-bold fs-4 mb-3">₹{{ plan.choice_label|plan_amount|inr }}</div>
-                      <div class="text-faded">
-                        <div>per month</div>
-                        {% if plan.choice_label|plan_size == '0' %}
-                        Unlimited members
-                        {% else %}
-                        upto {{ plan.choice_label|plan_size }} members
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </label>
-                {% endfor %}
+              <div id="planOptions" class="grid-wrapper grid-col-auto">
+                {% include 'customer/_partials/_plan_options_form.html' %}
               </div>
             </div>
           </div>
@@ -100,7 +88,7 @@
               <div class="form-group">
                 <label>Estimated Amount</label>
                 <div id="payableAmount" class="fw-bold">
-                  Rs. 0.00
+                  ₹0.00
                 </div>
               </div>
               <div class="form-group">

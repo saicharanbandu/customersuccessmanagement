@@ -1,4 +1,20 @@
 $(document).ready(function () {
+
+    $("#id_prospect-country").change(function () {
+        let url = $(this).closest("form").attr("data-url");
+        let countryId = $(this).val();
+
+        $.ajax({
+            url: url,
+            data: {
+                "country_id": countryId
+            },
+            success: function (data) {
+                $("#id_prospect-state").html(data);
+            }
+        });
+    });
+    
     $(".prospect-action").on("click", function () {
         let url = $(this).attr("data-url");
         $.get(url, function(data) {

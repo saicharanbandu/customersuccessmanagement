@@ -143,7 +143,7 @@ table th {
 }
 
 .form-container {
-    width: 70%;
+    width: 80%;
     margin: auto;
 }
 
@@ -380,4 +380,32 @@ input[type=checkbox].toggle+label:active:after {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+
+.toggle-group {
+    padding-left: 15rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.discount-desc {
+    font-style: italic;
+    text-transform: initial;
+    text-align: center;
+    color: #8f9091;
+    font-weight: 600;
+}
+
+.toggle-group img {
+    width: 5rem;
+    position: relative;
+    top: -1rem;
+}
+
+
+.discount-desc p {
+    font-size: 0.80rem;
 }

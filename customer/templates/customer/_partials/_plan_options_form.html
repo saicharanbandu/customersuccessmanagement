@@ -1,0 +1,41 @@
+{% load plan_format %}
+{% load cash_format %}
+
+{% for plan in plan_options_form.plan %}
+<label for="{{ plan.id_for_label }}" class="radio-card">
+  {{ plan.tag }}
+  <div class="card-content-wrapper">
+
+    <div class="card-content">
+      <div class="d-flex justify-content-between">
+        <div class="title">{{ plan.choice_label|plan_name }}</div>
+        <span class="check-icon"></span>
+      </div>
+      <div class="fw-bold fs-4 mb-3">
+        {% if is_yearly == 'true' %}
+        ₹{{ plan.choice_label|plan_amount|plan_discount_15|inr }}
+        {% else %}
+        ₹{{ plan.choice_label|plan_amount|inr }}
+        {% endif %}
+      </div>
+      <div class="text-faded">
+        <div>per month</div>
+        <div class="fw-bold mb-3">
+          {% if plan.choice_label|plan_size == '0' %}
+          Unlimited members
+          {% else %}
+          upto {{ plan.choice_label|plan_size }} members
+          {% endif %}
+        </div>
+        <div class="">
+          {% if is_yearly == 'true' %}
+          <label class="badge badge-success"><small>Billed Yearly</small></label>
+          {% else %}
+          <label class="badge badge-danger"><small>Billed Monthly</small></label>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</label>
+{% endfor %}

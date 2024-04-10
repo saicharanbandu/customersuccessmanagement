@@ -20,6 +20,6 @@ urlpatterns = [
     path('<uuid:customer_id>/poc/', customerActions.get_poc, name='get-poc'),
 
     path("<uuid:customer_id>/delete/", customerActions.delete_customer, name="delete"),
-
+    path('ajax/plan-options/', customerActions.get_plan_options, name='get-plan-options')
 
 ]   

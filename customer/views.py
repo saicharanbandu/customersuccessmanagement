@@ -122,7 +122,9 @@ class CustomerSelectPlanView(View):
         if plan_options_form.is_valid():
 
             plan = request.POST.get('plan')
-            duration = int(request.POST.get('duration'))
+            is_yearly = request.POST.get('is_yearly')
+
+            duration = 12 if is_yearly else 1
             payment_status = request.POST.get('payment_status')
             customer_profile_uuid=request.POST.get('customer_id')
             tariff = planModels.Tariff.objects.get(uuid=plan)

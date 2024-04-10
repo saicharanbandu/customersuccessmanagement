@@ -74,3 +74,17 @@ def update_customer_success_manager(request, prospect_id):
         else:
             messages.error(request, 'Unable to reassing CSM for prospect. Try Again!')
             return redirect(reverse('customer:list'))
+
+
+
+@login_required
+def get_plan_options(request):
+    template = 'customer/_partials/_plan_options_form.html'
+    plan_id = request.GET.get('plan_id')
+    is_yearly = request.GET.get('is_yearly')
+    plan_options_form = customerForms.SubscriptionPlanOptionsForm(initial={'plan': plan_id})
+    context = {
+        'plan_options_form': plan_options_form,
+        'is_yearly': is_yearly
+    }
+    return render(request, template, context)
