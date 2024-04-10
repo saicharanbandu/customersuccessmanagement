@@ -73,7 +73,7 @@
                   {{ customer.customer_plan.subscription_plan.name }}
                 </div>
                 <div class="mt-2">
-                  <span class="fs-6">₹{% widthratio customer.customer_plan.subscription_plan.amount 1 customer.customer_plan.duration as result %}{{ result |inr }}</span><small
+                  <span class="fs-6">₹{{ customer.amount |inr }}</span><small
                     class="text-faded">{% if customer.customer_plan.duration == 12 %}/year{% else %}/month{% endif %}</small>
                 </div>
                 {% else %}
@@ -100,8 +100,8 @@
                 <div class="badge payment-pending">
                   Overdue by {{ customer.days_difference }} days
                 </div>
-                {% elif customer.payment_status == 'paid' %}
-                <div class="badge payment-paid">Paid</div>
+                {% else %}
+                <div class="badge payment-{{ customer.payment_status }} text-capitalize">{{ customer.payment_status }}</div>
                 {% endif %}
                 {% endif %}
               </td>

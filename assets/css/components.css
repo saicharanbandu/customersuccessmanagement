@@ -4,8 +4,7 @@ hr {
     border-bottom: 1px solid #d9d9d9;
 }
 
-label,
-input {
+label {
     cursor: pointer;
 }
 
@@ -18,9 +17,6 @@ input {
 .card-content img {
     max-width: 100%;
     display: block;
-    vertical-align: middle;
-
-
 }
 
 .tab-section-wrapper {

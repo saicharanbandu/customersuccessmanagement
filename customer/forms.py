@@ -41,6 +41,7 @@ class SubscriptionPlanOptionsForm(forms.Form):
         widget=forms.RadioSelect(attrs={'class': 'radio'}),
     )
     is_yearly = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput(attrs={'class': 'toggle'}),
     )
     discount = forms.DecimalField(

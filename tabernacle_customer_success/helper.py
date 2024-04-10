@@ -1,3 +1,4 @@
+from decimal import Decimal, ROUND_HALF_UP
 
 def formatINR(number):
     s, *d = str(number).partition(".")
@@ -86,3 +87,10 @@ def INRWords(amount):
         else:
             return '{} {} {}'.format(INRWords(div_), word2, INRWords(mod_))
 
+
+def get_discounted_amount(number, percentage):
+    number = Decimal(number)
+    discount_percentage_decimal = Decimal(percentage)
+    discount_amount = (discount_percentage_decimal / Decimal(100)) * number
+    discounted_price = number - discount_amount
+    return discounted_price.quantize(Decimal('1'), rounding=ROUND_HALF_UP)

@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from decimal import Decimal
 
 from uuid import UUID
 # Project Imports
@@ -18,7 +19,7 @@ from prospect import models as prospectModels, forms as prospectForms
 from plan import models as planModels
 from django.contrib import messages
 
-from tabernacle_customer_success import constants
+from tabernacle_customer_success import constants, helper
 
 
 @method_decorator(login_required, name='dispatch')
@@ -123,6 +124,7 @@ class CustomerSelectPlanView(View):
 
             plan = request.POST.get('plan')
             is_yearly = request.POST.get('is_yearly')
+            discount = 0 if request.POST.get('discount') == '' else request.POST.get('discount')
 
             duration = 12 if is_yearly else 1
             payment_status = request.POST.get('payment_status')
@@ -135,29 +137,34 @@ class CustomerSelectPlanView(View):
                 )
                 subscribed_plan.subscription_plan = tariff
                 subscribed_plan.duration = duration
-                
                 subscribed_plan.save()
                 
-                
             except:
-                customerModels.SubscribedPlan.objects.create(
+                subscribed_plan = customerModels.SubscribedPlan.objects.create(
                     customer_id=customer_id,
                     subscription_plan=tariff,
                     duration=duration,
                 )
 
-            amount = int(tariff.amount) * duration
+            request.session['subscribed_plan_id'] = str(subscribed_plan.subscription_plan.uuid)
+
+            if duration == 12:
+                amount = helper.get_discounted_amount((tariff.amount * duration), 15) - Decimal(discount)
+            else:
+                amount = tariff.amount - Decimal(discount)
+
             payment_date = datetime.today()
             due_date = payment_date + relativedelta(months=duration)
 
-            if payment_status == constants.PAID:
-                payment_data = {
-                    'customer_id': customer_id,
-                    'amount': amount,
-                    'payment_date': payment_date,
-                    'due_date': due_date,
-                }
-                customerModels.PaymentHistory.objects.create(**payment_data)
+            payment_data = {
+                'customer_id': customer_id,
+                'amount': amount,
+                'payment_date': payment_date,
+                'due_date': due_date,
+                'payment_status': payment_status,
+                'discount': discount,
+            }
+            customerModels.PaymentHistory.objects.create(**payment_data)
             customer_profile_uuid = customer_id
             request.session['customer_profile_uuid'] = str(customer_profile_uuid)
             return redirect(
@@ -201,32 +208,23 @@ class CustomerListView(ListView):
                 last_payment = customerModels.PaymentHistory.objects.filter(customer_id=query.uuid).order_by('-created_at').first()
                 query.due_date = last_payment.due_date
                 days_difference = (query.due_date - timezone.now()).days
+                
                 if days_difference > 0 and days_difference < 30:
                     query.payment_status = constants.DUE
                 elif days_difference < 0:
                     query.payment_status = constants.OVERDUE
                 else:
-                    query.payment_status = constants.PAID
-
-            except:
-                # try:
-                #     if query.customer_plan.duration == 0:
-                #         query.due_date = query.created_at.date() + timedelta(days=constants.TRIAL_DURATION)
-                #         query.payment_status = constants.EXPIRY
-                #         query.days_difference = (query.due_date - datetime.now().date()).days
-                # except:
-                try:
-                    query.due_date = query.customer_plan.updated_at
-                    query.payment_status = constants.OVERDUE
-                except:
-                    query.due_date = None
+                    query.payment_status = last_payment.payment_status
                 
-            if query.due_date:
-                if query.due_date > timezone.now():
-                    query.days_difference = (query.due_date - timezone.now()).days
-                else:
-                    query.days_difference = (timezone.now() - query.due_date).days
-        
+                query.amount = last_payment.amount
+            
+                if query.due_date:
+                    if query.due_date > timezone.now():
+                        query.days_difference = (query.due_date - timezone.now()).days
+                    else:
+                        query.days_difference = (timezone.now() - query.due_date).days
+            except:
+                pass
         return queryset
 
     def get_paginate_by(self, queryset):
@@ -322,11 +320,13 @@ class UserCreateView(View):
     def get(self, request, *args, **kwargs):
 
         context = self.get_context()
-        if 'subscribed_plan' in request.session:
-            subscribed_plan = request.session['subscribed_plan']
+        if 'subscribed_plan_id' in request.session:
+            subscribed_plan_id = request.session['subscribed_plan_id']
 
-            tariff = planModels.Tariff.objects.get(uuid=subscribed_plan)
-            print(subscribed_plan)
+            tariff = planModels.Tariff.objects.get(uuid=subscribed_plan_id)
+            print(subscribed_plan_id)
+            print(tariff)
+
             user_app_permissions_formset = self.UserAppPermissionsFormSet(
                 initial=[
                     {
@@ -377,7 +377,7 @@ class UserCreateView(View):
                     )
                 )
             elif action == 'done':
-                request.session.pop('subscribed_plan', None)
+                request.session.pop('subscribed_plan_id', None)
                 return redirect(reverse('customer:list'))
 
         context = self.get_context()
@@ -402,10 +402,10 @@ class AnotherUserCreateView(View):
             initial={'customer': customer_id}
         )
 
-        if 'subscribed_plan' in request.session:
-            subscribed_plan = request.session['subscribed_plan']
+        if 'subscribed_plan_id' in request.session:
+            subscribed_plan_id = request.session['subscribed_plan_id']
 
-            tariff = planModels.Tariff.objects.get(uuid=subscribed_plan)
+            tariff = planModels.Tariff.objects.get(uuid=subscribed_plan_id)
 
             user_app_permissions_formset = self.UserAppPermissionsFormSet(
                 initial=[

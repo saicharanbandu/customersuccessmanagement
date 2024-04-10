@@ -127,6 +127,8 @@ class PaymentHistory(models.Model):
         on_delete=models.CASCADE,
     )
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    discount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    payment_status = models.CharField(choices=constants.PAYMENT_STATUS_CHOICES)
     payment_date = models.DateTimeField()
     due_date = models.DateTimeField()
     invoice_no = models.CharField(max_length=25, null=True, blank=True)

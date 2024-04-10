@@ -19,9 +19,6 @@ hr {
     border-bottom: 1px solid #6e6e6e !important;
 }
 
-input {
-    cursor: pointer;
-}
 
 h2,
 h3,
@@ -408,4 +405,19 @@ input[type=checkbox].toggle+label:active:after {
 
 .discount-desc p {
     font-size: 0.80rem;
+}
+
+.amount-group label {
+    font-size: 0.875rem;
+    display: block;
+    cursor: default;
+    color: #8f9091;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.amount-group label.total, #totalAmount {
+    font-size: 1rem;
+    color: #3a3a3a;
+    font-weight: 600;
 }
