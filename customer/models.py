@@ -1,12 +1,11 @@
 from django.db import models
 from django.conf import settings
-
 from plan import models as planModels
 from prospect import models as prospectModels
-
 from tabernacle_customer_success import constants
-import uuid
+from misc import models as miscModels
 
+import uuid
 
 class Profile(models.Model):
     """
@@ -101,7 +100,11 @@ class UserAppPermissions(models.Model):
         to_field="uuid",
         on_delete=models.CASCADE,
     )
-    module = models.CharField(max_length=25, null=True)
+    module = models.ForeignKey(
+        miscModels.AppModule,
+        on_delete=models.CASCADE,
+        to_field="uuid",
+    )
     access_role = models.CharField(max_length=25, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

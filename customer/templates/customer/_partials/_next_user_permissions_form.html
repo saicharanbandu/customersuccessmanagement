@@ -1,0 +1,27 @@
+{% for user_app_permissions_form in user_app_permissions_formset %}
+            
+<div class="col-12 col-md-6">
+  <div class="row m-3">
+    <div class="col-12 col-md-6">
+      <div class="d-flex">
+        <div class="form-check form-switch mx-2 col-form-label"
+          data-module="{{user_app_permissions_form.module.value}}">
+          {{ user_app_permissions_form.has_access }}
+        </div>
+        <div class="me-2 text-uppercase col-form-label">
+          {{ user_app_permissions_form.module_name.value }}
+          {{ user_app_permissions_form.module }}
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 {% if not user_app_permissions_form.access_role.value %}d-none{% endif %}"
+      id="roleFor{{user_app_permissions_form.module.value}}">
+      {% if user_app_permissions_form.permissions|length > 0 %}
+          {{ user_app_permissions_form.access_role }}
+      {% else %}
+          <div class="col-form-label">Full Access</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endfor %}

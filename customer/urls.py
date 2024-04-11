@@ -10,7 +10,7 @@ urlpatterns = [
     path('<uuid:customer_id>/select-plan/', customerViews.CustomerSelectPlanView.as_view(), name='select-plan'),
 
     path('<uuid:customer_id>/user/create/', customerViews.UserCreateView.as_view(), name='user-create'),
-    path('<uuid:customer_id>/user/add/', customerViews.AnotherUserCreateView.as_view(), name='user-add'),
+    path('<uuid:customer_id>/user/create/next', customerViews.UserCreateView.as_view(), name='user-create-next'),
 
     path('<uuid:customer_id>/info/update/', customerViews.CustomerEditView.as_view(), name='update-info'),
 

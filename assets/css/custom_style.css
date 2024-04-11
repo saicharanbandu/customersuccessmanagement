@@ -344,7 +344,7 @@ input[type=checkbox].toggle + label {
     height: 2rem;
     display: block;
     border-radius: 100px;
-    border: 2px solid #b66dff;
+    border: 2px solid #fe7c96;
     position: relative;
 }
 
@@ -355,16 +355,17 @@ input[type=checkbox].toggle + label:after {
     left: 5px;
     width: 1.3rem;
     height: 1.3rem;
-    background: #b66dff;
+    background: #fe7c96;
     border-radius: 90px;
     transition: 0.3s;
 }
-/* 
-input[type=checkbox].toggle:checked+label {
-    background: #bada55;
-} */
+
+input[type=checkbox].toggle:checked + label {
+    border: 2px solid #1bcfb4;
+}
 
 input[type=checkbox].toggle:checked+label:after {
+    background: #1bcfb4;
     left: calc(100% - 5px);
     transform: translateX(-100%);
 }

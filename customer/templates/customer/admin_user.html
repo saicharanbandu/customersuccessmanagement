@@ -4,7 +4,6 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
-
 {% block page_title %}
 {{ title }}
 {% endblock %}
@@ -27,14 +26,14 @@
       <div class="card-body">
         <h4 class="card-title text-center">Let's get started with the onboarding process</h4>
         <p class="card-description text-center">Follow the 3-step process to onboard the client</p>
-        
+
         <div class="stepper-wrapper">
           <div class="stepper-item completed">
             <div class="step-counter"><i class="mdi mdi-file-document"></i></div>
             <div class="step-name">Customer Info</div>
           </div>
           <div class="stepper-item completed">
-            <div class="step-counter"><i class="mdi mdi-cash" ></i></div>
+            <div class="step-counter"><i class="mdi mdi-cash"></i></div>
             <div class="step-name">Select Plan</div>
           </div>
           <div class="stepper-item active">
@@ -42,48 +41,70 @@
             <div class="step-name">Add Users</div>
           </div>
         </div>
+        <form class="row border-top py-4 px-5" method="POST">
+          <div class="col-md-8">
+            {% csrf_token %}
 
-        <form class="forms-sample border-top py-5" method="POST">
-          {% csrf_token %}
+            <div class="text-faded py-4">Assign access to the initial designated users</div>
+            {{ customer_user_form.customer}}
 
-          <div class="text-center">Assign access to the initial designated users</div>
-          {{  customer_user_form.customer}} <!-- This is hidden field. Do not style this-->
-          
-
-          {{ customer_user_form.full_name.label }}
-          {{ customer_user_form.full_name }}
-
-          {{ customer_user_form.designation.label }}
-          {{ customer_user_form.designation }}
-
-          {{ customer_user_form.mobile_no.label }}
-          {{ customer_user_form.mobile_no }}
-
-          {{ customer_user_form.email.label }}
-          {{ customer_user_form.email }}
-
-          <hr>
-          <h6>Permissions (Full Access)</h6>
-          <div class="row border-bottom">
-            {{ user_app_permissions_formset.management_form }}  <!-- This is hidden field. Do not style this-->
-            
-            {% for user_app_permissions_form in user_app_permissions_formset %}
-            
-            <div class="col-12 col-md-4">
-                <span class="text-capitalize">{{ user_app_permissions_form.module.value }}</span>
+            <div class="">
+              <div class="form-group">
+                <label for="{{ customer_user_form.legal_name.id_for_label }}">Fullname *</label>
+                {{ customer_user_form.full_name }}
+              </div>
             </div>
 
-            <div class="visually-hidden">  <!-- This are hidden fields. Do not style these-->
-              {{ user_app_permissions_form.has_access }}
-              {{ user_app_permissions_form.module }}
-              {{ user_app_permissions_form.access_role }}
+            <div class="form-group">
+              <label for="{{ customer_user_form.designation.id_for_label }}">Designation *</label>
+              {{ customer_user_form.designation }}
             </div>
-            {% endfor %}
+
+            <div class="form-group">
+              <label for="{{ customer_user_form.mobile_no.id_for_label }}">Mobile No *</label>
+              {{ customer_user_form.mobile_no }}
+            </div>
+
+            <div class="form-group">
+              <label for="{{ customer_user_form.email.id_for_label }}">Email *</label>
+              {{ customer_user_form.email }}
+            </div>
+
           </div>
-          <br>
-          <a href="{% url 'customer:select-plan' customer_id %}" class="btn btn-light me-3">Go Back</a>
-          <button type="submit" class="btn btn-gradient-primary me-3" name="action" value="add_more_user">Add Next User</button>
-          <button type="submit" class="btn btn-gradient-primary" name="action" value="done">Done</button>
+          <div class="col-md-4">
+            <h2 class="py-4">Added Users</h2>
+            <ol>
+              {% for user in users %}
+              <li>{{ user.full_name }} {{ user.designation }}</li>
+              {% endfor %}
+            </ol>
+          </div>
+          <hr>
+          <div class="text-faded py-3">Permissions {% if not is_next_user %}(Full Access){% endif %}</div>
+          <div class="row">
+            {{ user_app_permissions_formset.management_form }}
+            {% if not is_next_user %}
+            {% include 'customer/_partials/_admin_permissions_form.html' %}
+            {% else %}
+            {% include 'customer/_partials/_next_user_permissions_form.html' %}
+            {% endif %}
+          </div>
+
+          {% if not is_next_user %}
+          <div class="text-center mt-5">
+            <a href="{% url 'customer:select-plan' customer_id %}" class="btn btn-light me-3">Go Back</a>
+            <button type="submit" class="btn btn-gradient-primary me-3" name="action" value="add_more_user">Add Next
+              User</button>
+            <button type="submit" class="btn btn-gradient-primary" name="action" value="done">Done</button>
+          </div>
+          {% else %}
+          <div class="text-center mt-5">
+            <button type="submit" class="btn btn-gradient-primary me-3" name="action" value="add_more_user">
+              Add Next User
+            </button>
+            <button type="submit" class="btn btn-gradient-primary" name="action" value="done">Done</button>
+          </div>
+          {% endif %}
         </form>
       </div>
     </div>

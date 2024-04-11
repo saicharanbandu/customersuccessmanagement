@@ -18,7 +18,7 @@ from . import models as customerModels, forms as customerForms
 from prospect import models as prospectModels, forms as prospectForms
 from plan import models as planModels
 from django.contrib import messages
-
+from misc import models as miscModels
 from tabernacle_customer_success import constants, helper
 
 
@@ -307,36 +307,46 @@ class UserCreateView(View):
         customer_user_form = customerForms.CustomerUserForm(
             initial={'customer': customer_id}
         )
+        users = customerModels.User.objects.filter(customer_id=customer_id)
         return {
             'title': self.title,
             'active_tab': self.active_tab,
             'customer_id': customer_id,
             'customer_user_form': customer_user_form,
+            'users': users,
             'go_back_url': reverse(
                 'customer:select-plan', kwargs={'customer_id': customer_id}
             ),
+            'is_next_user': True if 'next' in self.request.get_full_path() else False
         }
 
     def get(self, request, *args, **kwargs):
-
+        
         context = self.get_context()
         if 'subscribed_plan_id' in request.session:
             subscribed_plan_id = request.session['subscribed_plan_id']
 
             tariff = planModels.Tariff.objects.get(uuid=subscribed_plan_id)
-            print(subscribed_plan_id)
-            print(tariff)
+            
+            modules = miscModels.AppModule.objects.filter(name__in=tariff.modules).order_by('precedance')
 
-            user_app_permissions_formset = self.UserAppPermissionsFormSet(
-                initial=[
-                    {
+            if context['is_next_user']:
+                user_app_permissions_formset = self.UserAppPermissionsFormSet(
+                    initial=[{
                         'module': module,
+                        'module_name': module.name,
+                        } for module in modules])
+            else:
+                user_app_permissions_formset = self.UserAppPermissionsFormSet(
+                    initial=[{
+                        'module': module,
+                        'module_name': module.name,
                         'has_access': True,
-                        'access_role': constants.VIEWER,
-                    }
-                    for module in tariff.modules
-                ]
-            )
+                        'access_role': constants.EDITOR,
+                    } for module in modules])
+            
+            for form in user_app_permissions_formset:
+                form.permissions = form.initial['module'].permissions
 
             more_context = {
                 'user_app_permissions_formset': user_app_permissions_formset,
@@ -359,12 +369,12 @@ class UserCreateView(View):
                     )
                     user_app_permissions_form_object.user = customer_user_object
 
-                    if user_app_permissions_form.cleaned_data['has_access'] == 'True':
-                        user_app_permissions_form_object.access_role = (
-                            user_app_permissions_form.cleaned_data['access_role']
-                        )
+                    if user_app_permissions_form.cleaned_data['has_access'] == 'True' and len(user_app_permissions_form_object.module.permissions) == 0:
+                            user_app_permissions_form_object.access_role = constants.ALL_ACCESS
+                    elif user_app_permissions_form.cleaned_data['has_access'] == 'True' and len(user_app_permissions_form_object.module.permissions) > 0:
+                        user_app_permissions_form_object.access_role = user_app_permissions_form.cleaned_data['access_role']
                     else:
-                        user_app_permissions_form_object.access_role = None
+                        continue
                     user_app_permissions_form_object.save()
 
             action = request.POST.get('action', None)
@@ -372,102 +382,15 @@ class UserCreateView(View):
             if action == 'add_more_user':
                 return redirect(
                     reverse(
-                        'customer:user-add',
+                        'customer:user-create-next',
                         kwargs={'customer_id': customer_user_object.customer_id},
                     )
                 )
             elif action == 'done':
-                request.session.pop('subscribed_plan_id', None)
+                request.session.pop('subscribed_plan_id')
                 return redirect(reverse('customer:list'))
 
         context = self.get_context()
-
-        return render(request, self.template_name, context)
-
-
-@method_decorator(login_required, name='dispatch')
-class AnotherUserCreateView(View):
-    model = customerModels.User
-    template_name = 'customer/assign_user_form.html'
-    title = 'User Information'
-    active_tab = 'customer'
-
-    UserAppPermissionsFormSet = formset_factory(
-        form=customerForms.AddUserAppPermissionsForm, extra=0
-    )
-
-    def get(self, request, *args, **kwargs):
-        customer_id = self.kwargs.get('customer_id')
-        customer_user_form = customerForms.CustomerUserForm(
-            initial={'customer': customer_id}
-        )
-
-        if 'subscribed_plan_id' in request.session:
-            subscribed_plan_id = request.session['subscribed_plan_id']
-
-            tariff = planModels.Tariff.objects.get(uuid=subscribed_plan_id)
-
-            user_app_permissions_formset = self.UserAppPermissionsFormSet(
-                initial=[
-                    {
-                        'module': module,
-                    }
-                    for module in tariff.modules
-                ]
-            )
-
-        customer_id = self.kwargs.get('customer_id')
-        users = customerModels.User.objects.filter(customer_id=customer_id)
-        context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
-            'customer_user_form': customer_user_form,
-            'user_app_permissions_formset': user_app_permissions_formset,
-            'users': users,
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        customer_user_form = customerForms.CustomerUserForm(request.POST)
-        user_app_permissions_formset = self.UserAppPermissionsFormSet(request.POST)
-
-        if customer_user_form.is_valid():
-            customer_user_object = customer_user_form.save()
-
-            if user_app_permissions_formset.is_valid():
-                for user_app_permissions_form in user_app_permissions_formset:
-                    user_app_permissions_form_object = user_app_permissions_form.save(
-                        commit=False
-                    )
-                    user_app_permissions_form_object.user = customer_user_object
-
-                    if user_app_permissions_form.cleaned_data['has_access'] == 'True':
-                        user_app_permissions_form_object.access_role = (
-                            user_app_permissions_form.cleaned_data['access_role']
-                        )
-                    else:
-                        user_app_permissions_form_object.access_role = None
-                    user_app_permissions_form_object.save()
-
-            action = request.POST.get('action', None)
-
-            if action == 'add_more_user':
-                return redirect(
-                    reverse(
-                        'customer:user-add',
-                        kwargs={'customer_id': customer_user_object.customer_id},
-                    )
-                )
-            elif action == 'done':
-                request.session.pop('subscribed_plan', None)
-                return redirect(reverse('customer:list'))
-
-        context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
-            'customer_user_form': customer_user_form,
-            'user_app_permissions_formset': user_app_permissions_formset,
-        }
 
         return render(request, self.template_name, context)
 
