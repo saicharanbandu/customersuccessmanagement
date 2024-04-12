@@ -167,19 +167,20 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_EMAIL_VERIFICATION = 'none' 
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 ACCOUNT_LOGOUT_REDIRECT_URL ='account_login'
 LOGIN_REDIRECT_URL = 'customer:list'
 LOGOUT_REDIRECT_URL = 'account_login'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'youremail@gmail.com'
-EMAIL_HOST_PASSWORD = 'WRITE THAT PASSWORD HERE'
-EMAIL_USE_TLS = True
-
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR/ 'sent_emails')
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'info.testmailservice@gmail.com'
+# EMAIL_HOST_PASSWORD = 'gwmb ffrt ychg twef'
+# EMAIL_USE_TLS = True
 
 SOCIALACCOUNT_AUTO_SIGNUP = False
