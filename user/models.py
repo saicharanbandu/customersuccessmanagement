@@ -40,9 +40,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         Custom user model
     """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
-    full_name = models.CharField(max_length=100)
-    mobile_no = models.CharField(max_length=15, unique=True)
-    email = models.EmailField(unique=True)
+    full_name = models.CharField(max_length=100,null=False)
+    mobile_no = models.CharField(max_length=15, unique=True,null=False)
+    email = models.EmailField(unique=True,null=False)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -81,3 +81,4 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user.full_name)
+    

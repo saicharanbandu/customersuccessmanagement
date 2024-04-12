@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block navbar %}
+{% include '_partials/_navbar.html' %}
+{% endblock %}
+
+{% block sidebar %}
+{% include '_partials/_sidebar.html' %}
+{% endblock %}
+
+{% block page_title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'user:list' %}">User Directory</a></li>
+  <li class="breadcrumb-item active" aria-current="page">New User</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+  <h1>Create User</h1>
+  <form method="POST" >
+    {% csrf_token %}
+    {{ user_form.full_name.label_tag}}
+    {{user_form.full_name}}
+    {{ user_form.password.label_tag}}
+    {{user_form.password}}
+    {{ user_form.mobile_no.label_tag}}
+    {{user_form.mobile_no}}
+    {{ user_form.email.label_tag}}
+    {{user_form.email}}
+    {{ user_form.is_staff.label_tag}}
+    {{user_form.is_staff}}
+    {{ user_form.is_superuser.label_tag}}
+    {{user_form.is_superuser}}
+    {{ user_form.is_active.label_tag}}
+    {{user_form.is_active}}
+    {{profile_form.image.label_tag}}
+    {{ profile_form.image }}
+    {{profile_form.date_of_birth.label_tag}}
+    {{ profile_form.date_of_birth }}
+    {{profile_form.designation.label_tag}}
+    {{ profile_form.designation }}
+    <br>
+    <br>
+    
+    <button class="btn btn-primary" type="submit">Create User</button>
+  </form>
+{% endblock %}
