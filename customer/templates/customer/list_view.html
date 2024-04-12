@@ -77,7 +77,7 @@
                     class="text-faded">{% if customer.customer_plan.duration == 12 %}/year{% else %}/month{% endif %}</small>
                 </div>
                 {% else %}
-                <a href="{% url 'customer:select-plan' customer.uuid %}" class="btn btn-sm btn-gradient-danger">Select
+                <a href="{% url 'customer:onboard-select-plan' customer.uuid %}" class="btn btn-sm btn-gradient-danger">Select
                   Plan</a>
                 {% endif%}
                 {% endif%}
@@ -86,7 +86,7 @@
                 {% if customer.legal_name %}
                 <span class="text-faded">{{ customer.customer_plan.created_at| date:'d/m/Y' }}</span>
                 {% else %}
-                <a href="{% url 'customer:onboard' customer.uuid %}" class="btn btn-sm btn-gradient-primary">Onboard
+                <a href="{% url 'customer:onboard-customer' customer.uuid %}" class="btn btn-sm btn-gradient-primary">Onboard
                   Now</a>
                 {% endif%}
               </td>
@@ -124,21 +124,21 @@
                       <i class="mdi mdi-pencil-box-outline me-2"></i>
                       Edit Customer Info
                     </a>
-                    <a class="dropdown-item view-action" data-bs-toggle="modal" data-bs-target="#viewModal"
+                    <a class="dropdown-item" href="{% url 'customer:users' customer.uuid %}">
+                      <i class="mdi mdi-account-multiple me-2"></i>
+                      Edit Collaborators
+                    </a>
+                    <a class="dropdown-item border-top view-action" data-bs-toggle="modal" data-bs-target="#viewModal"
                       data-url="{% url 'customer:get-poc' customer.uuid %}">
                       <i class="mdi mdi mdi-contacts me-2"></i>
                       View Contact Persons
-                    </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="mdi mdi-account-multiple me-2"></i>
-                      View Users
                     </a>
                     <a class="dropdown-item customer-action" data-bs-toggle="modal" data-bs-target="#updateModal"
                       data-url="{% url "customer:update-csm-ajax" customer.uuid %}">
                       <i class="mdi mdi-account-convert me-2"></i>
                       Re-assign CSM
                     </a>
-                    <a class="dropdown-item border-top" href="#">
+                    <a class="dropdown-item border-top" href="{% url 'customer:plan-update' customer.uuid %}">
                       <i class="mdi mdi-cash me-2"></i>
                       Change Plan
                     </a>

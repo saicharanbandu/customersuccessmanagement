@@ -24,7 +24,7 @@ from tabernacle_customer_success import constants, helper
 
 @method_decorator(login_required, name='dispatch')
 class CustomerOnboardingView(View):
-    template_name = 'customer/onboard_view.html'
+    template_name = 'customer/onboard_customer_view.html'
     title = 'Onboarding'
     active_tab = 'customer'
     
@@ -61,7 +61,7 @@ class CustomerOnboardingView(View):
             request.session['customer_profile_uuid'] = str(profile_uuid)
             return redirect(
                 reverse(
-                    'customer:select-plan',
+                    'customer:onboard-select-plan',
                     kwargs={'customer_id': customer_info_object.uuid},
                 )
             )
@@ -75,8 +75,8 @@ class CustomerOnboardingView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class CustomerSelectPlanView(View):
-    template_name = 'customer/select_plan.html'
+class OnboardingPlanView(View):
+    template_name = 'customer/onboard_select_plan.html'
     title = 'Select Plan'
     active_tab = 'customer'
 
@@ -168,7 +168,7 @@ class CustomerSelectPlanView(View):
             customer_profile_uuid = customer_id
             request.session['customer_profile_uuid'] = str(customer_profile_uuid)
             return redirect(
-                reverse('customer:user-create', kwargs={'customer_id': customer_id})
+                reverse('customer:onboard-user-create', kwargs={'customer_id': customer_id})
             )
 
         context = {
@@ -292,10 +292,10 @@ class CustomerEditView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class UserCreateView(View):
+class OnboardingUserView(View):
     model = customerModels.User
-    template_name = 'customer/admin_user.html'
-    title = 'User Information'
+    template_name = 'customer/onboard_user_view.html'
+    title = 'Collaborator Information'
     active_tab = 'customer'
 
     UserAppPermissionsFormSet = formset_factory(
@@ -315,7 +315,7 @@ class UserCreateView(View):
             'customer_user_form': customer_user_form,
             'users': users,
             'go_back_url': reverse(
-                'customer:select-plan', kwargs={'customer_id': customer_id}
+                'customer:onboard-select-plan', kwargs={'customer_id': customer_id}
             ),
             'is_next_user': True if 'next' in self.request.get_full_path() else False
         }
@@ -382,7 +382,7 @@ class UserCreateView(View):
             if action == 'add_more_user':
                 return redirect(
                     reverse(
-                        'customer:user-create-next',
+                        'customer:onboard-user-create-next',
                         kwargs={'customer_id': customer_user_object.customer_id},
                     )
                 )
@@ -394,3 +394,84 @@ class UserCreateView(View):
 
         return render(request, self.template_name, context)
 
+
+
+
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+class CustomerUsersView(View):
+    model = customerModels.User
+    template_name = 'customer/users_view.html'
+    title = 'Collaborators'
+    active_tab = 'customer'
+
+    def get(self, request, *args, **kwargs):
+        customer_id = kwargs.get('customer_id')
+        customer= get_object_or_404(customerModels.Profile, uuid=customer_id)
+        customer_users = customerModels.User.objects.filter(customer=customer)
+        context = {
+            'title': f'{self.title} for {customer.legal_name}',
+            'active_tab': self.active_tab,
+            'customer_users': customer_users,
+            'customer_id': customer_id
+        }
+        return render(request, self.template_name, context)
+    
+
+@method_decorator(login_required, name='dispatch')
+class UserCreateView(View):
+    model = customerModels.User
+    template_name = 'customer/user_create_view.html'
+    title = 'Create User'
+    active_tab = 'customer'
+
+    def get(self, request, *args, **kwargs):
+        customer_id = kwargs.get('customer_id')
+        customer= get_object_or_404(customerModels.Profile, uuid=customer_id)
+        customer_users = get_object_or_404(customerModels.User, customer=customer)
+        context = {
+            'title': f'{self.title} for {customer.legal_name}',
+            'active_tab': self.active_tab,
+            'customer_users': customer_users,
+            'customer_id': customer_id
+        }
+        return render(request, self.template_name, context)
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+class ChangePlanView(View):
+    model = customerModels.User
+    template_name = 'customer/change_plan_view.html'
+    title = 'Change Plan'
+    active_tab = 'customer'
+
+    def get(self, request, *args, **kwargs):
+        customer_id = kwargs.get('customer_id')
+        customer= get_object_or_404(customerModels.Profile, uuid=customer_id)
+        context = {
+            'title': f'{self.title} for {customer.legal_name}',
+            'active_tab': self.active_tab,
+            'customer_id': customer_id
+        }
+        return render(request, self.template_name, context)
+    
+
+
+@method_decorator(login_required, name='dispatch')
+class CalendarSample(View):
+    model = customerModels.User
+    template_name = 'customer/calendar_sample.html'
+    title = 'Calendar Sample'
+    active_tab = 'customer'
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'title': self.title,
+            'active_tab': self.active_tab,
+        }
+        return render(request, self.template_name, context)

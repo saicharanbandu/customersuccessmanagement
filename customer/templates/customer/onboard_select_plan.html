@@ -43,11 +43,11 @@
           </div>
           <div class="stepper-item">
             <div class="step-counter"><i class="mdi mdi-account-multiple-plus"></i></div>
-            <div class="step-name">Add Users</div>
+            <div class="step-name">Add Collaborators</div>
           </div>
         </div>
 
-        <form class="forms-sample border-top py-4" action="{% url 'customer:select-plan' customer_id %}" method="POST"
+        <form class="forms-sample border-top py-4" action="{% url 'customer:onboard-select-plan' customer_id %}" method="POST"
           enctype="multipart/form-data" data-url="{% url 'plan:get-plan-amount' %}"
           plan-url="{% url 'customer:get-plan-options' %}">
           {% csrf_token %}
@@ -61,7 +61,7 @@
             <img src="{% static 'images/arrow.png' %}" />
             <div class="discount-desc pt-2">
               <label class="badge badge-success"><small>Save 15%</small></label>
-              <p>12 Months of value, Pay for only 9</p>
+              <p>12 Months of value, Pay for only 10</p>
             </div>
           </div>
 
@@ -117,7 +117,7 @@
               </div>
             </div>
             <div class="text-end">
-              <a href="{% url 'customer:onboard' customer_id %}" class="btn btn-outline-primary me-3">Go Back</a>
+              <a href="{% url 'customer:onboard-customer' customer_id %}" class="btn btn-outline-primary me-3">Go Back</a>
               <button type="submit" class="btn btn-gradient-primary" name="action" value="continue">
                 Collect Payment
               </button>

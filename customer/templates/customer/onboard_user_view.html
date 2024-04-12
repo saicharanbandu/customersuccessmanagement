@@ -38,7 +38,7 @@
           </div>
           <div class="stepper-item active">
             <div class="step-counter"><i class="mdi mdi-account-multiple-plus"></i></div>
-            <div class="step-name">Add Users</div>
+            <div class="step-name">Add Collaborators</div>
           </div>
         </div>
         <form class="row border-top py-4 px-5" method="POST">
@@ -92,7 +92,7 @@
 
           {% if not is_next_user %}
           <div class="text-center mt-5">
-            <a href="{% url 'customer:select-plan' customer_id %}" class="btn btn-light me-3">Go Back</a>
+            <a href="{% url 'customer:onboard-select-plan' customer_id %}" class="btn btn-light me-3">Go Back</a>
             <button type="submit" class="btn btn-gradient-primary me-3" name="action" value="add_more_user">Add Next
               User</button>
             <button type="submit" class="btn btn-gradient-primary" name="action" value="done">Done</button>

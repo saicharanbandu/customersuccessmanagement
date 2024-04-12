@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load cash_format %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+
+{% block page_title %}
+{{ title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'customer:list' %}">Customers</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Collaborator List</li>
+</ol>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+<a class="btn btn-gradient-primary" href="{% url 'customer:user-create' customer_id %}">Add Collaborator</a>
+{% for user in customer_users %}
+<div>
+  {{ user.full_name }}
+</div>
+{% endfor %}
+{% endblock %}
