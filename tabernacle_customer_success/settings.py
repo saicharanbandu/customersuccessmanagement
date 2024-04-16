@@ -174,13 +174,13 @@ ACCOUNT_LOGOUT_REDIRECT_URL ='account_login'
 LOGIN_REDIRECT_URL = 'customer:list'
 LOGOUT_REDIRECT_URL = 'account_login'
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR/ 'sent_emails')
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'info.testmailservice@gmail.com'
-# EMAIL_HOST_PASSWORD = 'gwmb ffrt ychg twef'
-# EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = os.path.join(BASE_DIR/ 'sent_emails')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'info.testmailservice@gmail.com'
+EMAIL_HOST_PASSWORD = 'gwmb ffrt ychg twef'
+EMAIL_USE_TLS = True
 
 SOCIALACCOUNT_AUTO_SIGNUP = False
