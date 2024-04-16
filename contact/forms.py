@@ -5,22 +5,19 @@ from . import models as contactModel
 class ContactForm(forms.ModelForm):
     class Meta:
         model = contactModel.Contact
-        fields = [
-            "name",
-            "designation",
-            "organization",
-            "mobile_number",
-            "alt_number",
-            "email",
-            "address",
-            "profile_picture",
+        exclude = [
+            'uuid',
+            'created_at',
+            'updated_at'
         ]
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control"}),
-            "designation": forms.TextInput(attrs={"class": "form-control"}),
-            "organization": forms.TextInput(
+            'created_by': forms.HiddenInput(),
+            'updated_by': forms.HiddenInput(),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'designation': forms.TextInput(attrs={'class': 'form-control'}),
+            'organization': forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    'class': 'form-control',
                 }
             ),
             'mobile_number':
@@ -36,7 +33,7 @@ class ContactForm(forms.ModelForm):
                 'class': 'form-control',
             }),
             'address':
-           forms.Textarea(attrs={"class": "form-control", "rows":"4"}),
+           forms.Textarea(attrs={'class': 'form-control', 'rows':'4'}),
              'profile_picture':
             forms.ClearableFileInput(attrs={
                 'class': 'form-control file-upload-info',
@@ -50,15 +47,15 @@ class ContactForm(forms.ModelForm):
 
 
     def mobile_number(self):
-        mobile_number = self.cleaned_data["mobile_number"]
+        mobile_number = self.cleaned_data['mobile_number']
         if len(mobile_number) != 10:
-            raise forms.ValidationError("Please enter a valid 10-digit mobile number.")
+            raise forms.ValidationError('Please enter a valid 10-digit mobile number.')
         return mobile_number
 
     def alt_number(self):
-        alt_number = self.cleaned_data["alt_number"]
+        alt_number = self.cleaned_data['alt_number']
         if len(alt_number) != 10:
-            raise forms.ValidationError("Please enter a valid 10-digit mobile number.")
+            raise forms.ValidationError('Please enter a valid 10-digit mobile number.')
         return alt_number
 
             

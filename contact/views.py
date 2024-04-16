@@ -4,19 +4,22 @@ from django.views import View
 from django.db.models import Q
 from django.views.generic import ListView
 from django.contrib import messages
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from . import models as contactModel, forms as contactForm
 
 from tabernacle_customer_success import constants
 
 
+@method_decorator(login_required, name='dispatch')
 class ContactCreateView(View):
     template_name = "contact/create_view.html"
     title = "New Contact"
     active_tab = "contact"
 
     def get(self, request, *args, **kwargs):
-        contact_form = contactForm.ContactForm(request.GET)
+        contact_form = contactForm.ContactForm(initial={'created_by': request.user})
 
         context = {
             "title": self.title,
@@ -43,6 +46,7 @@ class ContactCreateView(View):
             return render(request, self.template_name, context)
 
 
+@method_decorator(login_required, name='dispatch')
 class ContactListView(ListView):
     model = contactModel.Contact
     title = "Contact Directory"
@@ -54,7 +58,6 @@ class ContactListView(ListView):
         queryset = super().get_queryset()
         search_query = self.request.GET.get("search")
         if search_query:
-            print("a")
             queryset = queryset.filter(
                 (
                     Q(name__istartswith=search_query)
@@ -84,8 +87,7 @@ class ContactListView(ListView):
         return context
 
 
-
-
+@method_decorator(login_required, name='dispatch')
 class ContactEditView(View):
     template_name = "contact/edit_view.html"
     title = "Edit Contact"
@@ -93,7 +95,7 @@ class ContactEditView(View):
 
     def get(self, request, contact_id, *args, **kwargs):
         contact = get_object_or_404(contactModel.Contact, uuid=contact_id)
-        contact_form = contactForm.ContactForm(instance=contact)
+        contact_form = contactForm.ContactForm(instance=contact, initial={'updated_by': request.user})
 
         context = {
             "title": self.title,

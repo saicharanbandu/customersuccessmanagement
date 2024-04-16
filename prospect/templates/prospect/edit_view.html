@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block page_title %} {{ title }} {% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'prospect:list' %}">Prospect List</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <form class="forms-sample" method="POST" enctype="multipart/form-data"
+                    data-url="{% url 'misc:ajax-load-states' %}">
+                    {% csrf_token %}
+                    <h4 class="card-title">Prospect Information</h4>
+                    <p class="card-description">Update prospect details</p>
+                    {% include 'prospect/_partials/_prospect_form.html' %}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button type="submit" class="btn btn-gradient-primary me-3">Update Prospect</button>
+                            <a href="{% url 'prospect:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
+                        </div>
+                        <div>
+                            <a class="text-danger" id="deleteButton" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal">Delete Prospect</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="deleteModalLabel">Delete Prospect</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this prospect?</p>
+                {% if has_customer %}
+                <div class="text-danger">This prospect is a customer. Deleting this data will delete the customer profile and all its related data!</div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                <form method="POST" action="{% url 'prospect:delete' prospect_form.instance.uuid %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Prospect</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

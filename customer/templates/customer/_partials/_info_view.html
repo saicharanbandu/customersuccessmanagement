@@ -1,0 +1,97 @@
+<div class="modal-header">
+    <h3 class="modal-title">Customer information</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <h4>SAAS Information</h4>
+
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-check-decagram me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>SAAS Name</label>
+            {{ customer.legal_name }}
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-eye me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>Display Name</label>
+            {{ customer.display_name }}
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-message-text me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>Short Name or Abbreviation (30 characters)</label>
+            {{ customer.short_name }}
+        </div>
+    </div>
+
+    <hr>
+    <h4>More Information</h4>
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-home-map-marker me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>Address</label>
+            <div class="description">
+                {{ customer.prospect.address }}, {{ customer.prospect.city }}, <br>{{ customer.prospect.state }} {{ customer.prospect.country }}
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-email me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>Email</label>
+            {{ customer.prospect.email }}
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-web me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>Website</label>
+            {{ customer.prospect.website }}
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-home-modern me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>Denomination</label>
+            {{ customer.prospect.denomination }}
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex">
+        <div>
+            <i class="mdi mdi-account-multiple me-2 text-faded"></i>
+        </div>
+        <div>
+            <label>Congregation</label>
+            {{ customer.prospect.congregation }}
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="auth-link" href="{% url 'customer:update-info' customer.uuid %}">
+        <i class="mdi mdi-pencil-box-outline me-2"></i>
+        Edit Customer Info
+    </a>
+</div>

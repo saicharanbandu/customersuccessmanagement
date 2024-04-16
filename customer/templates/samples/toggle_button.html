@@ -1,0 +1,89 @@
+<div class="toggle-btn-container">
+    <input id="toggle-on" class="toggle toggle-left" name="toggle" value="1" type="radio" checked>
+    <label for="toggle-on" class="toggle-btn">Monthly</label>
+    <input id="toggle-off" class="toggle toggle-right" name="toggle" value="12" type="radio">
+    <label for="toggle-off" class="toggle-btn">Yearly</label>
+</div>
+
+<style>
+    .toggle-btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        z-index: 1;
+        position: relative;
+    }
+
+    .toggle-btn {
+        border: 3px solid #9e58ff;
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        position: relative;
+        text-align: center;
+        transition: background 600ms ease, color 600ms ease;
+    }
+
+    input[type=radio].toggle {
+        display: none;
+    }
+
+    input[type=radio].toggle+label {
+        cursor: pointer;
+        width: 7rem;
+    }
+
+    input[type=radio].toggle+label:hover {
+        background: none;
+        color: #1a1a1a;
+    }
+
+    input[type=radio].toggle+label:after {
+        background: #9e58ff;
+        content: "";
+        height: 100%;
+        position: absolute;
+        top: 0;
+        transition: left 200ms cubic-bezier(0.77, 0, 0.175, 1);
+        width: 100%;
+        z-index: -1;
+        display: block;
+    }
+
+    input[type=radio].toggle.toggle-left+label {
+        border-right: 0;
+        border-radius: 15px 0 0 15px;
+    }
+
+    input[type=radio].toggle.toggle-left+label:after {
+        left: 100%;
+        border-radius: 0 10px 10px 0;
+    }
+
+    input[type=radio].toggle.toggle-right+label {
+        margin-left: -2px;
+        border-radius: 0 15px 15px 0;
+
+    }
+
+    input[type=radio].toggle.toggle-right+label:after {
+        left: -100%;
+        border-radius: 10px 0 0 10px;
+    }
+
+    input[type=radio].toggle:checked+label {
+        cursor: default;
+        color: #fff;
+        transition: color 200ms;
+    }
+
+    input[type=radio].toggle.toggle-left:checked+label:after {
+        left: 0;
+        border-radius: 10px 0 0 10px;
+    }
+
+    input[type=radio].toggle.toggle-right:checked+label:after {
+        left: 0;
+        border-radius: 0 10px 10px 0;
+    }
+</style>

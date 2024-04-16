@@ -1,0 +1,41 @@
+<div class="modal-header">
+  <h3 class="modal-title">Point of Contacts</h3>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+
+  {% if contacts %}
+    {% for contact in contacts %}
+    <p class="card-description">Contact Person {{ forloop.counter }}</p>
+    <div class="contact-group">
+      {{ contact.name }}
+      {% if contact.remarks %}
+      <a data-bs-toggle="tooltip" data-bs-placement="top" href="" title="{{ contact.remarks }}">
+        <i class="mdi mdi-information-outline"></i>
+      </a>
+      {% endif %}
+      <div class="contact-details-sm">
+        <div>
+          <i class="mdi mdi-email-outline"></i>
+          {{ contact.email | default_if_none:"--" }}
+        </div>
+        <div>
+          <i class="mdi mdi-cellphone-android"></i>
+          {{ contact.mobile | default_if_none:"--" }}
+        </div>
+      </div>
+    </div>
+      {% if not forloop.last %}
+      <hr>
+      {% endif %}
+    {% endfor%}
+  {% else %}
+    <div class="text-muted">No point of contacts for this customer</div>
+  {% endif %}
+</div>
+<div class="modal-footer">
+  <a class="auth-link" href="{% url 'prospect:update-poc' customer.prospect.uuid %}">
+    <i class="mdi mdi-pencil-box-outline me-2"></i>
+    Edit Contact Persons
+  </a>
+</div>

@@ -1,0 +1,51 @@
+<form method="POST" action="{% url 'prospect:update-status-ajax' prospect.uuid %}"
+    data-url="{% url 'prospect:get-status-options' %}">
+    {% csrf_token %}
+    {{ prospect_status_form.prospect }}
+    <div class="modal-header">
+        <h3 class="modal-title" id="changeStatusLabel">Change Status</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Current Status</label>
+            <div class="contact-group">
+                <div class="fw-bold text-capitalize">
+                    {{ prospect_status.get_status_display }}
+                </div>
+                <div class="contact-details-sm pt-0">
+                    {% if prospect_status.date %}
+                    <div>
+                        <i class="mdi mdi-calendar"></i>
+                        {{ prospect_status.date | date:'D, d M, Y' }}
+                    </div>
+                    {% endif %}
+                    {% if prospect_status.time %}
+                    <div>
+                        <i class="mdi mdi-calendar-clock"></i>
+                        {{ prospect_status.time | date:'h:i A' }}
+                    </div>
+                    {% endif %}
+                    {% if prospect_status.remarks %}
+                    <div>
+                        <i class="mdi mdi-information-outline"></i>
+                        {{ prospect_status.remarks |linebreaksbr }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label for="{{ prospect_status_form.status.id_for_label }}">New Status</label>
+            {{ prospect_status_form.status }}
+        </div>
+
+        <div id="statusOptions">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-gradient-primary">Change Status</button>
+    </div>
+</form>

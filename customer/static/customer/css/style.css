@@ -1,0 +1,123 @@
+.stepper-wrapper {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .stepper-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+  }
+  
+  .stepper-item::before {
+    position: absolute;
+    content: "";
+    border: 3px solid #D3D3D3;
+    width: 100%;
+    top: 21px;
+    left: -50%;
+    z-index: 2;
+  }
+  
+  .stepper-item .step-counter {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #D3D3D3;
+    border: 1px solid;
+    margin-bottom: 6px;
+    color: white;
+  }
+  
+  .stepper-item .step-counter i {
+    z-index: 10;
+    font-size: 20px;
+  }
+  
+  .stepper-item.active  .step-counter::before,
+  .stepper-item.completed .step-counter::before  {
+    content: "";
+    position: absolute;
+    width: calc(100% - 4px); 
+    height: calc(100% - 4px); 
+    border-radius: 50%;
+    border: 2px solid #ffffff; 
+  }
+  .stepper-item.active .step-counter {
+    color: #ffffff;
+    background-color: #9e58ff;
+  }
+  
+  .stepper-item.completed .step-counter {
+    color: #ffffff;
+    background-color: #3fd08f;
+  }
+  
+  .step-name {
+    font-size: 0.85rem;
+  }
+
+  .stepper-item.completed .step-name {
+    color: #d789ff;
+  }
+
+  .stepper-item.active .step-name {
+    font-weight: bold;
+    color: #9e58ff;
+  }
+  
+  
+  .stepper-item.completed .step-counter {
+    color: #ffffff;
+    background-color: #d789ff;
+  }
+  
+  
+  .stepper-item.completed::after {
+    
+    position: absolute;
+    content: "";
+    border: 3px solid; 
+    border-image: linear-gradient(to right, #d789ff, #9e58ff); 
+    border-image-slice: 1; 
+    width: 100%;
+    top: 21px;
+    left: 50%;
+    z-index: 3;
+  }
+  .stepper-item.completed + .stepper-item.completed::before {
+    position: absolute;
+    content: "";
+    border: 3px solid; 
+    border-image: linear-gradient(to right, #d789ff, #d789ff); 
+    border-image-slice: 1; 
+    width: 100%; 
+    top: 21px;
+    left: 50%;
+    transform: translateX(-100%);
+    z-index: 3;
+  }
+  
+  
+  .stepper-item:first-child::before {
+    content: none;
+  }
+  .stepper-item:last-child::after {
+    content: none;
+  }
+
+  .step-name {
+    color: #8f9091;
+  }

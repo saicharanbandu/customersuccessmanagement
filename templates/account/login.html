@@ -2,52 +2,93 @@
 {% load static %}
 {% load i18n %}
 {% load allauth account %}
+{% block head_title %}
+{% trans "Login" %}
+{% endblock head_title %}
 {% block content %}
-    <div class="col-lg-4 mx-auto">
-        <div class="auth-form-light text-left p-5">
-            <div class="brand-logo">
-                <a class="navbar-brand brand-logo" href="index.html"><img src="{% static 'images/logo.png' %}" alt="logo" /></a>
-            </div>
-            <h2 class = "my-3 font-weight-light" >Sign In</h2>
-            {% url 'account_login' as login_url %}
-            {% element form form=form method="post" action=login_url tags="entrance,login" %}
-            {% slot body %}
-                {% csrf_token %}
-                <div class="form-group">
-                    <label class = "text-muted font-weight-light mb-0">Email</label>
-                    <input type="email" class="form-control form-control-lg" name="login"  autocomplete="email" maxlength="320" required="" id="id_login">
-                </div>                    
-                <div class="form-group">
-                    <label class = "text-muted font-weight-light mb-0">Password</label>
-                    <input type="password" class="form-control form-control-lg" name="password" autocomplete="current-password" required="" aria-describedby="id_password_helptext" id="id_password">
-                </div>                    
-                {% if redirect_field_value %}
-                    <input type="hidden"
-                        name="{{ redirect_field_name }}"
-                        value="{{ redirect_field_value }}" />
-                {% endif %}
-            {% endslot %}                  
-            {% slot actions %}          
-            <button type="submit" class="btn btn-primary w-100">Login</button>
-            <div class="my-2 d-flex justify-content-between align-items-center">
-                <div class="form-check">
-                    <label class="form-check-label text-muted">
-                    <input type="checkbox" class="form-check-input"> Keep me signed in </label>
-                </div>
-                <a href="{% url 'account_reset_password'%}" class="auth-link">Forgot password?</a>
-            </div>
-            <p class="text-center mt-4 font-weight-light">
-                {% blocktrans %}Don't have an account yet?
-                <a href="{{ signup_url }}">Sign Up</a> {% endblocktrans %}   
-            </p>
-            <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>                    
-            {% endslot %}
-            {% endelement %}
-            {% if SOCIALACCOUNT_ENABLED %}
-            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-            {% endif %}
+
+<style>
+    .eye-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6d6d6d;
+    }
+</style>
+
+<div class="col-lg-4 mx-auto">
+    <div class="auth-form-light text-left p-5">
+        <div class="brand-logo">
+            <a class="navbar-brand brand-logo" href="index.html"><img src="{% static 'images/logo.png' %}"
+                    alt="logo" /></a>
         </div>
+        <h2 class="my-3 font-weight-light">Login</h2>
+
+        {% url 'account_login' as login_url %}
+        {% element form form=form method="post" action=login_url tags="entrance,login" %}
+        {% slot body %}
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control form-control-lg" name="login" autocomplete="email" maxlength="320"
+                required="" id="id_login">
+        </div>
+
+        <div class="form-group">
+            <p class="text-muted font-weight-light mb-0">Password</p>
+            <div class="position-relative">
+                <input type="password" class="form-control form-control-lg" name="password"
+                    autocomplete="current-password" required aria-describedby="id_password_helptext" id="id_password">
+                <span class="eye-toggle mdi mdi-eye-off" onclick="togglePasswordVisibility('id_password')"></span>
+            </div>
+        </div>
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        {% endslot %}
+
+        {% slot actions %}
+
+        <button type="submit" class="btn btn-gradient-primary w-100">Login</button>
+        <div class="my-2 d-flex justify-content-between align-items-center">
+            <div class="form-check">
+                <label class="form-check-label text-muted">
+                    <input type="checkbox" name="remember" id="id_remember" class="form-check-input">
+                    Keep me signed in
+                </label>
+            </div>
+            <a href="{% url 'account_reset_password'%}" class="auth-link">Forgot password?</a>
+        </div>
+        <p class="text-center mt-4 font-weight-light">
+            {% blocktrans %}Don't have an account yet?
+            <a href="{{ signup_url }}" class="auth-link">Sign up</a> {% endblocktrans %}
+        </p>
+        <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>
+
+        {% endslot %}
+        {% endelement %}
+        {% if SOCIALACCOUNT_ENABLED %}
+        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+        {% endif %}
     </div>
+</div>
+<script>
+    function togglePasswordVisibility(inputId) {
+        var inputField = document.getElementById(inputId);
+        var eyeIcon = inputField.nextElementSibling;
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            eyeIcon.classList.remove("mdi-eye-off");
+            eyeIcon.classList.add("mdi-eye");
+        } else {
+            inputField.type = "password";
+            eyeIcon.classList.remove("mdi-eye");
+            eyeIcon.classList.add("mdi-eye-off");
+        }
+    }
+</script>
 {% endblock content %}
-
-

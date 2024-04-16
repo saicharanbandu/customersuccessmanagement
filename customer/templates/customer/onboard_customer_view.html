@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block page_title %}
+{{ title }}
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'customer/css/style.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'customer/js/app.js' %}"></script>
+{% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'contact:list' %}">Customers Overview</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-center">Let's get started with the onboarding process</h4>
+        <p class="card-description text-center">Follow the 3-step process to onboard the customer</p>
+
+        <div class="stepper-wrapper">
+          <div class="stepper-item active">
+            <div class="step-counter"><i class="mdi mdi-file-document"></i></div>
+            <div class="step-name">Customer Info</div>
+          </div>
+          <div class="stepper-item ">
+            <div class="step-counter"><i class="mdi mdi-cash"></i></div>
+            <div class="step-name">Select Plan</div>
+          </div>
+          <div class="stepper-item">
+            <div class="step-counter"><i class="mdi mdi-account-multiple-plus"></i></div>
+            <div class="step-name">Add Collaborators</div>
+          </div>
+        </div>
+
+        <form class="forms-sample border-top py-5" action="{% url 'customer:onboard-customer' customer.uuid %}" method="POST"
+          enctype="multipart/form-data">
+          {% csrf_token %}
+          {% include 'customer/profile_form.html' with customer_profile_form=customer_profile_form profile=profile %}
+
+          <div class="text-end">
+            <a href="{% url 'customer:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
+            <button type="submit" class="btn btn-gradient-primary me-2">Continue</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -4,14 +4,6 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block navbar %}
-{% include '_partials/_navbar.html' %}
-{% endblock %}
-
-{% block sidebar %}
-{% include '_partials/_sidebar.html' %}
-{% endblock %}
-
 {% block page_title %}
 {{ title }}
 {% endblock %}
@@ -35,7 +27,7 @@
           {% csrf_token %}
           {% include 'contact/contact_form.html' %}
           <button type="submit" class="btn btn-gradient-primary me-3">Save Contact</button>
-          <a href="{% url 'contact:list' %}" type="button" class="btn btn-light">Cancel</a>
+          <a href="{% url 'contact:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
         </form>
       </div>
     </div>

@@ -32,7 +32,7 @@ class Tariff(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name}_{self.amount}_{self.lower_limit}_{self.upper_limit}'
     
 
 

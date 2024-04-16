@@ -4,8 +4,7 @@ hr {
     border-bottom: 1px solid #d9d9d9;
 }
 
-label,
-input {
+label {
     cursor: pointer;
 }
 
@@ -18,9 +17,6 @@ input {
 .card-content img {
     max-width: 100%;
     display: block;
-    vertical-align: middle;
-
-
 }
 
 .tab-section-wrapper {
@@ -42,6 +38,11 @@ input {
 label.radio-card {
     cursor: pointer;
     width: 100%;
+    color: #676767;
+}
+
+label.radio-card:has(input[type=radio]:checked) .title {
+    color: #a851ea;
 }
 
 label.radio-card .card-content-wrapper {
@@ -85,12 +86,12 @@ label.radio-card input[type=radio] {
 }
 
 label.radio-card input[type=radio]:checked+.card-content-wrapper {
-    box-shadow: 0 2px 4px 0 rgba(219, 215, 215, 0.5), 0 0 0 2px #3057d5;
+    box-shadow: 0 2px 4px 0 rgba(219, 215, 215, 0.5), 0 0 0 2px #b66dff;
 }
 
 label.radio-card input[type=radio]:checked+.card-content-wrapper .check-icon {
-    background: #3057d5;
-    border-color: #3057d5;
+    background: #b66dff;
+    border-color: #b66dff;
     transform: scale(1.2);
 }
 
@@ -100,20 +101,20 @@ label.radio-card input[type=radio]:checked+.card-content-wrapper .check-icon:bef
 }
 
 label.radio-card input[type=radio]:focus+.card-content-wrapper .check-icon {
-    box-shadow: 0 0 0 4px rgba(48, 86, 213, 0.2);
-    border-color: #3056d5;
+    box-shadow: 0 0 0 4px #b66dff33;
+    border-color: #b66dff;
 }
 
 label.radio-card .card-content img {
     margin-bottom: 10px;
 }
 
-label.radio-card .card-content h4 {
-    font-size: 16px;
+label.radio-card .card-content .title {
+    font-size: 1.25rem;
     letter-spacing: -0.24px;
-    text-align: center;
-    color: #1f2949;
+    color: #686d73;
     margin-bottom: 10px;
+    font-weight: 600;
 }
 
 label.radio-card .card-content h5 {

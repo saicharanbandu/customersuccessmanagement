@@ -1,0 +1,19 @@
+<form method="POST" action="{% url 'prospect:update-remarks-ajax' prospect.uuid %}">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h3 class="modal-title" id="UpdateRemarksLabel">Update Remarks</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label>Remarks for {{ prospect.name }}</label>
+      <div class="mb-3">
+        {{ prospect_remarks_form.remarks }}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+    <button type="submit" class="btn btn-gradient-primary">Update Remarks</button>
+  </div>
+</form>

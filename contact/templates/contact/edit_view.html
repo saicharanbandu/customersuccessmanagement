@@ -4,14 +4,6 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
-{% block navbar %}
-{% include '_partials/_navbar.html' %}
-{% endblock %}
-
-{% block sidebar %}
-{% include '_partials/_sidebar.html' %}
-{% endblock %}
-
 {% block page_title %}
 <span class="page-title-icon bg-gradient-primary text-white me-2">
   <i class="mdi mdi-contacts"></i>
@@ -36,19 +28,39 @@
         <form class="forms-sample" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           {% include 'contact/contact_form.html' %}
-
           <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <button type="submit" class="btn btn-gradient-primary me-2">Update CONTACT</button>
-              <a href="{% url 'contact:list' %}" type="button" class="btn btn-light">Cancel</a>
-            </div>
-            <div>
-              <a class="text-danger">Delete Contact</a>
-            </div>
+              <div>
+                  <button type="submit" class="btn btn-gradient-primary me-2">Update Contact</button>
+                  <a href="{% url 'contact:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
+              </div>
+              <div>
+                  <a class="text-danger" id="deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Contact</a>
+              </div>
           </div>
-        </form>
+      </form>     
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h3 class="modal-title" id="deleteModalLabel">Delete Contact</h3>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p>Are you sure you want to delete this contact?</p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+              <form method="POST" action="{% url 'contact:delete' contact_form.instance.uuid %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger">Delete Contact</button>
+              </form>
+          </div>
+      </div>
   </div>
 </div>
 {% endblock %}

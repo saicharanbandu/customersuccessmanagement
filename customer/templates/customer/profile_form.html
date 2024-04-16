@@ -1,29 +1,13 @@
 {% load static %}
 {{ customer_profile_form.prospect }}
 <div class="row">
-    <div class="col col-md-8">
-        <div class="form-group">
-            <label for="{{ customer_profile_form.legal_name.id_for_label }}">Legal Name *</label>
-            {{ customer_profile_form.legal_name }}
-        </div>
-        <div class="form-group">
-            <label
-                for="{{ customer_profile_form.display_name.id_for_label }}">Display Name*</label>
-            {{ customer_profile_form.display_name }}
-        </div>
-        <div class="form-group">
-            <label for="{{ display_name.short_name.id_for_label }}">
-                Short Name or Abbreviation *
-            </label>
-            {{ customer_profile_form.short_name }}
-        </div>
-    </div>
     <div class="col">
         <div class="form-group text-center">
-            <label for="{{ customer_profile_form.profile_picture.id_for_label }}" class="text-uppercase fw-bold"> Upload Logo *</label>
-            {% if customer_profile_form.instance.profile_picture %}
+            <label for="{{ customer_profile_form.profile_picture.id_for_label }}" class="text-uppercase fw-bold">
+                Upload Logo *</label>
+            {% if profile_instance.profile_picture %}
             <div>
-                <img src="{{ customer_profile_form.instance.profile_picture.url }}" alt="Profile Picture" width="100%" />
+                <img src="{{ profile_instance.profile_picture.url }}" alt="Profile Picture" width="100%" />
             </div>
             {% else %}
             <div>
@@ -32,14 +16,28 @@
             {% endif %}
             <div class="my-3">
                 {% if customer_profile_form.profile_picture.value %}
-                <label
-                    for="{{ customer_profile_form.profile_picture.auto_id }}-clear_id">Remove photo</label>
+                <label for="{{ customer_profile_form.profile_picture.auto_id }}-clear_id">Remove photo</label>
                 <input type="checkbox" name="{{ customer_profile_form.profile_picture.html_name }}-clear"
                     id="{{ customer_profile_form.profile_picture.auto_id }}-clear_id" />
                 {% endif %}
-                <input type="file" class="form-control file-upload-info" name="{{ customer_profile_form.profile_picture.html_name }}"
+                <input type="file" class="form-control file-upload-info"
+                    name="{{ customer_profile_form.profile_picture.html_name }}"
                     id="{{ customer_profile_form.profile_picture.id_for_label }}">
             </div>
+        </div>
+    </div>
+    <div class="col col-md-8">
+        <div class="form-group">
+            <label for="{{ customer_profile_form.legal_name.id_for_label }}">Subscription Name *</label>
+            {{ customer_profile_form.legal_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ customer_profile_form.display_name.id_for_label }}">Display Name*</label>
+            {{ customer_profile_form.display_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ customer_profile_form.short_name.id_for_label }}">Short Name or Abbreviation *</label>
+            {{ customer_profile_form.short_name }}
         </div>
     </div>
 </div>

@@ -1,0 +1,15 @@
+{% for user_app_permissions_form in user_app_permissions_formset %}
+
+<div class="col-12 col-md-4">
+  <span class="text-capitalize">
+    <i class="mdi mdi-check me-1 fs-5 text-faded"></i>
+    {{ user_app_permissions_form.module_name.value }}
+  </span>
+</div>
+
+<div class="visually-hidden">
+  {{ user_app_permissions_form.has_access }}
+  {{ user_app_permissions_form.module }}
+  {{ user_app_permissions_form.access_role }}
+</div>
+{% endfor %}

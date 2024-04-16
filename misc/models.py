@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from django.contrib.postgres.fields import ArrayField
 
 
 class Country(models.Model):
@@ -11,6 +12,10 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'country'
+        verbose_name_plural = 'countries'
+        ordering = ('name',)
 
 class State(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
@@ -21,3 +26,26 @@ class State(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name = 'state'
+        verbose_name_plural = 'states'
+        ordering = ('name',)
+
+
+class AppModule(models.Model):
+    """
+    Tabernacle Modules
+    """
+
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
+    name = models.CharField(max_length=256)
+    permissions = ArrayField(
+        models.CharField(max_length=10), size=4, null=True, blank=True
+    )
+    precedance = models.IntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.name)

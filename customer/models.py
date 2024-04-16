@@ -1,12 +1,11 @@
 from django.db import models
-
+from django.conf import settings
 from plan import models as planModels
-from misc import models as miscModels
 from prospect import models as prospectModels
-
 from tabernacle_customer_success import constants
-import uuid
+from misc import models as miscModels
 
+import uuid
 
 class Profile(models.Model):
     """
@@ -14,13 +13,20 @@ class Profile(models.Model):
     """
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     prospect = models.OneToOneField(
-        prospectModels.Profile, to_field="uuid", on_delete=models.SET_NULL, null=True
+        prospectModels.Profile, to_field="uuid", on_delete=models.CASCADE, null=True, related_name='customer_prospect',
     )
     profile_picture = models.ImageField(upload_to="pictures", blank=True)
-    legal_name = models.CharField(max_length=55, verbose_name="Legal Name")
-    display_name = models.CharField(max_length=55, verbose_name="Display Name")
+    legal_name = models.CharField(max_length=255, verbose_name="Legal Name")
+    display_name = models.CharField(max_length=255, verbose_name="Display Name")
     short_name = models.CharField(
-        max_length=50, verbose_name="Short Name or Abbreviation"
+        max_length=30, verbose_name="Short Name or Abbreviation"
+    )
+    manager = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+        related_name='customer_manager'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -94,7 +100,11 @@ class UserAppPermissions(models.Model):
         to_field="uuid",
         on_delete=models.CASCADE,
     )
-    module = models.CharField(max_length=25, null=True)
+    module = models.ForeignKey(
+        miscModels.AppModule,
+        on_delete=models.CASCADE,
+        to_field="uuid",
+    )
     access_role = models.CharField(max_length=25, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -120,8 +130,10 @@ class PaymentHistory(models.Model):
         on_delete=models.CASCADE,
     )
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    payment_date = models.DateField()
-    due_date = models.DateField()
+    discount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    payment_status = models.CharField(choices=constants.PAYMENT_STATUS_CHOICES)
+    payment_date = models.DateTimeField()
+    due_date = models.DateTimeField()
     invoice_no = models.CharField(max_length=25, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

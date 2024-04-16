@@ -1,5 +1,7 @@
 from django.db import models
 from misc import models as miscModels
+from django.conf import settings
+
 import uuid
 
 from tabernacle_customer_success import constants
@@ -33,6 +35,16 @@ class Profile(models.Model):
     
     remarks = models.TextField( blank=True, null=True, verbose_name="Remarks")
 
+    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES, null=True)
+
+    manager = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        blank=True,
+        null=True,
+        related_name='prospect_manager'
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -50,9 +62,9 @@ class PointOfContact(models.Model):
         related_name="prospect_poc",
         null=True,
     )
-    name = models.CharField(max_length=255, verbose_name="Name")
+    name = models.CharField(max_length=255, verbose_name="Name",  blank=True)
     email = models.EmailField(max_length=255, verbose_name="Email ID", blank=True, null=True)
-    mobile = models.CharField(max_length=10, verbose_name="Mobile Number", blank=True, null=True)
+    mobile = models.CharField(max_length=15, verbose_name="Mobile Number", blank=True, null=True)
     remarks = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -68,10 +80,9 @@ class StatusHistory(models.Model):
         to_field="uuid",
         on_delete=models.CASCADE,
         related_name="prospect_history",
-        null=True,
     )
-    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES, null=True)
-    date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES)
+    date = models.DateTimeField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     remarks = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

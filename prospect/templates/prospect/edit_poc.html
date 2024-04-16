@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block page_title %} {{ title }} {% endblock %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{% url 'prospect:list' %}">Prospect List</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ poc_formset.management_form }}
+          {% for form in poc_formset %}
+          {{ form.uuid }}
+          {% include 'prospect/_partials/_poc_form.html' with index=forloop.counter %}
+          {% endfor %}
+          <button type="submit" class="btn btn-gradient-primary">Update</button>
+          <a href="{% url 'prospect:list' %}" class="btn btn-outline-primary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

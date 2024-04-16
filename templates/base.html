@@ -19,7 +19,10 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom_style.css' %}">
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
-    
+
+    {% block styles %}
+    {% endblock %}
+
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
   </head>
@@ -28,13 +31,11 @@
 
         {% include '_partials/_snackbar.html' %}
 
-        {% block navbar %}
-        {% endblock %}
+        {% include '_partials/_navbar.html' %}
+
 
       <div class="container-fluid page-body-wrapper">
-        {% block sidebar %}
-        {% endblock %}
-
+        {% include '_partials/_sidebar.html' %}
 
       <!-- partial -->
         <!-- partial -->
@@ -58,7 +59,7 @@
           <footer class="footer">
             <div class="container-fluid d-flex justify-content-between">
               <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © Tabernacle 2024</span>
-              <span class="float-none float-sm-end mt-1 mt-sm-0 text-end">Tabernacle Customer Success</span>
+              <span class="text-muted float-none float-sm-end mt-1 mt-sm-0 text-end">Tabernacle Customer Success</span>
             </div>
           </footer>
           <!-- partial -->
@@ -85,5 +86,10 @@
     <script src="{% static 'js/todolist.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
     <!-- End custom js for this page -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>  
+    
+    {% block scripts %}
+    {% endblock %}
+
   </body>
 </html>
