@@ -126,3 +126,51 @@ class UserEditView(View):
             print(profile_form.errors)
             messages.error(request, 'Contact has not been successfully edited')
             return render(request, self.template_name, context)
+        
+class LoggedUserEditView(View):
+    template_name = "User/edit_view.html"
+    title = "Edit User"
+    active_tab = "user"
+
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        profile_id=request.user.uuid
+        print(profile_id)
+        user = get_object_or_404(userModels.Profile, user=profile_id)
+        user_form = userForms.UserInfo(instance=user.user)
+        profile_form = userForms.UserProfile(instance=user)
+
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "profile_form": profile_form,
+            "user_form": user_form,
+            "profile_id": profile_id,
+        }
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, profile_id, *args, **kwargs):
+        user_profile = get_object_or_404(userModels.Profile, uuid=profile_id)
+        user_instance = user_profile.user  # Get the related user instance
+    
+        user_form = userForms.UserInfo(request.POST, instance=user_instance)
+        profile_form = userForms.UserProfile(request.POST, request.FILES, instance=user_profile)
+    
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Contact has been successfully edited')
+            return redirect(reverse("user:list"))
+        else:
+            context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "user_form": user_form,
+            "profile_form": profile_form,
+            "profile_id": profile_id,
+        }
+            print(user_form.errors)
+            print(profile_form.errors)
+            messages.error(request, 'Contact has not been successfully edited')
+            return render(request, self.template_name, context)
