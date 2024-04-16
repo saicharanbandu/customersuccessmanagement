@@ -30,16 +30,8 @@
 
     {% include '_partials/_snackbar.html' %}
 
-
     <div class="container-fluid page-body-wrapper full-page-wrapper">
-      <div class="content-wrapper d-flex align-items-center auth">
-        <div class="row flex-grow">
-          <div class="content-wrapper">
-            {% block content%}
-            {% endblock%}
-          </div>
-        </div>
-      </div>
+      {% block content%}{% endblock%}
     </div>
   </div>
   <!-- plugins:js -->

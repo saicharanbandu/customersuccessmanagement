@@ -1,5 +1,3 @@
-
-
 {% extends "base.html" %}
 
 {% load static %}
@@ -29,30 +27,37 @@
 {% endblock %}
 
 {% block content %}
-  <h1>Edit User</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ user_form.full_name.label_tag}}
-    {{user_form.full_name}}
-    {{ user_form.mobile_no.label_tag}}
-    {{user_form.mobile_no}}
-    {{ user_form.email.label_tag}}
-    {{user_form.email}}
-    {{ user_form.is_staff.label_tag}}
-    {{user_form.is_staff}}
-    {{ user_form.is_superuser.label_tag}}
-    {{user_form.is_superuser}}
-    {{ user_form.is_active.label_tag}}
-    {{user_form.is_active}}
-    {{profile_form.image.label_tag}}
-    {{ profile_form.image }}
-    {{profile_form.date_of_birth.label_tag}}
-    {{ profile_form.date_of_birth }}
-    {{profile_form.designation.label_tag}}
-    {{ profile_form.designation }}
-    <br>
-    <br>
-    
-    <button class="btn btn-primary" type="submit">Edit User</button>
-  </form>
+<div class="form-container">
+  <div class="col-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h1>Edit User</h1>
+        <form method="post">
+          {% csrf_token %}
+          {{ user_form.full_name.label_tag}}
+          {{user_form.full_name}}
+          {{ user_form.mobile_no.label_tag}}
+          {{user_form.mobile_no}}
+          {{ user_form.email.label_tag}}
+          {{user_form.email}}
+          {{ user_form.is_staff.label_tag}}
+          {{user_form.is_staff}}
+          {{ user_form.is_superuser.label_tag}}
+          {{user_form.is_superuser}}
+          {{ user_form.is_active.label_tag}}
+          {{user_form.is_active}}
+          {{profile_form.image.label_tag}}
+          {{ profile_form.image }}
+          {{profile_form.date_of_birth.label_tag}}
+          {{ profile_form.date_of_birth }}
+          {{profile_form.designation.label_tag}}
+          {{ profile_form.designation }}
+          <br>
+          <br>
+          <button class="btn btn-primary" type="submit">Edit User</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

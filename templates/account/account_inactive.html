@@ -1,28 +1,34 @@
-{% extends "../account_base.html" %}    
+{% extends "../account_base.html" %}
 {% load static %}
 {% load i18n %}
 {% load allauth %}
 {% block head_title %}
-    {% trans "Account Inactive" %}
+{% trans "Account Inactive" %}
 {% endblock head_title %}
 {% block content %}
-    <div class="row justify-content-center">
-        <div class="col-md-10 bg-white py-4" style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+<div class="content-wrapper d-flex align-items-center auth bg-white">
+    <div class="row flex-grow">
+        <div class="row justify-content-center">
+            <div class="col-md-10 py-4"
+                style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 <div class="text-center">
                     <img src="{% static 'images/Inactive.svg' %}" alt="Illustration" style="width: 15%; height: auto;">
                 </div>
                 <div class="text-center">
-                        {% element h2 %}
-                            <h2 class="my-3 card-title"> {% trans "Account Inactive" %}</h2>
-                        {% endelement %}
-                        {% if user.is_authenticated %}
-                            {% include "account/snippets/already_logged_in.html" %}
-                        {% endif %}
-                        <p class="my-3 font-weight-light px-5">
-                            {% trans "This account is inactive." %}
-                        </p>
+                    {% element h2 %}
+                    <h2 class="my-3 card-title"> {% trans "Account Inactive" %}</h2>
+                    {% endelement %}
+                    {% if user.is_authenticated %}
+                    {% include "account/snippets/already_logged_in.html" %}
+                    {% endif %}
+                    <p class="my-3 font-weight-light px-5">
+                        {% trans "This account is inactive." %}
+                    </p>
                 </div>
-            <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>
+                <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>
+            </div>
         </div>
     </div>
+</div>
+
 {% endblock content %}

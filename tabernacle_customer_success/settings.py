@@ -161,7 +161,7 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = 'user.User'
 
-# ACCOUNT_ADAPTER = 'user.adapters.NoSignupAccountAdapter'
+ACCOUNT_ADAPTER = 'user.adapters.NoSignupAccountAdapter'
 
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
