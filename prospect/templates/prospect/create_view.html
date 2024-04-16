@@ -23,7 +23,7 @@
                     <p class="card-description">Enter prospect details</p>
                     {% include 'prospect/_partials/_prospect_form.html' %}
                     <hr>
-                    <h4 class="card-title">Point of Contact</h4>
+                    <h4 class="card-title">Point of Contacts</h4>
                     {{ poc_formset.management_form }}
                     {% for form in poc_formset %}
                         {% include 'prospect/_partials/_poc_form.html' with index=forloop.counter %}

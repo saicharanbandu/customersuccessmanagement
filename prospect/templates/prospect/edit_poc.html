@@ -19,6 +19,7 @@
       <div class="card-body">
         <form method="post">
           {% csrf_token %}
+          <h4 class="card-title">Point of Contacts</h4>
           {{ poc_formset.management_form }}
           {% for form in poc_formset %}
           {{ form.uuid }}
