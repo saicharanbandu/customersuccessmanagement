@@ -14,7 +14,8 @@ def plan_amount(value):
 
 @register.filter()
 def plan_size(value):
-    return f'{value.split('_')[3]}'
+    #return f'{value.split('_')[3]}'
+    return None
 
 @register.filter()
 def plan_discount_15(value):

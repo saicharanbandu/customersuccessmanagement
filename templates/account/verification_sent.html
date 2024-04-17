@@ -6,25 +6,28 @@
     {% trans "Verify Your Email Address" %}
 {% endblock head_title %}
 {% block content %}
+<div class="content-wrapper d-flex align-items-center auth bg-white">
+    <div class="row flex-grow">
+        <div class="col-md-12 bg-white"
+            style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="text-center">
+                <img src="{% static 'images/Mail_sent.svg' %}" alt="Illustration" style="width: 14%; height: auto;">
+            </div>
+            <div class="text-center">
 
-    <div class="row justify-content-center">
-        <div class="col-md-10 bg-white py-4" style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <div class="text-center">
-                    <img src="{% static 'images/Mail_sent.svg' %}" alt="Illustration" style="width: 14%; height: auto;">
-                </div>
-                <div class="text-center">
-                        {% element h2 %}
-                            <h2 class="my-3 card-title">{% trans "Verify Your Email Address" %}</h2>
-                        {% endelement %}
-                        {% if user.is_authenticated %}
-                            {% include "account/snippets/already_logged_in.html" %}
-                        {% endif %}
-                        <p class="my-3 font-weight-light px-5">
-                            {% blocktrans %}We have sent an email to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification email in your main inbox, check your spam folder. Please contact us if you do not receive the verification email within a few minutes.{% endblocktrans %}
-                        </p>
-                </div>
-            <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>
+                {% element h2 %}
+                    <h2 class="my-3 card-title">{% trans "Verify Your Email Address" %}</h2>
+                {% endelement %}
+                {% if user.is_authenticated %}
+                {% include "account/snippets/already_logged_in.html" %}
+                {% endif %}
+                <p class="my-3 font-weight-light">
+                    {% blocktrans %}We have sent an email to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification email in your main inbox, check your spam folder. Please contact us if you do not receive the verification email within a few minutes.{% endblocktrans %}
+                </p>
+
+            </div>
+        <p class="text-muted font-weight-light text-center">Copyright © Tabernacle 2024</p>
         </div>
     </div>
-    
+</div>
 {% endblock content %}
