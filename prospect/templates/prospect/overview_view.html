@@ -3,12 +3,20 @@
 
 {% block head_title %}{{ title }}{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'prospect/css/calendar.css' %}">
+{% endblock %}
+
 {% block page_title %}
 <span class="page-title-icon bg-gradient-primary text-white me-2">
   <i class="mdi mdi-bullseye"></i>
 </span>
 {{ title }}
 {% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'prospect/js/app.js' %}"></script>
+{% endblock scripts %}
 
 {% block content %}
 <div class="row grid-margin">
@@ -77,21 +85,20 @@
 <div class="row">
   <div class="col-md-4 grid-margin stretch-card">
     <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Traffic Sources</h4>
-        <canvas id="traffic-chart"></canvas>
-        <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
+      <div class="card-body p-4">
+          {% include 'prospect/_partials/_upcoming_events.html' %}
+          {% comment %} <canvas id="traffic-chart"></canvas> {% endcomment %}
+        {% comment %} <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div> {% endcomment %}
       </div>
     </div>
   </div>
   <div class="col-md-8 grid-margin stretch-card">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body p-4">
         <div class="clearfix">
-          <h4 class="card-title float-left">Visit And Sales Statistics</h4>
-          <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-right"></div>
+          {% include 'prospect/_partials/_calendar.html' %}
         </div>
-        <canvas id="visit-sale-chart" class="mt-4"></canvas>
+        {% comment %} <canvas id="visit-sale-chart" class="mt-4"></canvas> {% endcomment %}
       </div>
     </div>
   </div>

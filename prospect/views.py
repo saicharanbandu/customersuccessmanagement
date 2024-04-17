@@ -1,27 +1,48 @@
+import calendar
+import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import ListView
 from prospect import models as prospectModels, forms as prospectForms
+from prospect.utils import Calendar
 from tabernacle_customer_success import constants
 from django.contrib import messages
 from django.forms import formset_factory, modelformset_factory
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from django.db.models import Q
 from customer import models as customerModels
 
-from datetime import timedelta
-
-
+from datetime import date, timedelta
+from django.db.models import Max
 @method_decorator(login_required, name='dispatch')
 class ProspectDashboardView(View):
     template_name = 'prospect/overview_view.html'
     title = 'Overview'
     active_tab = 'prospect'
 
+    def _get_date(self, req_day):
+        if req_day:
+            year, month = (int(x) for x in req_day.split("-"))
+            return date(year, month, day=1)
+        return datetime.datetime.today()
+
+
+    def _prev_month(self, d):
+        first = d.replace(day=1)
+        prev_month = first - timedelta(days=1)
+        month = "month=" + str(prev_month.year) + "-" + str(prev_month.month)
+        return month
+
+
+    def _next_month(self, d):
+        days_in_month = calendar.monthrange(d.year, d.month)[1]
+        last = d.replace(day=days_in_month)
+        next_month = last + timedelta(days=1)
+        month = "month=" + str(next_month.year) + "-" + str(next_month.month)
+        return month
     def get(self, request, *args, **kwargs):
         stats = {}
         stats['prospects'] = prospectModels.Profile.objects.exclude(status__in=[constants.TRIAL, constants.ACCEPTED, constants.REJECTED]).count()
@@ -30,10 +51,42 @@ class ProspectDashboardView(View):
         stats['lost_prospects'] = prospectModels.Profile.objects.filter(status=constants.REJECTED).count()
 
 
+        firstweekday = 6  # sunday as the first weekday
+        d = self._get_date(self.request.GET.get("month", None))
+        cal = Calendar(d.year, d.month, firstweekday)
+        html_cal = cal.formatmonth(withyear=True)
+        today = datetime.datetime.today()
+        
+        prospects_ids = prospectModels.Profile.objects.filter(status=constants.MEETING_SCHEDULED).distinct('uuid').values_list('uuid', flat=True)
+        status_history = prospectModels.StatusHistory.objects.filter(
+            date__month=today.month,
+            date__year=today.year,
+            prospect_id__in = prospects_ids,
+            status=constants.MEETING_SCHEDULED
+        ).order_by('prospect', 'created_at')
+        latest_records = status_history.values('prospect').annotate(
+            latest_date=Max('created_at')
+        )
+
+        latest_status_history = prospectModels.StatusHistory.objects.filter(
+            date__month=today.month,
+            date__year=today.year,
+            status=constants.MEETING_SCHEDULED,
+            prospect__in=latest_records.values_list('prospect', flat=True),
+            created_at__in=latest_records.values_list('latest_date', flat=True)
+        )
+
         context = {
             'title': self.title,
             'active_tab': self.active_tab,
             'stats': stats,
+            'calendar': html_cal,
+            'prev_month': self._prev_month(d),
+            'current_month': d,
+            'next_month': self._next_month(d),
+            'today': today,
+            'weekdays': cal.formatweekheader(),
+            'month_events': latest_status_history
         }
         return render(request, self.template_name, context)
 

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $("#id_prospect-country").change(function () {
         let url = $(this).closest("form").attr("data-url");
         let countryId = $(this).val();
@@ -60,5 +59,40 @@ $(document).ready(function () {
         });
     });
 
-   
+    
+});
+
+
+// bootstrap popovers
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+
+$(document).ready(function() {
+    pervID = null
+    count = 1
+    // When popover trigger is clicked
+    $('.trigger-popover').click(function(event) {
+        console.log('trigger me')
+        let element_id = $(this).attr('data-id');
+        let popoverContent = $(`[data-name="popover-content-${element_id}"]`).html();
+        // Destroy old popover
+        $(this).popover('dispose');
+        // Initialize new popover with updated content
+        $(this).popover({
+            html: true,
+            title: "Meeting Schedule",
+            content: popoverContent
+        });
+        if (!$(event.target).closest('.popover').length && !$(event.target).closest('.trigger-popover').length) {
+            $('.trigger-popover').popover('hide');
+        }
+        $(this).popover('show');
+    });
+    // Hide popover when clicking outside
+    $(document, 'calendar-table').click(function(event) {
+        if (!$(event.target).closest('.popover').length && !$(event.target).closest('.trigger-popover').length) {
+            $('.trigger-popover').popover('hide');
+        }
+    });
 });
