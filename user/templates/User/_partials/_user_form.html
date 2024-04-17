@@ -1,0 +1,64 @@
+{% load static %}
+<div class="row">
+    <div class="col col-md-8">
+
+        <div class="form-group">
+            <label for="{{ user_form.full_name.id_for_label }}">Full Name *</label>
+            {{ user_form.full_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ user_form.email.id_for_label }}">Email *</label>
+            {{ user_form.email }}
+        </div>
+        <div class="form-group">
+            <label for="{{ user_form.mobile_no.id_for_label }}">Mobile Number *</label>
+            {{ user_form.mobile_no }}
+        </div>
+        <div class="form-group">
+            <label for="{{ user_form.designation.id_for_label }}">Designation *</label>
+            {{ profile_form.designation }}
+        </div>
+        <div class="form-group">
+            <label for="{{ user_form.date_of_birth.id_for_label }}">Date of Birth *</label>
+            {{ profile_form.date_of_birth }}
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group float-end">
+            <div class="form-group text-center">
+                <label for="{{ profile_form.image.id_for_label }}" class="text-uppercase fw-bold">Upload
+                    Picture *</label>
+                {% if profile_form.instance.image %}
+                <div>
+                    <img src="{{ profile_form.instance.image.url }}" alt="Profile Picture" width="100%" />
+                </div>
+                {% else %}
+                <div>
+                    <img src="{% static 'images/avatar.jpg' %}" alt="Default Profile Picture" width="75%">
+                </div>
+                {% endif %}
+
+                <div class="my-3">
+                    {% if profile_form.image.value %}
+                    <label for="{{ profile_form.image.auto_id }}-clear_id">Remove photo</label>
+                    <input type="checkbox" name="{{ profile_form.image.html_name }}-clear"
+                        id="{{ profile_form.image.auto_id }}-clear_id" />
+                    {% endif %}
+                    <input type="file" class="form-control file-upload-info" name="{{ profile_form.image.html_name }}"
+                        id="{{ profile_form.image.id_for_label }}">
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ user_form.is_staff.label_tag}}
+                {{user_form.is_staff}}
+                {{ user_form.is_superuser.label_tag}}
+                {{user_form.is_superuser}}
+                {{ user_form.is_active.label_tag}}
+                {{user_form.is_active}}
+            </div>
+        </div>
+    </div>
+</div>

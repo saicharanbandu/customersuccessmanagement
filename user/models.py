@@ -76,7 +76,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='images/user/',
                               blank=True,
                               null=True)
-    designation = models.CharField(max_length=50, unique=True)
+    designation = models.CharField(max_length=50)
     date_of_birth = models.DateField(blank=True, null=True)
 
     def __str__(self):

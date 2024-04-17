@@ -10,7 +10,7 @@ from django.db.models import Q
 
 class UserCreateView(View):
     title = 'Create User'
-    template_name = 'User/create_view.html'
+    template_name = 'user/create_view.html'
     active_tab = 'user'
     def get(self, request, *args, **kwargs):
         user_form = userForms.UserInfo()
@@ -36,7 +36,7 @@ class UserCreateView(View):
             profile_form_instance.user = user_instance
             profile_form_instance.save()
 
-            messages.success(request, 'Contact has been successfully created')
+            messages.success(request, 'User has been successfully created')
             return redirect(reverse("user:list"))
         else:
             context = {
@@ -47,14 +47,14 @@ class UserCreateView(View):
         }
         print(user_form.errors)
         print(profile_form.errors)
-        messages.error(request, 'Contact has not been successfully created')
+        messages.error(request, 'Failed to add user')
         return render(request, self.template_name, context)
 
 class UserListView(ListView):
     model = userModels.Profile
     title = "User Directory"
     active_tab = "profile"
-    template_name = "User/list_view.html"
+    template_name = "user/list_view.html"
     context_object_name = "profiles"
 
     def get_queryset(self):
@@ -83,7 +83,7 @@ class UserListView(ListView):
         return context
     
 class UserEditView(View):
-    template_name = "User/edit_view.html"
+    template_name = "user/edit_view.html"
     title = "Edit User"
     active_tab = "user"
 
@@ -128,7 +128,7 @@ class UserEditView(View):
             return render(request, self.template_name, context)
         
 class LoggedUserEditView(View):
-    template_name = "User/edit_view.html"
+    template_name = "user/edit_view.html"
     title = "Edit User"
     active_tab = "user"
 
