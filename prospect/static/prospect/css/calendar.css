@@ -107,7 +107,7 @@
 }
 
 
-.main .first {
+.main .upcoming-events {
     display: flex;
     flex-direction: column;
     border: 2px solid #ffffff;
@@ -196,10 +196,6 @@
     bottom: -10px;
     right: 5px;
     color: #11047a;
-}
-
-.main .bi.bi-arrow-right {
-    display: inline-block;
 }
 
 .main .trailing-month {
