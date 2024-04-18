@@ -11,13 +11,13 @@
         </div>
         <div class="float-end">
             <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
-                <a type="button" class="btn btn-outline-primary" href="{% url "prospect:overview" %}?{{prev_month}}">
+                <a type="button" class="btn btn-outline-primary calendar-link" href="{% url "prospect:overview" %}?{{prev_month}}">
                     <i class="mdi mdi-chevron-left"></i>
                 </a>
-                <a type="button" class="btn btn-outline-primary" href="{% url "prospect:overview" %}?{{current_month}}">
+                <a type="button" class="btn btn-outline-primary calendar-link" href="{% url "prospect:overview" %}?{{current_month}}">
                     Today
                 </a>
-                <a type="button" class="btn btn-outline-primary" href="{% url "prospect:overview" %}?{{next_month}}">
+                <a type="button" class="btn btn-outline-primary calendar-link" href="{% url "prospect:overview" %}?{{next_month}}">
                     <i class="mdi mdi-chevron-right"></i>
                 </a>
             </div>

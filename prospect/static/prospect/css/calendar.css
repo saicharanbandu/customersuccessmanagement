@@ -29,7 +29,9 @@
 .main .bordered tr:last-child td:last-child {
     border-radius: 0 0 15px 0;
 }
-
+.calendar-table a.calendar-link:hover {
+    color: white;
+}
 .main .row-weekdays th {
     border: 1px solid #e7e7e7;
     border-bottom: none;
@@ -86,7 +88,8 @@
     border-radius: 6px;
 }
 .main .calendar-events > div.calendar-status-meeting {
-    background-color: #11047a;
+    /* background-color: #11047a; */
+    background: linear-gradient(to right, #da8cff, #9a55ff);
     border-radius: 5px;
 }
 .main .calendar-events > div.calendar-status-rejected {
@@ -150,6 +153,36 @@
 .main .event-highlight:hover .arrow  {
     color: #ffffff;
 } */
+
+/* .main .event-highlight:hover .event-date {
+    background-color: #3311db;
+    color: #ffffff;
+} */
+.main .event-highlight.calendar-status-meeting:hover .event-date {
+    background: linear-gradient(to right, #da8cff, #9a55ff);
+    color: #ffffff;
+}
+.main .event-highlight[aria-describedby] .event-date {
+    background: linear-gradient(to right, #da8cff, #9a55ff);
+    color: #ffffff;
+    transform: 0.3s ease-in-out;
+}
+.main .event-highlight:hover {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+.main .event-highlight:active {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1.3px 3.3px, rgba(0, 0, 0, 0.24) 0px 1.3px 2.3px;
+}
+.main .event-highlight:active .arrow {
+    right: 5px;
+}
+.main .event-highlight[aria-describedby] .arrow {
+    right: 5px;
+}
+.main .event-highlight[aria-describedby] {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1.3px 3.3px, rgba(0, 0, 0, 0.24) 0px 1.3px 2.3px;
+}
+
 .main .event-date .event-weekday {
     font-size: 0.8rem;
     font-weight: 700;
@@ -193,9 +226,10 @@
 
 .event-details .arrow {
     position: absolute;
-    bottom: -10px;
-    right: 5px;
-    color: #11047a;
+    bottom: -15px;
+    right: 10px;
+    color: #000000;
+    transition: right 0.2s ease-out;
 }
 
 .main .trailing-month {
@@ -208,7 +242,7 @@
     
 }
 .popover-header {
-    background-color: #11047a;
+    background: linear-gradient(to right, #da8cff, #9a55ff);
     color: #e7e7e7;
     font-size: 1.1rem;
 }
