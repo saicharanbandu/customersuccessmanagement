@@ -128,10 +128,11 @@
             <div class="text-end">
               <a href="{% url 'customer:onboard-customer' customer_id %}" class="btn btn-outline-primary me-3">Go Back</a>
               <button type="submit" class="btn btn-gradient-primary" name="action" value="continue" id="btnSubmit">
-                Collect Payment 1
+                Collect Payment
               </button>
+              <!-- Trigger modal instead if payment status in paid -->
               <button type="button" class="btn btn-gradient-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btnModal">
-                Collect Payment 2
+                Collect Payment
               </button>
             </div>
           </div>
