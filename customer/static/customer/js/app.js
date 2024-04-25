@@ -73,13 +73,15 @@ const select_plan_handler = () => {
 
 const load_plan_amount = (url, params) => {
     $.get(url, params, function (data) {
-        $("#subtotalAmount").closest(".amount-group").find("label").html(`${data.tariff_selected}`);
-        $('#selectedPlanAmount').html(`₹ ${data.monthly_amount}`);
-        $("#subtotalAmount").html(`₹ ${data.payable_amount}`);
+        $("#selectedPlanAmount").closest(".amount-group").find("label").html(`${data.tariff_selected}`);
+        $('#subtotalAmount').html(`₹ ${data.payable_amount}`);
+        $("#selectedPlanAmount").html(`₹ ${data.monthly_amount}`);
         if (data.tariff_selected.toUpperCase().indexOf('MONTHLY') !== -1) {
-            $('#selectedPlanAmount').closest(".amount-group").addClass('d-none');
+            $('#subtotalAmount ').closest(".amount-group").addClass('d-none');
+            $('#selectedPlanAmount').replaceWith(`<span id="selectedPlanAmount"> ₹ ${data.monthly_amount}</span>`)
         } else {
-            $('#selectedPlanAmount').closest(".amount-group").removeClass('d-none');
+            $('#subtotalAmount').closest(".amount-group").removeClass('d-none');
+            $('#selectedPlanAmount').replaceWith(`<s id="selectedPlanAmount"> ₹ ${data.monthly_amount}</s>`)
         }
         calculate_total();
     });

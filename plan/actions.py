@@ -21,11 +21,11 @@ def get_plan_amount(request):
         discounted_price = (monthly_amount * 12) - discount_amount
         payable_amount = discounted_price.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
 
-        tariff_selected = tariff.name + 'Plan (Yearly)'
+        tariff_selected = tariff.name + ' (Yearly)'
         monthly_amount = helper.formatINR((Decimal(100) / Decimal(100)) * (monthly_amount * 12))
     else:
         payable_amount = monthly_amount
-        tariff_selected = tariff.name + 'Plan (Monthly)'
+        tariff_selected = tariff.name + ' (Monthly)'
         monthly_amount = helper.formatINR(monthly_amount)
 
     response_data = {
