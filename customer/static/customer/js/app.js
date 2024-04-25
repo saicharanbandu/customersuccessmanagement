@@ -85,7 +85,8 @@ const load_plan_amount = (url, params) => {
     });
 }
 
-// set payment status to hidden field
+// set value to hidden field when payment status changes on the form
+// swap btn to modal trigger when payment status is not checked
 const checkPaymentStatus = () => {
     if (!$('#paymentStatus').is(':checked')) {
         $('#btnSubmit').addClass('d-none')
@@ -102,9 +103,8 @@ $('#paymentStatus').on('click', function () {
 })
 checkPaymentStatus();
 
-// set payment mode to hidden field
+// set value to hidden field when payment mode changes on the form
 const setPaymentMode = (element) => {
-    console.log($(element).val())
     if ($(element).is(':checked')) {
         $('input[name="payment_mode"]').val($(element).val())
     } 
@@ -114,7 +114,7 @@ $('.set-payment-mode').on('click', function () {
 })
 setPaymentMode();
 
-// submit actual form on click
+// submit actual form on submit from modal
 $('#proxySubmit').on("click", function () {
     $('#btnSubmit').click()
 })
