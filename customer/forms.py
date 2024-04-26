@@ -56,6 +56,10 @@ class SubscriptionPlanOptionsForm(forms.Form):
         choices=constants.PAYMENT_STATUS_CHOICES,
         widget=forms.Select(attrs={'class': 'form-select'}))
 
+    def __init__(self, *args, **kwargs):
+        super(SubscriptionPlanOptionsForm, self).__init__(*args, **kwargs)
+        self.fields['payment_mode'].initial = 'cash'
+        self.fields['payment_status'].initial = 'paid'
 class CustomerUserForm(forms.ModelForm):
     class Meta:
         model = customerModels.User

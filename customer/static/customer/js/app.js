@@ -73,7 +73,50 @@ const select_plan_handler = () => {
 
 const load_plan_amount = (url, params) => {
     $.get(url, params, function (data) {
-        $("#subtotalAmount").html(`₹${data.payable_amount}`);
+        $("#selectedPlanAmount").closest(".amount-group").find("label").html(`${data.tariff_selected}`);
+        $('#subtotalAmount').html(`₹ ${data.payable_amount}`);
+        $("#selectedPlanAmount").html(`₹ ${data.monthly_amount}`);
+        if (data.tariff_selected.toUpperCase().indexOf('MONTHLY') !== -1) {
+            $('#subtotalAmount ').closest(".amount-group").addClass('d-none');
+            $('#selectedPlanAmount').replaceWith(`<span id="selectedPlanAmount"> ₹ ${data.monthly_amount}</span>`)
+        } else {
+            $('#subtotalAmount').closest(".amount-group").removeClass('d-none');
+            $('#selectedPlanAmount').replaceWith(`<s id="selectedPlanAmount"> ₹ ${data.monthly_amount}</s>`)
+        }
         calculate_total();
     });
 }
+
+// set payment status to hidden field
+const checkPaymentStatus = () => {
+    if (!$('#paymentStatus').is(':checked')) {
+        $('#btnSubmit').addClass('d-none')
+        $('#btnModal').removeClass('d-none')
+        $('input[name="payment_status"]').val('paid')
+    } else {
+        $('#btnSubmit').removeClass('d-none')
+        $('#btnModal').addClass('d-none')
+        $('input[name="payment_status"]').val('pending')
+    }
+}
+$('#paymentStatus').on('click', function () {
+    checkPaymentStatus();
+})
+checkPaymentStatus();
+
+// set payment mode to hidden field
+const setPaymentMode = (element) => {
+    console.log($(element).val())
+    if ($(element).is(':checked')) {
+        $('input[name="payment_mode"]').val($(element).val())
+    } 
+}
+$('.set-payment-mode').on('click', function () {
+    setPaymentMode($(this));
+})
+setPaymentMode();
+
+// submit actual form on click
+$('#proxySubmit').on("click", function () {
+    $('#btnSubmit').click()
+})

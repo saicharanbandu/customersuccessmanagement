@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'prospect',
     'contact',
     'misc',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'tabernacle_customer_success.middleware.LoginRequiredMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'tabernacle_customer_success.urls'
@@ -184,3 +186,9 @@ EMAIL_HOST_PASSWORD = 'gwmb ffrt ychg twef'
 EMAIL_USE_TLS = True
 
 SOCIALACCOUNT_AUTO_SIGNUP = False
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

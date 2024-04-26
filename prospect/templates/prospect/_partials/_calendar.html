@@ -1,0 +1,87 @@
+<section class="main">
+<section class="calendar-table">
+    <div class="page-header mb-0">
+        <div>
+            <p style="font-size: 1.5em; color: #1c265a;">
+                <b>Calendar</b>
+            </p>
+            <p style="margin-top: -1em; color: #a7b2d3;">
+                {{current_month|date:"F Y"  }}
+            </p>
+        </div>
+        <div class="float-end">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                <a type="button" class="btn btn-outline-primary calendar-link" href="{% url "prospect:overview" %}?{{prev_month}}">
+                    <i class="mdi mdi-chevron-left"></i>
+                </a>
+                <a type="button" class="btn btn-outline-primary calendar-link" href="{% url "prospect:overview" %}?{{current_month}}">
+                    Today
+                </a>
+                <a type="button" class="btn btn-outline-primary calendar-link" href="{% url "prospect:overview" %}?{{next_month}}">
+                    <i class="mdi mdi-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table class="bordered">
+        <tr class="calendar-weekdays">
+            {% for weekday in weekdays %}
+                <th class="weekday">{{weekday}}</th>
+            {% endfor %}
+        </tr>
+        {% for weekdays in calendar %}
+            <tr class="row-weekdays">
+                {% for day in weekdays %}
+                <td class="
+                    {% if current_month.month != day.day.month %}trailing-month{% else %}current-month{% endif %}
+                    {% if today|date:"j-m-y" == day.day|date:"j-m-y" %}current-day{% endif %}
+                ">
+                    <div class="day-container">
+                        <span class="calendar-day">{{ day.day|date:"j" }}</span>
+                        {% for prospect in day.prospects %}
+                            {% if prospect.status %}
+                                <!-- popover content -->
+                                <div hidden>
+                                    <div class="event-popover-content" data-name="popover-content-meeting-{{prospect.prospect.uuid}}">
+                                        <div class="row align-items-baseline">   
+                                            <div class="icon-container"><i class="mdi mdi-account"></i></div>
+                                            <div class="details-container"><span>{{prospect.prospect.name}}</span></div>
+                                        </div>
+                                        <div class="row align-items-baseline">   
+                                            <div class="icon-container"><i class="mdi mdi-calendar-month-outline"></i></div>
+                                            <div class="details-container"><span> {{prospect.date|date:'D, d M, Y'}} </span></div>
+                                        </div>
+                                        <div class="row align-items-baseline">   
+                                            <div class="icon-container"><i class="mdi mdi-clock-outline"></i></div>
+                                            <div class="details-container"><span> {{prospect.time| date:'h:i A'}} </span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- popover content end -->
+                                
+                                <!-- popover trigger -->
+                                <div class="calendar-events">
+                                    <div 
+                                        data-id="meeting-{{prospect.prospect.uuid}}" 
+                                        tabindex="0" 
+                                        class="calendar-status-{{ prospect.status }} trigger-popover" 
+                                        role="button" 
+                                        data-bs-toggle="popover"
+                                        data-bs-title="Meeting Schedule" 
+                                        data-bs-content=`popover-content-meeting-{{day.day|date:"j"}}`
+                                    >
+                                        Meeting
+                                    </div>
+                                </div>
+                                <!-- popover trigger end -->
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</section>
+</section>
