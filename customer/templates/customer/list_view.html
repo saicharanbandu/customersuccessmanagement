@@ -67,7 +67,7 @@
                 </a>
               </td>
               <td>
-                {% if customer.legal_name %}
+                {% if customer.official_name %}
                 {% if customer.customer_plan.subscription_plan.name %}
                 <div class="text-faded">
                   {{ customer.customer_plan.subscription_plan.name }}
@@ -83,7 +83,7 @@
                 {% endif%}
               </td>
               <td class="text-center">
-                {% if customer.legal_name %}
+                {% if customer.official_name %}
                 <span class="text-faded">{{ customer.customer_plan.created_at| date:'d/m/Y' }}</span>
                 {% else %}
                 <a href="{% url 'customer:onboard-customer' customer.uuid %}" class="btn btn-sm btn-gradient-primary">Onboard

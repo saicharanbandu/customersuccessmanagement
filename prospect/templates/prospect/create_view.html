@@ -23,7 +23,7 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <form class="forms-sample" method="POST" enctype="multipart/form-data" data-url="{% url 'misc:ajax-load-states' %}">
+                <form method="POST" enctype="multipart/form-data" data-url="{% url 'misc:ajax-load-states' %}">
                     {% csrf_token %}
                     <h4 class="card-title">Prospect Information</h4>
                     <p class="card-description">Enter prospect details</p>

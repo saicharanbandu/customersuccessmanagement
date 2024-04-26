@@ -201,7 +201,7 @@ class CustomerListView(ListView):
                     | Q(legal_name__icontains=' ' + search_query)
                 )
             )
-        queryset = queryset.order_by('legal_name')
+        queryset = queryset.order_by('official_name')
 
         for query in queryset:
             try:
@@ -280,7 +280,7 @@ class CustomerEditView(View):
         if customer_profile_form.is_valid() and prospect_profile_form.is_valid():
             customer_object = customer_profile_form.save()
             prospect_object = prospect_profile_form.save(commit=False)
-            prospect_object.name = customer_object.legal_name
+            prospect_object.name = customer_object.official_name
             prospect_object.save()
             return redirect(reverse('customer:list'))
         context = {
@@ -413,7 +413,7 @@ class CustomerUsersView(View):
         customer= get_object_or_404(customerModels.Profile, uuid=customer_id)
         customer_users = customerModels.User.objects.filter(customer=customer)
         context = {
-            'title': f'{self.title} for {customer.legal_name}',
+            'title': f'{self.title} for {customer.official_name}',
             'active_tab': self.active_tab,
             'customer_users': customer_users,
             'customer_id': customer_id
@@ -433,7 +433,7 @@ class UserCreateView(View):
         customer= get_object_or_404(customerModels.Profile, uuid=customer_id)
         customer_users = get_object_or_404(customerModels.User, customer=customer)
         context = {
-            'title': f'{self.title} for {customer.legal_name}',
+            'title': f'{self.title} for {customer.official_name}',
             'active_tab': self.active_tab,
             'customer_users': customer_users,
             'customer_id': customer_id
@@ -454,7 +454,7 @@ class ChangePlanView(View):
         customer_id = kwargs.get('customer_id')
         customer= get_object_or_404(customerModels.Profile, uuid=customer_id)
         context = {
-            'title': f'{self.title} for {customer.legal_name}',
+            'title': f'{self.title} for {customer.official_name}',
             'active_tab': self.active_tab,
             'customer_id': customer_id
         }

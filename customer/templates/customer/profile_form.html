@@ -28,8 +28,8 @@
     </div>
     <div class="col col-md-8">
         <div class="form-group">
-            <label for="{{ customer_profile_form.legal_name.id_for_label }}">Subscription Name *</label>
-            {{ customer_profile_form.legal_name }}
+            <label for="{{ customer_profile_form.official_name.id_for_label }}">Subscription Name *</label>
+            {{ customer_profile_form.official_name }}
         </div>
         <div class="form-group">
             <label for="{{ customer_profile_form.display_name.id_for_label }}">Display Name*</label>
@@ -37,7 +37,7 @@
         </div>
         <div class="form-group">
             <label for="{{ customer_profile_form.short_name.id_for_label }}">Short Name or Abbreviation *</label>
-            {{ customer_profile_form.short_name }}
+            {{ customer_profile_form.sms_name }}
         </div>
     </div>
 </div>

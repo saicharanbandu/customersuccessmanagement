@@ -7,32 +7,36 @@ from misc import models as miscModels
 
 import uuid
 
+
 class Profile(models.Model):
     """
     Customer Profile
     """
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     prospect = models.OneToOneField(
-        prospectModels.Profile, to_field="uuid", on_delete=models.CASCADE, null=True, related_name='customer_prospect',
+        prospectModels.Profile,
+        to_field="uuid",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="customer_prospect",
     )
     profile_picture = models.ImageField(upload_to="pictures", blank=True)
-    legal_name = models.CharField(max_length=255, verbose_name="Legal Name")
-    display_name = models.CharField(max_length=255, verbose_name="Display Name")
-    short_name = models.CharField(
-        max_length=30, verbose_name="Short Name or Abbreviation"
-    )
+    official_name = models.CharField(max_length=255)
+    display_name = models.CharField(max_length=255)
+    sms_name = models.CharField(max_length=30)
     manager = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.DO_NOTHING,
         blank=True,
         null=True,
-        related_name='customer_manager'
+        related_name="customer_manager",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.legal_name
+        return self.official_name
 
 
 class SubscribedPlan(models.Model):
@@ -54,8 +58,13 @@ class SubscribedPlan(models.Model):
         on_delete=models.CASCADE,
         null=True,
     )
-    duration = models.IntegerField(default=0) # Duration in months
-    payment_status = models.CharField(max_length=55, choices=constants.PAYMENT_STATUS_CHOICES, verbose_name="Payment Status", default=constants.PENDING)
+    duration = models.IntegerField(default=0)  # Duration in months
+    payment_status = models.CharField(
+        max_length=55,
+        choices=constants.PAYMENT_STATUS_CHOICES,
+        verbose_name="Payment Status",
+        default=constants.PENDING,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -63,13 +72,14 @@ class SubscribedPlan(models.Model):
         return f"{self.customer}"
 
     class Meta:
-        ordering = ('customer__legal_name',)
+        ordering = ("customer__official_name",)
 
 
 class User(models.Model):
     """
     User created for a customer
     """
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     customer = models.ForeignKey(
         Profile,
@@ -88,11 +98,11 @@ class User(models.Model):
         return f"{self.full_name}"
 
 
-
 class UserAppPermissions(models.Model):
     """
     User App Permissions
     """
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     user = models.ForeignKey(
         User,
@@ -114,14 +124,14 @@ class UserAppPermissions(models.Model):
 
     class Meta:
         unique_together = ["user", "module"]
-        ordering = ('user__full_name', )
-
+        ordering = ("user__full_name",)
 
 
 class PaymentHistory(models.Model):
     """
     Customer's Payment History
     """
+
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     customer = models.ForeignKey(
         Profile,
@@ -139,5 +149,4 @@ class PaymentHistory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.customer.legal_name} | {self.payment_date}"
-
+        return f"{self.customer.official_name} | {self.payment_date}"
