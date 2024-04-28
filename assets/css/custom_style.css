@@ -213,7 +213,7 @@ table .sl-col {
 }
 
 .border-trial {
-    border-left: 5px solid #047edf;
+    border-left: 5px solid #0470C7;
 }
 
 .payment-due {
@@ -240,9 +240,9 @@ table .sl-col {
 .status-rejected,
 .toast-danger,
 .payment-pending {
-    border: 1px solid #fadbe1;
-    background: #fadbe1;
-    color: #f80808;
+    border: 1px solid #FFD9D9;
+    background: #FFD9D9;
+    color: #DC3545;
 }
 
 
