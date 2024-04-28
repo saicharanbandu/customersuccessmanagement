@@ -1,15 +1,15 @@
 {% for user_app_permissions_form in user_app_permissions_formset %}
             
-<div class="col-12 col-md-6">
+<div class="col-12 col-md-6 ps-2 pe-0">
   <div class="row m-3">
     <div class="col-12 col-md-6">
       <div class="d-flex">
-        <div class="form-check form-switch mx-2 col-form-label"
+        <div class="form-check form-switch mx-2 mt-3"
           data-module="{{user_app_permissions_form.module.value}}">
           {{ user_app_permissions_form.has_access }}
         </div>
-        <div class="me-2 text-uppercase col-form-label">
-          {{ user_app_permissions_form.module_name.value }}
+        <div class="me-2 text-uppercase">
+          <label for="{{user_app_permissions_form.has_access.id_for_label}}" class="col-form-label">{{ user_app_permissions_form.module_name.value }}</label>
           {{ user_app_permissions_form.module }}
         </div>
       </div>
