@@ -25,6 +25,16 @@ def delete_customer(request, customer_id):
     else:
         messages.error(request,'Unsuccessful, try again')
 
+@login_required
+def delete_collaborator(request, customer_id, collaborator_id):
+    # if request.method == 'POST':
+    collaborator = customerModels.User.objects.get(uuid=collaborator_id)
+    collaborator.delete()
+    messages.success(request, 'Customer has been successfully deleted')
+    return redirect(reverse('customer:users', kwargs={'customer_id': customer_id}))
+    # else:
+        # messages.error(request,'Unsuccessful, try again')
+
 
 @login_required
 def get_customer_info(request, customer_id):

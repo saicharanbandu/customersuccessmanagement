@@ -120,3 +120,11 @@ setPaymentMode();
 $('#proxySubmit').on("click", function () {
     $('#btnSubmit').click()
 })
+
+
+// collaborator delete handler
+
+$('#deleteCollaboratorAction').on('click', function () {
+    url = $(this).attr('dat-url');
+    $('#deleteCollaboratorForm').attr('action', url)
+})

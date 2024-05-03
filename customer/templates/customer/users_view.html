@@ -9,7 +9,9 @@
 {% block page_title %}
 {{ title }}
 {% endblock %}
-
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'customer/css/style.css' %}">
+{% endblock %}
 {% block breadcrumbs %}
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a href="{% url 'customer:list' %}">Customers</a></li>
@@ -17,14 +19,97 @@
 </ol>
 {% endblock %}
 
+
 {% block scripts %}
+<script src="{% static 'customer/js/app.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-<a class="btn btn-gradient-primary" href="{% url 'customer:user-create' customer_id %}">Add Collaborator</a>
-{% for user in customer_users %}
-<div>
-  {{ user.full_name }}
+{% include "customer/_partials/_delete_colaborator_confirm_modal.html" %}
+
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-8 col-lg-6">
+            <form method="GET">
+              <div class="input-group">
+                <input type="search" class="form-control" placeholder="Search" name="search"
+                  value="{{ request.GET.search }}">
+                <button type="submit" class="btn btn-sm btn-light">
+                  <i class="mdi mdi-magnify"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="col-4 col-lg-6">
+            <a class="btn btn-gradient-primary" href="{% url 'customer:add-collaborator' customer_id %}"><i class="mdi mdi-plus me-2"></i> Add Collaborator</a>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap my-2">
+          {% for user in customer_users %}
+          <div class="col-4 pe-2 pb-2">
+            <div class="card card-collaborators">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-auto">
+                    <h5 class="card-title">{{user.full_name}}</h5>
+                  </div>
+                  <div class="col-1 text-center">
+                    <div class="nav-item nav-profile dropdown">
+                      <span class="actions-select" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                      </span>
+                      <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item" href="{% url "customer:edit-collaborator" customer_id user.uuid %}">Edit </a>
+                        <div class="dropdown-divider"></div>
+                        {% if forloop.first %}
+                          <button class="dropdown-item" disabled>Remove </button>
+                        {% else %}
+                          <a class="dropdown-item" dat-url="{% url "customer:delete-collaborator" customer_id user.uuid %}" data-bs-toggle="modal" data-bs-target="#deleteCollaboratorModal" id="deleteCollaboratorAction">Remove </a>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="collaborators-details">
+                  <span class="d-block">{{user.designation|title}}</span>
+                  <span class="d-block"><i class="mdi mdi-email-outline"></i> {{user.mobile_no}}</span>
+                  <span class="d-block"><i class="mdi mdi-cellphone"></i> {{user.email}}</span>
+                </div>
+              </div>
+              <div class="accordion" id="accordionPermissions">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#permissionContainer{{forloop.counter}}" aria-expanded="false" aria-controls="permissionContainer{{forloop.counter}}">
+                      Permissions
+                    </button>
+                  </h2>
+                  <div id="permissionContainer{{forloop.counter}}" class="accordion-collapse collapse" data-bs-parent="#accordionPermissions">
+                    <div class="accordion-body">
+                      {% for permission in user.app_permissions %}
+                        <div class="col-4 py-2">
+                          <div class="d-flex flex-column">
+                            <span class="fw-bold">{{permission.module|title}}</span>
+                            {% if 'all_access' == permission.access_role %}Full Access
+                            {% elif 'editor' == permission.access_role %}Editor
+                            {% elif 'viewer' == permission.access_role %}Viewer
+                            {% else %}-
+                            {% endif %}
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-{% endfor %}
 {% endblock %}

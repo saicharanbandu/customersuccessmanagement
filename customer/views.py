@@ -393,33 +393,269 @@ class OnboardingUserView(View):
         context = self.get_context()
 
         return render(request, self.template_name, context)
+@method_decorator(login_required, name='dispatch')
+class AddCollaboratorView(View):
+    model = customerModels.User
+    template_name = 'customer/edit_collaborator.html'
+    title = 'Collaborator Information'
+    active_tab = 'customer'
+
+    UserAppPermissionsFormSet = formset_factory(
+        form=customerForms.AddUserAppPermissionsForm, extra=0
+    )
+
+    def get_context(self):
+        customer_id = self.kwargs.get('customer_id')
+        customer_user_form = customerForms.CustomerUserForm(
+            initial={'customer': customer_id}
+        )
+        return {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_id': customer_id,
+            'customer_user_form': customer_user_form,
+            'go_back_url': reverse(
+                'customer:users', kwargs={'customer_id': customer_id}
+            ),
+        }
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context()
+        subscribed_plan = customerModels.SubscribedPlan.objects.get(customer=context['customer_id'])
+        first_customers = customerModels.User.objects.filter(customer=context['customer_id']).order_by('created_at').first()
+        tariff = planModels.Tariff.objects.get(uuid=subscribed_plan.subscription_plan.uuid)
+        
+        modules = miscModels.AppModule.objects.filter(name__in=tariff.modules).order_by('precedance')
+        is_next_user = True
+        
+        if is_next_user:
+            user_app_permissions_formset = self.UserAppPermissionsFormSet(
+                    initial=[{
+                        'module': module,
+                        'module_name': module.name,
+                        } for module in modules])
+            is_next_user = False
+        else:
+            initial_data = [{
+                'module': module,
+                'module_name': module.name,
+                'has_access': True,
+                'access_role': constants.EDITOR,
+            } for module in modules]
+            user_app_permissions_formset = self.UserAppPermissionsFormSet(initial=initial_data)
+        
+        for form in user_app_permissions_formset:
+            form.permissions = form.initial['module'].permissions
+
+        more_context = {
+            'user_app_permissions_formset': user_app_permissions_formset,
+            'is_next_user': is_next_user
+        }
+        context.update(more_context)
+
+        return render(request, self.template_name, context)
 
 
+    def post(self, request, *args, **kwargs):
+        context = self.get_context()
+
+        customer_id = self.kwargs.get('customer_id')
+        customer_user_form = customerForms.CustomerUserForm(request.POST)
+        user_app_permissions_formset = self.UserAppPermissionsFormSet(request.POST)
+        if customer_user_form.is_valid():
+            customer_user_object = customer_user_form.save()
+            if user_app_permissions_formset.is_valid():
+                for user_app_permissions_form in user_app_permissions_formset:
+                    if user_app_permissions_form.cleaned_data.get('has_access') == 'True':
+                        module = user_app_permissions_form.cleaned_data.get('module')
+                        try:
+                            user_app_permissions_object = customerModels.UserAppPermissions.objects.get(
+                                user=customer_user_object,
+                                module=module
+                            )
+                        except customerModels.UserAppPermissions.DoesNotExist:
+                            user_app_permissions_object = user_app_permissions_form.save(commit=False)
+                            user_app_permissions_object.user = customer_user_object
+
+                        if len(module.permissions) == 0:
+                            user_app_permissions_object.access_role = constants.ALL_ACCESS
+                        else:
+                            user_app_permissions_object.access_role = user_app_permissions_form.cleaned_data.get('access_role')
+                        
+                        user_app_permissions_object.save()
+                    else:
+                        module = user_app_permissions_form.cleaned_data.get('module')
+                        try:
+                            user_app_permissions_object = customerModels.UserAppPermissions.objects.get(
+                                user=customer_user_object,
+                                module=module
+                            )
+                            user_app_permissions_object.delete()
+                        except customerModels.UserAppPermissions.DoesNotExist:
+                            pass
+        else:
+            return render(request, self.template_name, context)
+        return redirect(reverse('customer:users', kwargs={'customer_id': customer_id}))
+
+@method_decorator(login_required, name='dispatch')
+class EditCollaboratorView(View):
+    model = customerModels.User
+    template_name = 'customer/edit_collaborator.html'
+    title = 'Collaborator Information'
+    active_tab = 'customer'
+
+    UserAppPermissionsFormSet = formset_factory(
+        form=customerForms.AddUserAppPermissionsForm, extra=0
+    )
+
+    def get_context(self):
+        customer_id = self.kwargs.get('customer_id')
+        colab_id = self.kwargs.get('collaborator_id')
+        collaborator = customerModels.User.objects.get(uuid=colab_id)
+        customer_user_form = customerForms.CustomerUserForm(instance = collaborator,
+            initial={'customer': customer_id}
+        )
+        return {
+            'title': self.title,
+            'active_tab': self.active_tab,
+            'customer_id': customer_id,
+            'colab_id': colab_id,
+            'customer_user_form': customer_user_form,
+            'go_back_url': reverse(
+                'customer:users', kwargs={'customer_id': customer_id}
+            ),
+        }
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context()
+        subscribed_plan = customerModels.SubscribedPlan.objects.get(customer=context['customer_id'])
+        first_customers = customerModels.User.objects.filter(customer=context['customer_id']).order_by('created_at').first()
+        tariff = planModels.Tariff.objects.get(uuid=subscribed_plan.subscription_plan.uuid)
+        
+        modules = miscModels.AppModule.objects.filter(name__in=tariff.modules).order_by('precedance')
+        collaborator = customerModels.UserAppPermissions.objects.filter(user__uuid=context['colab_id'])
+        is_next_user = True
+        
+        if context['colab_id'] != first_customers.uuid:
+            initial_data = []
+            for module in modules:
+                data = collaborator.filter(module=module).first()
+                if data:
+                    initial_data.append({
+                        'module': module,
+                        'module_name': module.name,
+                        'has_access': True,
+                        'access_role': data.access_role
+                    })
+                else:
+                    initial_data.append({
+                        'module': module,
+                        'module_name': module.name,
+                        'has_access': False,
+                        'access_role': None
+                    })
+            user_app_permissions_formset = self.UserAppPermissionsFormSet(initial=initial_data)
+            is_next_user = False
+
+        else:
+            initial_data = [{
+                'module': module,
+                'module_name': module.name,
+                'has_access': True,
+                'access_role': constants.EDITOR,
+            } for module in modules]
+            user_app_permissions_formset = self.UserAppPermissionsFormSet(initial=initial_data)
+        
+        for form in user_app_permissions_formset:
+            form.permissions = form.initial['module'].permissions
+
+        more_context = {
+            'user_app_permissions_formset': user_app_permissions_formset,
+            'is_next_user': is_next_user
+        }
+        context.update(more_context)
+
+        return render(request, self.template_name, context)
 
 
+    def post(self, request, *args, **kwargs):
+        context = self.get_context()
 
+        colab_id = self.kwargs.get('collaborator_id')
+        collaborator = customerModels.User.objects.get(uuid=colab_id)
+        customer_user_form = customerForms.CustomerUserForm(request.POST, instance=collaborator )
+        user_app_permissions_formset = self.UserAppPermissionsFormSet(request.POST)
+        if customer_user_form.is_valid():
+            customer_user_object = customer_user_form.save()
+            if user_app_permissions_formset.is_valid():
+                for user_app_permissions_form in user_app_permissions_formset:
+                    if user_app_permissions_form.cleaned_data.get('has_access') == 'True':
+                        module = user_app_permissions_form.cleaned_data.get('module')
+                        try:
+                            user_app_permissions_object = customerModels.UserAppPermissions.objects.get(
+                                user=customer_user_object,
+                                module=module
+                            )
+                        except customerModels.UserAppPermissions.DoesNotExist:
+                            user_app_permissions_object = user_app_permissions_form.save(commit=False)
+                            user_app_permissions_object.user = customer_user_object
+
+                        if len(module.permissions) == 0:
+                            user_app_permissions_object.access_role = constants.ALL_ACCESS
+                        else:
+                            user_app_permissions_object.access_role = user_app_permissions_form.cleaned_data.get('access_role')
+                        
+                        user_app_permissions_object.save()
+                    else:
+                        module = user_app_permissions_form.cleaned_data.get('module')
+                        try:
+                            user_app_permissions_object = customerModels.UserAppPermissions.objects.get(
+                                user=customer_user_object,
+                                module=module
+                            )
+                            user_app_permissions_object.delete()
+                        except customerModels.UserAppPermissions.DoesNotExist:
+                            pass
+        else:
+            return render(request, self.template_name, context)
+        return redirect(reverse('customer:users', kwargs={'customer_id': collaborator.customer.uuid}))
 
 
 
 @method_decorator(login_required, name='dispatch')
-class CustomerUsersView(View):
+class CustomerUsersView(ListView):
     model = customerModels.User
     template_name = 'customer/users_view.html'
     title = 'Collaborators'
     active_tab = 'customer'
+    context_object_name = 'customer_users'
 
-    def get(self, request, *args, **kwargs):
-        customer_id = kwargs.get('customer_id')
-        customer= get_object_or_404(customerModels.Profile, uuid=customer_id)
-        customer_users = customerModels.User.objects.filter(customer=customer)
-        context = {
-            'title': f'{self.title} for {customer.official_name}',
-            'active_tab': self.active_tab,
-            'customer_users': customer_users,
-            'customer_id': customer_id
-        }
-        return render(request, self.template_name, context)
-    
+    def search_query(self, queryset):
+        search_query = self.request.GET.get('search')
+        if search_query:
+            queryset = queryset.filter(
+                Q(full_name__istartswith=search_query) |
+                Q(full_name__icontains=' ' + search_query)
+            )
+        return queryset
+
+    def get_queryset(self):
+        customer_id = self.kwargs.get('customer_id')
+        customer = get_object_or_404(customerModels.Profile, uuid=customer_id)
+        queryset = customerModels.User.objects.filter(customer=customer).order_by('created_at')
+        queryset = self.search_query(queryset)
+        for user in queryset:
+            user.app_permissions = customerModels.UserAppPermissions.objects.filter(user=user)
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customer_id = self.kwargs.get('customer_id')
+        customer = get_object_or_404(customerModels.Profile, uuid=customer_id)
+        context['title'] = f'{self.title} for {customer.official_name}'
+        context['active_tab'] = self.active_tab
+        context['customer_id'] = customer_id
+        return context
 
 @method_decorator(login_required, name='dispatch')
 class UserCreateView(View):

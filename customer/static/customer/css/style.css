@@ -121,3 +121,57 @@
   .step-name {
     color: #8f9091;
   }
+
+  /* Collaborators container */
+
+  .card-collaborators {
+    width: 100%;
+    border: 1px solid #e6e6e6;
+  }
+  .card-collaborators .card-body {
+    padding: 1rem;
+  }
+
+  .card-collaborators .actions-select i {
+    color:#8f9091;
+    font-size: 1.2rem;
+  }
+
+  .card-collaborators .actions-select:hover i {
+    color: #000000;
+  }
+  
+  .card-collaborators .collaborators-details span {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .card-collaborators .accordion .accordion-item {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+  }
+  
+  .card-collaborators .accordion .accordion-body {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 0;
+  }
+
+  .card-collaborators .accordion .accordion-item:first-of-type {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .card-collaborators .accordion .accordion-button:not(.collapsed) {
+    color: black; 
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .card-collaborators .accordion-item:first-of-type .accordion-button {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+  }
+  .card-collaborators .accordion-button:focus {
+      border-color:transparent;
+  }
