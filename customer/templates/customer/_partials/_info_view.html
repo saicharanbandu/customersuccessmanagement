@@ -11,7 +11,7 @@
         </div>
         <div>
             <label>SAAS Name</label>
-            {{ customer.official_name }}
+            {{ customer.official_name | default_if_none:"--" }}
         </div>
     </div>
 
@@ -21,7 +21,7 @@
         </div>
         <div>
             <label>Display Name</label>
-            {{ customer.display_name }}
+            {{ customer.display_name | default_if_none:"--" }}
         </div>
     </div>
 
@@ -31,7 +31,7 @@
         </div>
         <div>
             <label>Short Name or Abbreviation (30 characters)</label>
-            {{ customer.sms_name }}
+            {{ customer.sms_name | default_if_none:"--" }}
         </div>
     </div>
 
@@ -55,7 +55,7 @@
         </div>
         <div>
             <label>Email</label>
-            {{ customer.prospect.email }}
+            {{ customer.prospect.email | default_if_none:"--" }}
         </div>
     </div>
 
@@ -65,7 +65,7 @@
         </div>
         <div>
             <label>Website</label>
-            {{ customer.prospect.website }}
+            {{ customer.prospect.website | default_if_none:"--"  }}
         </div>
     </div>
 
@@ -75,7 +75,7 @@
         </div>
         <div>
             <label>Denomination</label>
-            {{ customer.prospect.denomination }}
+            {{ customer.prospect.denomination | default_if_none:"--"  }}
         </div>
     </div>
 
@@ -85,7 +85,7 @@
         </div>
         <div>
             <label>Congregation</label>
-            {{ customer.prospect.congregation }}
+            {{ customer.prospect.congregation | default_if_none:"--" }}
         </div>
     </div>
 </div>

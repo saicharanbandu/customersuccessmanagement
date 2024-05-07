@@ -12,12 +12,11 @@ urlpatterns = [
     path('<uuid:customer_id>/user/create/', customerViews.OnboardingUserView.as_view(), name='onboard-user-create'),
     path('<uuid:customer_id>/user/create/next/', customerViews.OnboardingUserView.as_view(), name='onboard-user-create-next'),
 
-    path('<uuid:customer_id>/user/s', customerViews.CustomerUsersView.as_view(), name='users'),
+    path('<uuid:customer_id>/user/s', customerViews.CustomerCollaboratorsView.as_view(), name='users'),
     path('<uuid:customer_id>/collaborators/add', customerViews.AddCollaboratorView.as_view(), name='add-collaborator'),
     path('<uuid:customer_id>/collaborators/edit/<uuid:collaborator_id>', customerViews.EditCollaboratorView.as_view(), name='edit-collaborator'),
     
     path('<uuid:customer_id>/collaborators/delete/<uuid:collaborator_id>', customerActions.delete_collaborator, name='delete-collaborator'),
-    path('<uuid:customer_id>/user/create/more/', customerViews.UserCreateView.as_view(), name='user-create'),
 
     path('<uuid:customer_id>/plan/update/', customerViews.ChangePlanView.as_view(), name='plan-update'),
 
@@ -31,8 +30,5 @@ urlpatterns = [
 
     path("<uuid:customer_id>/delete/", customerActions.delete_customer, name="delete"),
     path('ajax/plan-options/', customerActions.get_plan_options, name='get-plan-options'),
-
-    path('calendar', customerViews.CalendarSample.as_view(), name='sample'),
-
 
 ]   

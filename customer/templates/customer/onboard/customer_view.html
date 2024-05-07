@@ -50,7 +50,7 @@
         <form class="forms-sample border-top py-5" action="{% url 'customer:onboard-customer' customer.uuid %}" method="POST"
           enctype="multipart/form-data">
           {% csrf_token %}
-          {% include 'customer/profile_form.html' with customer_profile_form=customer_profile_form profile=profile %}
+          {% include 'customer/_partials/_profile_form.html' with customer_profile_form=customer_profile_form profile=profile %}
 
           <div class="text-end">
             <a href="{% url 'customer:list' %}" type="button" class="btn btn-outline-primary">Cancel</a>
