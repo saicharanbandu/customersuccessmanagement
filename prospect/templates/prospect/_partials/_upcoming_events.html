@@ -1,44 +1,39 @@
 <section class="main">
     <section class="upcoming-events">
-    <div>
-        <p style="font-size: 1.5em; color: #1c265a;">
-            <b>Upcoming Events</b>
+        <h3 class="card-title">
+            Upcoming Events
+        </h3>
+        <p class="card-description">
+            Meetings scheduled with prospects:
         </p>
-        <p style="margin-top: -1em; color: #a7b2d3;">
-            See your products in our timeline:
-        </p>
-        <section>
-        {% for event in month_events %}
-            <a 
-                data-id="meeting-{{event.prospect.uuid}}" 
-                tabindex="0" 
-                class="event-highlight calendar-status-{{ event.status }} trigger-popover" 
-                role="button" 
+        <div>
+            {% for event in month_events %}
+            <a data-id="meeting-{{event.prospect.uuid}}" tabindex="0"
+                class="event-highlight calendar-status-meeting popover-dismiss" role="button"
+                data-bs-trigger="focus"
                 data-bs-toggle="popover"
-                data-bs-title="Meeting Schedule" 
-                data-bs-content=`popover-content-meeting-{{event.date|date:"j"}}`
-            >
+                data-bs-content="{{event.prospect.name}}"
+                data-bs-title="Prospect"
+                data-bs-animation="true">
                 <div class="event-date">
                     <div class="event-weekday">{{event.date|date:"D"}}</div>
                     <span class="event-day">{{event.date|date:"d"}}</span>
                 </div>
                 <div class="event-details">
-                    <p class="event-details-header">{{event.status|title}}</p>
+                    <p class="event-details-header">{{event.prospect.name}}</p>
                     {% if event.date %}
-                    <p class="event-details-info"><span class="mdi mdi-calendar-month-outline"></span> {{event.date|date:'D, d M, Y'}} </p>
+                    <p class="event-details-info"><span class="mdi mdi-calendar-month-outline"></span>
+                        {{event.date|date:'D, d M, Y'}} </p>
                     {% endif %}
+                    <p class="event-details-info"><span class="mdi mdi-clock-outline"></span>
                     {% if event.time %}
-                    <p class="event-details-info"><span class="mdi mdi-clock-outline"></span> {{event.time| date:'h:i A'}} </p>
+                        {{event.time| date:'h:i A'}} </p>
+                    {% else %}
+                        --:--
                     {% endif %}
-                    <p class="arrow">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                        </svg></p>
                 </div>
             </a>
-        {% endfor %}
-        </section>
+            {% endfor %}
+        </div>
     </section>
 </section>

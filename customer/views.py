@@ -1,6 +1,6 @@
 # Dango Imports
 from django.db.models import Q
-from django.forms import modelformset_factory,formset_factory
+from django.forms import formset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -13,6 +13,7 @@ from django.utils import timezone
 from decimal import Decimal
 
 from uuid import UUID
+
 # Project Imports
 from . import models as customerModels, forms as customerForms
 from prospect import models as prospectModels, forms as prospectForms
@@ -23,8 +24,8 @@ from tabernacle_customer_success import constants, helper
 
 
 @method_decorator(login_required, name='dispatch')
-class CustomerOnboardingView(View):
-    template_name = 'customer/onboard_customer_view.html'
+class OnboardingCustomerView(View):
+    template_name = 'customer/onboard/customer_view.html'
     title = 'Onboarding'
     active_tab = 'customer'
     
@@ -76,7 +77,7 @@ class CustomerOnboardingView(View):
 
 @method_decorator(login_required, name='dispatch')
 class OnboardingPlanView(View):
-    template_name = 'customer/onboard_select_plan.html'
+    template_name = 'customer/onboard/select_plan.html'
     title = 'Select Plan'
     active_tab = 'customer'
 
@@ -294,7 +295,7 @@ class CustomerEditView(View):
 @method_decorator(login_required, name='dispatch')
 class OnboardingUserView(View):
     model = customerModels.User
-    template_name = 'customer/onboard_user_view.html'
+    template_name = 'customer/onboard/user_view.html'
     title = 'Collaborator Information'
     active_tab = 'customer'
 

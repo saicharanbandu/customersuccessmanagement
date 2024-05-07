@@ -30,7 +30,7 @@
     </div>
     <div>
       <label for="{{ form.email.id_for_label }}">Email</label>
-      {{ prospect.email }}
+      {{ prospect.email | default_if_none:"--" }}
     </div>
   </div>
 
@@ -40,7 +40,7 @@
     </div>
     <div>
       <label for="{{ form.website.id_for_label }}">Website</label>
-      {{ prospect.website }}
+      {{ prospect.website | default_if_none:"--" }}
     </div>
   </div>
 
@@ -50,7 +50,7 @@
     </div>
     <div>
       <label for="{{ form.denomination.id_for_label }}">Denomination</label>
-      {{ prospect.denomination }}
+      {{ prospect.denomination | default_if_none:"--" }}
     </div>
   </div>
 
@@ -60,7 +60,7 @@
     </div>
     <div>
       <label for="{{ form.congregation.id_for_label }}">Congregation</label>
-      {{ prospect.congregation }}
+      {{ prospect.congregation | default_if_none:"--" }}
     </div>
   </div>
 </div>

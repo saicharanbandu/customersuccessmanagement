@@ -48,16 +48,16 @@
 .row-weekdays .calendar-day {
     border-radius: 50%;
     margin-top: 0.5rem;
-    padding: 0.3rem;
+    padding: 0.4rem 0.65rem;
 }
 .row-weekdays .current-day .calendar-day {
-    background-color: #0748be;
+    background-color: #9a55ff;
     color: white;
 }
 .main .day-container{
     height: 100%;
     text-align: center;
-    padding: 0.5rem 0.2rem;
+    padding: 1rem 0;
 }
 
 .main {
@@ -83,30 +83,9 @@
 .main .calendar-events > div {
     padding: 0.2rem 0.2rem;
 }
-.main .calendar-events > div.calendar-status-initiated {
-    background-color: #565656;
-    border-radius: 6px;
-}
+
 .main .calendar-events > div.calendar-status-meeting {
-    /* background-color: #11047a; */
     background: linear-gradient(to right, #da8cff, #9a55ff);
-    border-radius: 5px;
-}
-.main .calendar-events > div.calendar-status-rejected {
-    background-color: #f80808;
-    border-radius: 5px;
-}
-.main .calendar-events > div.calendar-status-accepted {
-    background-color: #01b574;
-    border-radius: 5px;
-}
-.main .calendar-events > div.calendar-status-trial {
-    background-color: #0748be;
-    border-radius: 5px;
-}
-.main .calendar-events > div.calendar-status-awaiting {
-    background-color: #ff6500;
-    border-radius: 5px;
 }
 
 
@@ -124,7 +103,7 @@
     flex-direction: row;
     width: 100%;
     margin: 0.5em 0 0.5em 0;
-    padding: 0.3rem;
+    padding: 0.75rem;
     border: none;
     border-radius: 1em;
 }
@@ -135,41 +114,48 @@
     height: var(--size);
     display: block;
     align-content: baseline;
-    color: #000050;
+    color: #343a40;
     text-align: center;
-    background-color: #f4f7fe;
+    background-color: #f2edf3;
     border-radius: 0.8em;
     padding: 0.5rem;
 }
-/* .main .event-highlight:hover {
-    background-color: #11047a;
-}
-.main .event-highlight:hover .event-date {
-    background-color: #3311db;
-    color: #ffffff;
-}
-.main .event-highlight:hover .event-details-header,
-.main .event-highlight:hover .event-details-info,
-.main .event-highlight:hover .arrow  {
-    color: #ffffff;
-} */
 
-/* .main .event-highlight:hover .event-date {
-    background-color: #3311db;
-    color: #ffffff;
-} */
-.main .event-highlight.calendar-status-meeting:hover .event-date {
-    background: linear-gradient(to right, #da8cff, #9a55ff);
+.main .event-highlight.calendar-status-meeting:hover .event-date,
+.main .event-highlight[aria-describedby] .event-date{
+    background: #9a55ff;
     color: #ffffff;
 }
 .main .event-highlight[aria-describedby] .event-date {
-    background: linear-gradient(to right, #da8cff, #9a55ff);
+    /* background: linear-gradient(to right, #da8cff, #9a55ff); */
     color: #ffffff;
     transform: 0.3s ease-in-out;
 }
-.main .event-highlight:hover {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+.main .event-highlight:hover, .main .event-highlight[aria-describedby] {
+    color: #ffffff;
+    background: linear-gradient(to right, #da8cff, #9a55ff);
+    transform: 0.3s ease-in-out;
 }
+
+.main .event-date {
+    width: 25%;
+}
+.main .event-details {
+    width: 75%;
+}
+
+.main .event-details-header {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.main .event-highlight:hover .event-details-info, .main .event-highlight:hover .event-details-header,
+.main .event-highlight[aria-describedby] .event-details-info, .main .event-highlight[aria-describedby] .event-details-header{
+    color: #ffffff;
+    transform: 0.3s ease-in-out;
+}
+
 .main .event-highlight:active {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1.3px 3.3px, rgba(0, 0, 0, 0.24) 0px 1.3px 2.3px;
 }
@@ -178,9 +164,6 @@
 }
 .main .event-highlight[aria-describedby] .arrow {
     right: 5px;
-}
-.main .event-highlight[aria-describedby] {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1.3px 3.3px, rgba(0, 0, 0, 0.24) 0px 1.3px 2.3px;
 }
 
 .main .event-date .event-weekday {
@@ -205,7 +188,7 @@
 }
 
 .main .event-details-header {
-    color: #000000;
+    color: #343a40;
     font-weight: 600;
     text-align: left;
     margin: 0.2em 0 0 1em;
@@ -226,15 +209,14 @@
 
 .event-details .arrow {
     position: absolute;
-    bottom: -15px;
     right: 10px;
-    color: #000000;
-    transition: right 0.2s ease-out;
+    color: #343a40;
 }
 
 .main .trailing-month {
     color: #c0c7df;
 }
+
 
 .popover {
     max-width: 250px;
@@ -243,12 +225,7 @@
 }
 .popover-header {
     background: linear-gradient(to right, #da8cff, #9a55ff);
-    color: #e7e7e7;
-    font-size: 1.1rem;
-}
-.popover-body {
-    width: 100%;
-    padding: 0.5rem 1rem;
+    color: #ffffff;
 }
 .popover-body .row.align-items-baseline{
     padding: 0;
