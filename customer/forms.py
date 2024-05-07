@@ -37,7 +37,7 @@ class CustomerPlanForm(forms.ModelForm):
 
 class SubscriptionPlanOptionsForm(forms.Form):
     plan = forms.ModelChoiceField(
-        queryset=planModels.Tariff.objects.all(),
+        queryset=planModels.Tariff.objects.all().order_by('lower_limit'),
         widget=forms.RadioSelect(attrs={'class': 'radio'}),
     )
     is_yearly = forms.BooleanField(
