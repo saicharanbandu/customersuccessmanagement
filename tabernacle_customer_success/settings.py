@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'contact',
     'misc',
     'debug_toolbar',
+    'revenue',
+    'usage',
 ]
 
 MIDDLEWARE = [

@@ -30,6 +30,9 @@ urlpatterns = [
     path("plan/", include("plan.urls")),
     path("prospect/", include("prospect.urls")),
     path('user/',include('user.urls')),
+    path('revenue/',include('revenue.urls')),
+    path('usage/',include('usage.urls')),
+
     path("__debug__/", include("debug_toolbar.urls")),
     # path('', RedirectView.as_view(pattern_name='customer:list')),
 ]

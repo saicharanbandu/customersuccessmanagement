@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'revenue/css/style.css' %}">
+{% endblock %}
+
+{% block page_title %}
+<span class="page-title-icon bg-gradient-primary text-white me-2">
+  <i class="mdi mdi-bullseye"></i>
+</span>
+{{ title }}
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'revenue/js/app.js' %}"></script>
+{% endblock scripts %}
+
+{% block content %}
+<div class="row">
+
+</div>
+{% endblock %}

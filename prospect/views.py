@@ -17,6 +17,7 @@ from customer import models as customerModels
 
 from datetime import date, timedelta
 from django.db.models import Max
+
 @method_decorator(login_required, name='dispatch')
 class ProspectDashboardView(View):
     template_name = 'prospect/overview_view.html'
