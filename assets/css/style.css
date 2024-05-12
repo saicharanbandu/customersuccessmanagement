@@ -21335,5 +21335,10 @@ dl li {
   -ms-flex-positive: 1;
   flex-grow: 1;
 }
-
+.spacing{
+  padding: 60px;
+  border-radius: 10px;
+  width: 90%;
+  margin: 20px;
+}
 /*# sourceMappingURL=style.css.map */

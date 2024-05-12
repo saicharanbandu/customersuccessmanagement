@@ -1,21 +1,39 @@
-{% extends "account/base_manage_email.html" %}
+{% extends "base.html" %}
+{% load static %}
 {% load allauth i18n %}
 {% block head_title %}
     {% trans "Email Addresses" %}
 {% endblock head_title %}
 {% block content %}
-    {% element h1 %}
-        {% trans "Email Addresses" %}
-    {% endelement %}
-    {% if emailaddresses %}
-        <p>{% trans 'The following email addresses are associated with your account:' %}</p>
+    <!--Title and breadcrumbs area-->
+    <div class="row">
+        <div class="col order-md-first">
+            <h3>Email Addresses</h3>
+            <p class="text-subtitle text-muted">
+                The following email addresses are associated with your account:
+            </p>
+        </div>
+        <div class="col order-md-last">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Email</li>
+                    </ol>
+                </nav>
+        </div>
+    </div>
+    <div class=" bg-white"  style ="padding: 60px;
+                                border-radius: 10px;
+                                width: 90%;
+                                margin: 20px;">
+        {% if emailaddresses %}
         {% url 'account_email' as email_url %}
         {% element form form=form action=email_url method="post" %}
             {% slot body %}
                 {% csrf_token %}
                 {% for radio in emailaddress_radios %}
                     {% with emailaddress=radio.emailaddress %}
-                        {% element field type="radio" checked=radio.checked name="email" value=emailaddress.email id=radio.id %}
+                    {% element field type="radio" checked=radio.checked name="email" value=emailaddress.email id=radio.id %}
                             {% slot label %}
                                 {{ emailaddress.email }}
                                 {% if emailaddress.verified %}
@@ -37,41 +55,41 @@
                     {% endwith %}
                 {% endfor %}
             {% endslot %}
-            {% slot actions %}
-                {% element button type="submit" name="action_primary" %}
-                    {% trans 'Make Primary' %}
-                {% endelement %}
-                {% element button tags="secondary" type="submit" name="action_send" %}
-                    {% trans 'Re-send Verification' %}
-                {% endelement %}
-                {% element button tags="danger,delete" type="submit" name="action_remove" %}
-                    {% trans 'Remove' %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
-    {% else %}
-        {% include "account/snippets/warn_no_email.html" %}
-    {% endif %}
-    {% if can_add_email %}
-        {% element h2 %}
-            {% trans "Add Email Address" %}
-        {% endelement %}
-        {% url 'account_email' as action_url %}
-        {% element form form=form method="post" action=action_url %}
-            Hoi bef bod
+            
+                {% slot actions %}
+                    <button name="action_primary" type="submit" class="btn btn-primary me-1 mb-5">
+                        Make Primary
+                    </button>
+                    <button name="action_send" type="submit"  class="btn btn-secondary me-1 mb-5">
+                        Re-send Verification
+                    </button>
+                    <button name="action_remove" type="submit"  class="btn btn-light-tertiary me-1 mb-5">
+                        Remove
+                    </button>
+                {% endslot %}
+            {% endelement %}
+        {% else %}
+            {% include "account/snippets/warn_no_email.html" %}
+        {% endif %}
+        {% if can_add_email %}
+            <h4 class="mb-4">Add Email Address</h4>
+            {% url 'account_email' as action_url %}
+            {% element form form=form method="post" action=action_url %}
             {% slot body %}
                 {% csrf_token %}
-                {% element fields form=form %}
-                {% endelement %}
+                    <div class="form-group position-relative mb-3">
+                    <label for="id_email" style="display: block;">Email:</label>
+                    <input class="form-control" type="email" name="email" placeholder="Email address" aria-invalid="true" autocomplete="email" maxlength="320" required="" id="id_email">
+                </div>  
             {% endslot %}
-            befac
             {% slot actions %}
-                {% element button name="action_add" type="submit" %}
-                    {% trans "Add Email" %}
-                {% endelement %}
+                <button name="action_add" type="submit"  class="btn btn-primary me-1 mb-1">
+                Add Email
+                </button>
             {% endslot %}
-        {% endelement %}
-    {% endif %}
+            {% endelement %}
+        {% endif %}
+    </div>
 {% endblock content %}
 {% block extra_body %}
     <script type="text/javascript">
