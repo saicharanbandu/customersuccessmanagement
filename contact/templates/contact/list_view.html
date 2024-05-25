@@ -20,30 +20,39 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-lg-12 grid-margin stretch-card">
+<div class="row mb-3">
+  <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
         <div class="row">
-          <div class="col-8 col-lg-6">
-            <form class="w-auto" method="GET" action="{% url 'contact:list' %}">
+          <div class="col-12 col-lg-8 d-flex align-items-center">
+            
+            <form class="d-flex w-100" method="GET" action="{% url 'contact:list' %}">
               <div class="input-group">
-                <input type="search" class="form-control" placeholder="Search" name="search"
-                  value="{{ request.GET.search }}">
+                <input type="search" class="form-control" placeholder="Search" name="search" value="{{ request.GET.search }}">
                 <button type="submit" class="btn btn-sm btn-light">
                   <i class="mdi mdi-magnify"></i>
                 </button>
               </div>
+              <div class="input-group ms-2">
+                <select name="sort" class="form-select form-select-sm" onchange="this.form.submit();">
+                  <option value="">Sort</option>
+                  {% for key, value in sort_options.items %}
+                    <option value="{{ key }}" {% if key == request.GET.sort %}selected{% endif %}>{{ value }}</option>
+                  {% endfor %}
+                </select>
+              </div>
             </form>
           </div>
-          <div class="col-4 col-lg-6">
-            <a href="{% url 'contact:create' %}" class="btn btn-gradient-primary float-end">
+          <div class="col-12 col-lg-4 text-end">
+            <a href="{% url 'contact:create' %}" class="btn btn-gradient-primary">
               <i class="mdi mdi-plus me-2"></i>
               New contact
             </a>
           </div>
         </div>
-        <table class="table table-hover mt-3">
+
+        <table class="table table-hover">
           <thead>
             <tr>
               <th class="sl-col table-photo">#</th>
@@ -95,6 +104,7 @@
                 <a href="{% url 'contact:edit' contact.uuid %}" data-bs-toggle="tooltip" data-bs-placement="top"
                   title="Edit contact">
                   <i class="mdi mdi-pencil"></i>
+                </a>
               </td>
             </tr>
             {% endfor %}

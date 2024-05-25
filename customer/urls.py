@@ -13,7 +13,7 @@ urlpatterns = [
     path('<uuid:customer_id>/user/add/', customerViews.AnotherUserCreateView.as_view(), name='user-add'),
 
     path('<uuid:customer_id>/info/update/', customerViews.CustomerEditView.as_view(), name='update-info'),
-
+    path('<uuid:customer_id>/record_payment/', customerViews.PaymentView.as_view(), name='record-payment'),
     path('<uuid:prospect_id>/crm/update/', customerActions.update_customer_success_manager, name='update-csm-ajax'),
 
     path('<uuid:customer_id>/info/', customerActions.get_customer_info, name='get-customer-info'),

@@ -127,11 +127,13 @@ class PaymentHistory(models.Model):
         on_delete=models.CASCADE,
     )
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    payment_date = models.DateTimeField()
-    due_date = models.DateTimeField()
-    invoice_no = models.CharField(max_length=25, null=True, blank=True)
+    payment_date = models.DateField()
+    due_date = models.DateField()
+    invoice_no = models.CharField(max_length=25,null=True)
+    receipt_no = models.CharField(max_length=25,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    remarks=models.CharField(max_length=255,null=True, blank=True)
 
     def __str__(self):
         return f"{self.customer.legal_name} | {self.payment_date}"

@@ -8,29 +8,51 @@ from django.forms import formset_factory, modelformset_factory
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-
+from .filters import ProfileFilter
 from django.db.models import Q
 from customer import models as customerModels
 
 @method_decorator(login_required, name='dispatch')
 class ProspectsListView(ListView):
-    template_name = 'prospect/list_view.html'
-    title = 'Prospect List'
-    active_tab = 'prospect'
     model = prospectModels.Profile
     context_object_name = 'prospects'
+    template_name = 'prospect/list_view.html'
+    filterset_class = ProfileFilter
+    title="Prospect List"
+    active_tab="prospect"
 
     def get_queryset(self):
         queryset = super().get_queryset()
         search_query = self.request.GET.get('search')
+        sort = self.request.GET.get("sort", "")
+        status = self.request.GET.get("status", "")
+        print("Status:", status)
         if search_query:
             queryset = queryset.filter(
-                (
-                    Q(name__istartswith=search_query)
-                    | Q(name__icontains=' ' + search_query)
-                )
+                Q(name__istartswith=search_query) |
+                Q(name__icontains=' ' + search_query)
             )
-        return queryset.order_by('name')
+        if status:
+            print("Filtering queryset by status:", status)
+            queryset = queryset.filter(status=status)
+
+        if sort:
+            if sort == "name_asc":
+                print("a-z")
+                queryset = queryset.order_by("name")
+            elif sort == "name_desc":
+                print("z-a")
+                queryset = queryset.order_by("-name")
+            elif sort == "crm_name_asc":
+                queryset = queryset.order_by("-created_at")
+            elif sort == "crm_name_desc":
+                queryset = queryset.order_by("created_at")
+            elif sort == "updated_newest":
+                queryset = queryset.order_by("-updated_at")
+            elif sort == "updated_oldest":
+                queryset = queryset.order_by("updated_at")
+        return queryset
+        
 
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)
@@ -41,11 +63,21 @@ class ProspectsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        more_context = {
-            'title': self.title,
-            'active_tab': self.active_tab,
+        sort_options = {
+            "name_asc": "Customer Name (A-Z)",
+            "name_desc": "Customer Name (Z-A)",
+            "crm_name_asc": "CRM Name (A-Z)",
+            "crm_name_desc": "CRM Name (Z-A)",
+            "updated_newest": "Record Updated (Newest First)",
+            "updated_oldest": "Record Updated (Oldest First) ",
         }
-        context.update(more_context)
+        filter_form = ProfileFilter(self.request.GET, queryset=self.get_queryset())
+        context.update({
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "sort_options": sort_options,
+            "prospect_filter": filter_form,
+        })
         return context
 
 

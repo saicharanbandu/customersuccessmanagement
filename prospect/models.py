@@ -35,7 +35,7 @@ class Profile(models.Model):
     
     remarks = models.TextField( blank=True, null=True, verbose_name="Remarks")
 
-    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES, null=True)
+    status = models.CharField(max_length=55, choices=constants.PROSPECT_STATUS_CHOICES, null=False)
 
     manager = models.ForeignKey(
         settings.AUTH_USER_MODEL,

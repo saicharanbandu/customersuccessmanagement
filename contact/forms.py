@@ -13,6 +13,8 @@ class ContactForm(forms.ModelForm):
         widgets = {
             'created_by': forms.HiddenInput(),
             'updated_by': forms.HiddenInput(),
+            'created_at': forms.HiddenInput(),
+            'updated_at': forms.HiddenInput(),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'designation': forms.TextInput(attrs={'class': 'form-control'}),
             'organization': forms.TextInput(
