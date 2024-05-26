@@ -76,20 +76,9 @@ class ContactListView(ListView):
 
 
         if sort:
-            if sort == "name_asc":
-                print("a-z")
-                queryset = queryset.order_by("name")
-            elif sort == "name_desc":
-                print("z-a")
-                queryset = queryset.order_by("-name")
-            elif sort == "created_newest":
-                queryset = queryset.order_by("-created_at")
-            elif sort == "created_oldest":
-                queryset = queryset.order_by("created_at")
-            elif sort == "updated_newest":
-                queryset = queryset.order_by("-updated_at")
-            elif sort == "updated_oldest":
-                queryset = queryset.order_by("updated_at")
+            sort_field = constants.contact_sort_options.get(sort, '')
+            if sort_field:
+                queryset = queryset.order_by(sort_field)
         return queryset
 
     def get_paginate_by(self, queryset):
@@ -100,19 +89,12 @@ class ContactListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        sort_options = {
-            "name_asc": "Customer Name (A-Z)",
-            "name_desc": "Customer Name (Z-A)",
-            "created_newest": "Contact Created (Newest First)",
-            "created_oldest": "Contact Created (Oldest First)",
-            "updated_newest": "Contact Updated (Newest First)",
-            "updated_oldest": "Contact Updated (Oldest First) ",
-        }
+        
         filter_form = ContactFilter(self.request.GET, queryset=self.get_queryset())
         context.update({
             "title": self.title,
             "active_tab": self.active_tab,
-            "sort_options": sort_options,
+            "sort_options": constants.contact_sort_options,
             "contact_filter": filter_form,
         })
         return context

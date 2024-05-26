@@ -31,7 +31,7 @@
                 <select name="sort" class="form-select form-select-sm" onchange="this.form.submit();">
                   <option value="">Sort</option>
                   {% for key, value in sort_options.items %}
-                    <option value="{{ key }}" {% if key == request.GET.sort %}selected{% endif %}>{{ value }}</option>
+                    <option value="{{ key }}" {% if key == request.GET.sort %}selected{% endif %}>{{ key }}</option>
                   {% endfor %}
                 </select>
               </div>

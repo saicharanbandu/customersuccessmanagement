@@ -108,32 +108,22 @@ class ProspectListView(ListView):
     def search_query(self, queryset):
         search_query = self.request.GET.get('search')
         sort = self.request.GET.get("sort", "")
-        status = self.request.GET.get("status", "")
-        print("Status:", status)
+        status = self.request.GET.getlist("status")
+        print("Sort:", sort)
         if search_query:
             queryset = queryset.filter(
                 Q(name__istartswith=search_query) |
                 Q(name__icontains=' ' + search_query)
             )
         if status:
-            print("Filtering queryset by status:", status)
-            queryset = queryset.filter(status=status)
+            filter_form = self.filterset_class(self.request.GET, queryset=queryset)
+            queryset = filter_form.qs 
 
         if sort:
-            if sort == "name_asc":
-                print("a-z")
-                queryset = queryset.order_by("name")
-            elif sort == "name_desc":
-                print("z-a")
-                queryset = queryset.order_by("-name")
-            elif sort == "crm_name_asc":
-                queryset = queryset.order_by("-created_at")
-            elif sort == "crm_name_desc":
-                queryset = queryset.order_by("created_at")
-            elif sort == "updated_newest":
-                queryset = queryset.order_by("-updated_at")
-            elif sort == "updated_oldest":
-                queryset = queryset.order_by("updated_at")
+            sort_field = constants.PROSPECT_SORT_CHOICES.get(sort, '')
+            if sort_field:
+                queryset = queryset.order_by(sort_field)
+        
         return queryset
     
     def get_queryset(self):
@@ -158,20 +148,13 @@ class ProspectListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        sort_options = {
-            "name_asc": "Customer Name (A-Z)",
-            "name_desc": "Customer Name (Z-A)",
-            "crm_name_asc": "CRM Name (A-Z)",
-            "crm_name_desc": "CRM Name (Z-A)",
-            "updated_newest": "Record Updated (Newest First)",
-            "updated_oldest": "Record Updated (Oldest First) ",
-        }
         filter_form = ProfileFilter(self.request.GET, queryset=self.get_queryset())
         context.update({
             "title": self.title,
             "active_tab": self.active_tab,
-            "sort_options": sort_options,
+            "sort_options":constants.PROSPECT_SORT_CHOICES,
             "prospect_filter": filter_form,
+            "status_list": self.request.GET.getlist("status"),
         })
         return context
 

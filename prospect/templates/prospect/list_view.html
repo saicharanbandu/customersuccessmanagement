@@ -31,22 +31,37 @@
                   <i class="mdi mdi-magnify"></i>
                 </button>
               </div>
-              <div class="input-group ms-2">
-                <select name="status" class="form-select form-select-sm" onchange="this.form.submit();">
-                  <option value="">Status</option>
+              <div class="dropdown me-2">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  Status
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                  <li>
+                    <div class="form-check ms-3">
+                      <input class="form-check-input" type="checkbox" name="status" value="all" id="selectAllStatus" onclick="this.form.submit();" {% if 'status' in request.GET %}checked{% endif %}>
+                      <label class="form-check-label" for="selectAllStatus">Select All</label>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
                   {% for key, value in prospect_filter.form.fields.status.choices %}
-                    <option value="{{ key }}" {% if key == request.GET.status %}selected{% endif %}>{{ value }}</option>
+                  <li>
+                    <div class="form-check ms-3">
+                      <input class="form-check-input" type="checkbox" name="status" value="{{ key }}" id="status{{ key }}" {% if key in status_list %}checked{% endif %} onclick="this.form.submit();">
+                      <label class="form-check-label" for="status{{ key }}">{{ value }}</label>
+                    </div>
+                  </li>
                   {% endfor %}
-                </select>
+                </ul>
               </div>
               <div class="input-group ms-2">
                 <select name="sort" class="form-select form-select-sm" onchange="this.form.submit();">
                   <option value="">Sort</option>
                   {% for key, value in sort_options.items %}
-                    <option value="{{ key }}" {% if key == request.GET.sort %}selected{% endif %}>{{ value }}</option>
+                    <option value="{{ key }}" {% if key == request.GET.sort %}selected{% endif %}>{{ key }}</option>
                   {% endfor %}
                 </select>
               </div>
+            
             </form>
           </div>
           <div class="col-12 col-lg-4 text-end">

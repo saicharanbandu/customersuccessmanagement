@@ -38,10 +38,17 @@ PROSPECT_STATUS_CHOICES = [
     (REJECTED, 'Responded No'),
 ]
 
-
-PROSPECT_SORT_CHOICES = [
-    ('name', 'Name (A-Z)'),
-    ('-name', 'Name (Z-A)'),
-    ('-updated_at', 'Record Updated (Newest First)'),
-    ('updated_at', 'Record Updated (Oldest First)'),
-]
+contact_sort_options = {
+            "Customer Name (A-Z)": "name",
+            "Customer Name (Z-A)": "-name",
+            "Contact Created (Newest First)": "created_at",
+            "Contact Created (Oldest First)": "-created_at",
+            "Contact Updated (Newest First)": "-updated_at",
+            "Contact Updated (Oldest First)": "updated_at",
+        }
+PROSPECT_SORT_CHOICES = {
+    "Name (A-Z)": "name",
+    "Name (Z-A)": "-name",
+    "Record Updated (Newest First)": "-updated_at",
+    "Record Updated (Oldest First)": "updated_at",
+}
