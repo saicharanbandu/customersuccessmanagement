@@ -12,6 +12,7 @@ AWAITING = 'awaiting'
 MEETING_SCHEDULED = 'meeting scheduled'
 INITIATED = 'initiated'
 TRIAL = 'trial'
+SELECT_ALL='all'
 EXPIRY = 'expiry'
 CASH = 'cash'
 ONLINE = 'online'
@@ -30,6 +31,7 @@ PAYMENT_MODE_CHOICES = [(CASH, 'Cash'), (ONLINE, 'Online'), (BANK_TRANSFER, 'Ban
 PAYMENT_STATUS_CHOICES = [(PAID, 'Paid'), (PENDING, 'Payment due later')]
 
 PROSPECT_STATUS_CHOICES = [
+    (SELECT_ALL,'Select All'),
     (INITIATED, 'First Call'),
     (MEETING_SCHEDULED, 'Meeting Scheduled'),
     (AWAITING, 'Awaiting Response'),

@@ -14,9 +14,16 @@ class ProfileFilter(django_filters.FilterSet):
 
     def filter_by_all(self, queryset, name, value):
         return queryset.filter(Q(name__icontains=value))
+    
     def filter_status(self, queryset, name, value):
-        if value=="all":
+        print(value)
+        if value[0]=="all":
             return queryset
         else:
             queryset = queryset.filter(status__in=value)
+            return queryset
+    def filter_by_order(self, queryset, name, value):
+        sort_field = constants.PROSPECT_SORT_CHOICES.get(value, '')
+        if sort_field:
+            queryset = queryset.order_by(sort_field)
         return queryset

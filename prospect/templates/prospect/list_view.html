@@ -36,12 +36,12 @@
                   Status
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-                  <li>
+                  {% comment %} <li>
                     <div class="form-check ms-3">
-                      <input class="form-check-input" type="checkbox" name="status" value="all" id="selectAllStatus" onclick="this.form.submit();" {% if 'status' in request.GET %}checked{% endif %}>
+                      <input class="form-check-input" type="checkbox" name="select_all_status" value="all" id="selectAllStatus" onclick="this.form.submit();" {% if 'select_all_status' in request.GET %}checked{% endif %}>
                       <label class="form-check-label" for="selectAllStatus">Select All</label>
                     </div>
-                  </li>
+                  </li> {% endcomment %}
                   <li><hr class="dropdown-divider"></li>
                   {% for key, value in prospect_filter.form.fields.status.choices %}
                   <li>

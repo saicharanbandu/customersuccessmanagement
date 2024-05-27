@@ -689,8 +689,9 @@ class PaymentView(View):
 
     def get(self, request, customer_id, *args, **kwargs):
         customer = get_object_or_404(customerModels.Profile, uuid=customer_id)
-        customer1 = get_object_or_404(customerModels.PaymentHistory, customer=customer_id)
-        payment_form = customerForms.PaymentHistoryForm(initial={'created_by': request.user})
+        print(customer)
+        payment_form = customerForms.PaymentHistoryForm(instance=customer,initial={'created_by': request.user})
+        print(payment_form)
         
         context = {
             "title": self.title,

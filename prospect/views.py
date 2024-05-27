@@ -107,23 +107,19 @@ class ProspectListView(ListView):
 
     def search_query(self, queryset):
         search_query = self.request.GET.get('search')
-        sort = self.request.GET.get("sort", "")
+        
         status = self.request.GET.getlist("status")
-        print("Sort:", sort)
+        
         if search_query:
             queryset = queryset.filter(
                 Q(name__istartswith=search_query) |
                 Q(name__icontains=' ' + search_query)
             )
         if status:
+            
             filter_form = self.filterset_class(self.request.GET, queryset=queryset)
+            
             queryset = filter_form.qs 
-
-        if sort:
-            sort_field = constants.PROSPECT_SORT_CHOICES.get(sort, '')
-            if sort_field:
-                queryset = queryset.order_by(sort_field)
-        
         return queryset
     
     def get_queryset(self):
@@ -138,6 +134,16 @@ class ProspectListView(ListView):
                     query.expiry_date = query.status_history.date + timedelta(days=14)
                     query.expiry_days = (query.expiry_date - timezone.now()).days
         return queryset
+    
+    def get_ordering(self):
+        sort = self.request.GET.get("sort", "")
+        sort_field = constants.PROSPECT_SORT_CHOICES.get(sort, '-created_at')
+        if sort_field:
+            return [sort_field]
+        else:
+            return ['-created_at']    
+    
+    
 
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)
