@@ -23,12 +23,13 @@ urlpatterns = [
 
     path('<uuid:customer_id>/info/update/', customerViews.CustomerEditView.as_view(), name='update-info'),
     path('<uuid:customer_id>/record_payment/', customerViews.PaymentView.as_view(), name='record-payment'),
+    path('<uuid:customer_id>/payment_list/', customerViews.PaymentListView.as_view(), name='payment_list'),
     path('<uuid:prospect_id>/crm/update/', customerActions.update_customer_success_manager, name='update-csm-ajax'),
 
     path('<uuid:customer_id>/info/', customerActions.get_customer_info, name='get-customer-info'),
     path('<uuid:customer_id>/poc/', customerActions.get_poc, name='get-poc'),
-
-    path("<uuid:customer_id>/delete/", customerActions.delete_customer, name="delete"),
+    path("<uuid:customer_id>/edit/<uuid:payment_id>/", customerViews.PaymentEditView.as_view(), name="edit-payment"),
+    path("<uuid:customer_id>/delete/<uuid:payment_id>/", customerActions.delete_payment, name="delete_payment"),
     path('ajax/plan-options/', customerActions.get_plan_options, name='get-plan-options'),
 
 ]   

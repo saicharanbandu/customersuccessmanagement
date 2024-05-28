@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
-from datetime import datetime
+from datetime import datetime,timedelta
 from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -689,10 +689,8 @@ class PaymentView(View):
 
     def get(self, request, customer_id, *args, **kwargs):
         customer = get_object_or_404(customerModels.Profile, uuid=customer_id)
-        print(customer)
-        payment_form = customerForms.PaymentHistoryForm(instance=customer,initial={'created_by': request.user})
-        print(payment_form)
-        
+        payment_form = customerForms.PaymentHistoryForm(initial={'created_by': request.user, 'payment_date': datetime.now()})
+
         context = {
             "title": self.title,
             "active_tab": self.active_tab,
@@ -703,17 +701,94 @@ class PaymentView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, customer_id, *args, **kwargs):
-        customer = get_object_or_404(customerModels.PaymentHistory, customer=customer_id)
-        payment_form = customerForms.PaymentHistoryForm(request.POST,  instance=customer)
+        customer = get_object_or_404(customerModels.Profile, uuid=customer_id)
+        payment_form = customerForms.PaymentHistoryForm(request.POST)
+
         if payment_form.is_valid():
-            payment_form.save()
-            return redirect(reverse("contact:list"))
-        else:
-            payment_form = customerForms.PaymentHistoryForm(instance=customer)
-            context = {
-                "title": self.title,
-                "active_tab": self.active_tab,
-                "payment_form": payment_form,
-                "customer": customer,
-            }
-            return render(request, self.template_name, context)
+            payment = payment_form.save(commit=False)
+            payment.customer = customer  
+            payment.created_by = request.user
+            subscribed_plan = customer.customer_plan
+            
+            print(subscribed_plan.duration)
+            if not payment.due_date:  
+                payment.due_date = datetime.now() + timedelta(days=subscribed_plan.duration*30)
+            payment.save()
+            return redirect(reverse("customer:payment_list", kwargs={"customer_id": customer.uuid}))
+
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "payment_form": payment_form,
+            "customer": customer,
+        }
+        return render(request, self.template_name, context)
+class PaymentListView(ListView):
+    model = customerModels.PaymentHistory
+    title = "Payment Directory"
+    active_tab = "payment"
+    template_name = "customer/payment_list.html"
+    context_object_name = "payments"
+
+    def get_queryset(self):
+        customer_id = self.kwargs['customer_id']
+        payments = customerModels.PaymentHistory.objects.filter(customer_id=customer_id)
+        return payments
+    def get_paginate_by(self, queryset):
+        page_limit = self.request.GET.get("page_limit", constants.PAGINATION_LIMIT)
+        if page_limit == "all":
+            page_limit = len(queryset)
+        return self.request.GET.get("paginate_by", page_limit)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customer = get_object_or_404(customerModels.Profile, uuid=self.kwargs['customer_id'])
+        context.update({
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "customer": customer,
+        })
+        return context
+    
+class PaymentEditView(View):
+    title = "Edit Payment"
+    active_tab = "payment"
+    template_name = "customer/payment.html"
+
+    def get(self, request, payment_id, *args, **kwargs):
+        payment = get_object_or_404(customerModels.PaymentHistory, uuid=payment_id)
+        customer = get_object_or_404(customerModels.Profile, uuid=payment.customer_id)
+        payment_form = customerForms.PaymentHistoryForm(instance=payment)
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "payment_form": payment_form,
+            "customer": customer,
+            "payment": payment,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, payment_id, *args, **kwargs):
+        payment = get_object_or_404(customerModels.PaymentHistory, uuid=payment_id)
+        customer = get_object_or_404(customerModels.Profile, uuid=payment.customer_id)
+        payment_form = customerForms.PaymentHistoryForm(request.POST, instance=payment)
+
+        if payment_form.is_valid():
+            payment = payment_form.save(commit=False)
+            payment.customer = customer
+            payment.created_by = request.user
+            subscribed_plan = customer.customer_plan
+            
+            if not payment.due_date:  
+                payment.due_date = datetime.now() + timedelta(days=subscribed_plan.duration * 30)
+            payment.save()
+            return redirect(reverse("customer:payment_list", kwargs={"customer_id": customer.uuid}))
+
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "payment_form": payment_form,
+            "customer": customer,
+            "payment": payment,
+        }
+        return render(request, self.template_name, context)
