@@ -682,6 +682,16 @@ class ChangePlanView(View):
         }
         return render(request, self.template_name, context)
     
+class CustomerDashboardView(View):
+    template_name = 'customer/overview_view.html'
+    title = 'Customer Overview'
+   
+    def get(self, request, *args, **kwargs):
+        
+        context = {
+            'title': self.title,
+        }
+        return render(request, self.template_name, context)
 class PaymentView(View):
     template_name = "customer/payment.html"
     title = "Record Payment"

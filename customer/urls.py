@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views as customerViews
 from . import actions as customerActions
+from customer import views
 
 app_name = 'customer'
 
@@ -31,5 +32,6 @@ urlpatterns = [
     path("<uuid:customer_id>/edit/<uuid:payment_id>/", customerViews.PaymentEditView.as_view(), name="edit-payment"),
     path("<uuid:customer_id>/delete/<uuid:payment_id>/", customerActions.delete_payment, name="delete_payment"),
     path('ajax/plan-options/', customerActions.get_plan_options, name='get-plan-options'),
+    path('overview/', views.CustomerDashboardView.as_view(), name='overview'),
 
 ]   

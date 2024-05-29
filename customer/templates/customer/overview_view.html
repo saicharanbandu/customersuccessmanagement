@@ -1,0 +1,380 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% block head_title %}{
+   { title }
+}
+{% endblock %}
+
+<link rel="stylesheet" href="{% static 'revenue/css/style.css' %}" />
+
+
+{% block page_title %}
+<span class="page-title-icon bg-gradient-primary text-white me-2">
+  <i class="mdi mdi-bullseye"></i>
+</span>
+{{ title }} 
+{% endblock %} 
+{% block scripts %}
+<script src="{% static 'revenue/js/app.js' %}"></script>
+{% endblock scripts %} 
+
+{% block content %}
+<style>
+    .margin-top{
+        margin-top: 10px;
+        margin-right: 8px;
+        margin-left: 8px;
+    } 
+
+    .padding-card{
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
+        padding-bottom: 20px;
+    }
+
+    .head-text{
+      font-size: 18px;
+      color: #000000;
+      font-weight: 500;
+    }
+
+    .head-text-2{
+      font-size: 12px;
+      color: #000000;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    .highlight{
+      font-size: 20px;
+      color: #000000;
+      font-weight: 550;
+    }
+
+    .body-text{
+      font-size: 14px;
+      color: #979797;
+      font-weight: normal;
+    }
+
+    .body-text-2{
+      font-size: 14px;
+      color: #000000;
+      font-weight: normal;
+    }
+
+    .body-text-3{
+      font-size: 10px;
+      color: #979797;
+      font-weight: normal;
+    }
+
+    
+    .green-text{
+      font-size: 18px;
+      color: #00CC6D;
+      font-weight: bold;
+    }
+
+    .red-text{
+      font-size: 18px;
+      color: #FF6C40;
+      font-weight: bold;
+    }
+
+    .red-text-big{
+      font-size: 20px;
+      color: #FF6C40;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .orange-text-big{
+      font-size: 18px;
+      color: #F9A628;
+      font-weight: bold;
+       margin-top: 20px;
+    }
+
+    .blue-text-big {
+        font-size: 20px;
+        font-weight: bold;
+        color: #9A55FF; 
+         margin-top: 20px;
+    }
+
+     .black-text-big{
+      font-size: 20px;
+      color: #000000;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .link-text {
+        font-size: 12px;
+        font-weight: bold;
+        color: #9A55FF; 
+    }
+
+    .center-text{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .link-margin{
+      margin-left: 20px;
+    }
+
+    .border-right {
+      border-right: 1px solid #E6E6E6;
+    }
+
+    .padding-right{
+      padding-right: 30px;
+    }
+    padding-left{
+      padding-left: 30px;
+    }
+
+    .pie-chart-area{
+        width:auto;
+        height: 173px;
+    }
+
+    .update-icon-green {
+      font-size: 12px;
+      color: #009126; 
+    }
+    .update-icon-red {
+        font-size: 12px;
+        color: #DC3545; 
+    }
+
+    .update-text-green {
+        font-size: 12px;
+        color: #009126;
+        font-weight: bold;
+        margin-left:5px; 
+    }
+
+    .update-text-red {
+        font-size: 12px;
+        color: #DC3545;
+        font-weight: bold;
+        margin-left:5px; 
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <div class="container">
+{% comment %} First Row {% endcomment %}
+{% comment %} Total Customers {% endcomment %}
+      <div class="row">
+        <div class="col card margin-top padding-card">
+          <h5 class="head-text ">Total Customers</h5>
+          <hr class="m-0">
+          <div class="row">
+            <div class="col border-right mt-2">
+              <div class = "mt-5 mb-5 pt-2">
+                    <p class=" highlight mb-0 center-text">200</p>
+                    <p class="body-text center-text">Customers</p>
+              </div>
+            </div>
+            
+            <div class="col mt-2">
+               <div class = "mt-5 mb-5 ">
+                <div class="row pb-3">
+                  <div class="col">
+                    <p class=" body-text-2 mb-0 center-text">Active</p>
+                  </div>
+                  <div class="col">
+                    <p class=" green-text mb-0 center-text ">150</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <p class=" body-text-2 mb-0 center-text">Lapsed</p>
+                  </div>
+                  <div class="col">
+                    <p class=" red-text mb-0 center-text">50</p>
+                </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+           <a href="#" class="link-text link-margin">View All<span class="mdi mdi-arrow-right"></a>
+        </div>
+
+        {% comment %} Customers by Plan {% endcomment %}
+         <div class="col card margin-top padding-card">
+           <h5 class="head-text ">Customers by Plan</h5>
+            <hr class="m-0">
+               <div class="pie-chart-area">
+                  <canvas id="myPieChart"></canvas>
+                </div>
+
+              <script>
+                  const ctx = document.getElementById('myPieChart');
+                  new Chart(ctx, {
+                          type: 'pie',
+                          data: {
+                              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                              datasets: [{
+                                  label: '# of Votes',
+                                  data: [12, 19, 3, 5, 2, 3],
+                                  backgroundColor: [
+                                      'rgba(255, 99, 132, 0.2)',
+                                      'rgba(54, 162, 235, 0.2)',
+                                      'rgba(255, 206, 86, 0.2)',
+                                      'rgba(75, 192, 192, 0.2)',
+                                      'rgba(153, 102, 255, 0.2)',
+                                      'rgba(255, 159, 64, 0.2)'
+                                  ],
+                                  borderColor: [
+                                      'rgba(255, 99, 132, 1)',
+                                      'rgba(54, 162, 235, 1)',
+                                      'rgba(255, 206, 86, 1)',
+                                      'rgba(75, 192, 192, 1)',
+                                      'rgba(153, 102, 255, 1)',
+                                      'rgba(255, 159, 64, 1)'
+                                  ],
+                                  borderWidth: 1
+                              }]
+                          },
+                          options: {
+                              responsive: true,
+                              maintainAspectRatio: false,
+                          }
+                      });
+                </script> 
+                            
+        </div>
+
+        {% comment %} Customers by Journey Phases {% endcomment %}
+        <div class="col card margin-top padding-card">
+          <h5 class="head-text ">Customers by Journey Phases</h5>
+            <hr class="m-0">
+           <div class="pie-chart-area">
+                  <canvas id="mySecondPieChart"></canvas>
+                </div>
+
+              <script>
+                  const ctx2 = document.getElementById('mySecondPieChart');
+                  new Chart(ctx2, {
+                          type: 'pie',
+                          data: {
+                              labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                              datasets: [{
+                                  label: '# of Votes',
+                                  data: [12, 19, 3, 5, 2, 3],
+                                  backgroundColor: [
+                                      'rgba(255, 99, 132, 0.2)',
+                                      'rgba(54, 162, 235, 0.2)',
+                                      'rgba(255, 206, 86, 0.2)',
+                                      'rgba(75, 192, 192, 0.2)',
+                                      'rgba(153, 102, 255, 0.2)',
+                                      'rgba(255, 159, 64, 0.2)'
+                                  ],
+                                  borderColor: [
+                                      'rgba(255, 99, 132, 1)',
+                                      'rgba(54, 162, 235, 1)',
+                                      'rgba(255, 206, 86, 1)',
+                                      'rgba(75, 192, 192, 1)',
+                                      'rgba(153, 102, 255, 1)',
+                                      'rgba(255, 159, 64, 1)'
+                                  ],
+                                  borderWidth: 1
+                              }]
+                          },
+                          options: {
+                              responsive: true,
+                              maintainAspectRatio: false,
+                          }
+                      });
+                </script> 
+            <a href="#" class="link-text link-margin">View All<span class="mdi mdi-arrow-right"></a>
+        </div>
+        
+      </div>
+{% comment %} Second Row {% endcomment %}
+       <div class="row">
+        <div class="col card margin-top padding-card">
+           <h5 class="head-text ">Customers Status Review</h5>
+            <hr class="m-0">
+             <h5 class="head-text-2 ">New</h5>
+             <p class=" blue-text-big mb-0">120</p>
+             <div class="d-flex justify-content-between align-items-center">
+                  <p class="body-text-3 mb-4">
+                      <strong>Customers joined within the last 60 days</strong>
+                  </p>
+                  <a href="#" class="link-text mb-4">View all <span class="mdi mdi-arrow-right"></a>
+              </div>
+              <hr class="m-0">
+
+              <p class=" orange-text-big mb-0">140</p>
+             <div class="d-flex justify-content-between align-items-center">
+                  <p class="body-text-3 mb-4">
+                      <strong>Total number of renewals in the next 90 days</strong>
+                  </p>
+                  <a href="#" class="link-text mb-4">View all <span class="mdi mdi-arrow-right"></a>
+              </div>
+              <hr class="m-0">
+
+              <p class=" red-text-big mb-0">20</p>
+             <div class="d-flex justify-content-between align-items-center">
+                  <p class="body-text-3 mb-4">
+                      <strong>Decreased by <i class="mdi mdi-trending-down update-icon-red"></i><span class="update-text-red">2.5%</span> from the last 90 days</strong>
+                  </p>
+                  <a href="#" class="link-text mb-4">View all <span class="mdi mdi-arrow-right"></a>
+              </div>
+              <hr class="m-0">
+        </div>
+
+
+
+        <div class="col card margin-top padding-card">
+          <h5 class="head-text ">Trial Customer Overview</h5>
+            <hr class="m-0">
+             <h5 class="head-text-2 ">Trial Customers</h5>
+             <p class=" black-text-big mb-0">120</p>
+             <div class="d-flex justify-content-between align-items-center">
+                  <p class="body-text-3 mb-4">
+                      <strong>Number of trial customers</strong>
+                  </p>
+                  <a href="#" class="link-text mb-4">View all <span class="mdi mdi-arrow-right"></a>
+              </div>
+              <hr class="m-0">
+
+                <p class=" black-text-big mb-0">140</p>
+             <div class="d-flex justify-content-between align-items-center">
+                  <p class="body-text-3 mb-4">
+                      <strong>Increased by <i class="mdi mdi-trending-down update-icon-green"></i><span class="update-text-green">2.5%</span> from the last 90 days</strong>
+                  </p>
+                  <a href="#" class="link-text mb-4">View all <span class="mdi mdi-arrow-right"></a>
+              </div>
+              <hr class="m-0">
+
+              <p class=" black-text-big mb-0">20</p>
+             <div class="d-flex justify-content-between align-items-center">
+                  <p class="body-text-3 mb-4">
+                      <strong>Number of trial Customers</strong>
+                  </p>
+                  <a href="#" class="link-text mb-4">View all <span class="mdi mdi-arrow-right"></a>
+              </div>
+              <hr class="m-0">
+        </div>
+
+
+
+       <div class="col card stretch-card margin-top padding-card">
+                  {% include 'prospect/_partials/_upcoming_events.html' %}
+        </div>
+      </div>
+
+  </div>
+{% endblock %}

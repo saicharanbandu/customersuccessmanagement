@@ -1,0 +1,760 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% block head_title %}{
+   { title }
+}
+{% endblock %}
+
+<link rel="stylesheet" href="{% static 'revenue/css/style.css' %}" />
+
+
+{% block page_title %}
+<span class="page-title-icon bg-gradient-primary text-white me-2">
+  <i class="mdi mdi-bullseye"></i>
+</span>
+{{ title }} 
+{% endblock %} 
+{% block scripts %}
+<script src="{% static 'revenue/js/app.js' %}"></script>
+{% endblock scripts %} 
+
+{% block content %}
+<style>
+    .margin-top{
+        margin-top: 10px;
+        margin-right: 8px;
+        margin-left: 8px;
+    } 
+
+    .margin-left{
+        margin-left: 25px;
+    }
+    .padding-card{
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 25px;
+        padding-bottom: 20px;
+    }
+    .padding-card-2{
+        padding-left: 15px;
+        padding-right: 25px;
+        padding-top: 10px;
+        padding-bottom: 20px;
+    }
+    .head-text {
+      font-size: 14px;
+      color: #6C6C6C;
+      font-weight: bold; 
+    }
+
+    .head-text-2 {
+      font-size: 18px;
+      color: #6C6C6C;
+      font-weight: bold; 
+    }
+
+    .body-text{
+        font-size: 14px;
+        color: #979797;
+        font-weight: bold; 
+    }
+
+    .body-text-2{
+        font-size: 12px;
+        color: #979797;
+        font-weight: bold; 
+    }
+
+    .chart-head-text {
+      font-size: 16px;
+      color: #505D6F;
+      font-weight: 500; 
+    }
+
+    .head-text-dark {
+      font-size: 14px;
+      color: #202020;
+      font-weight: bold; 
+    }
+
+    .head-text-dark-2 {
+      font-size: 16px;
+      color: #202020;
+      font-weight: bold; 
+    }
+
+    .chart-link-text {
+        font-size: 14px;
+        font-weight: 500;
+        color: #9A55FF; 
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .highlight{
+      font-size: 24px;
+      color: #000000;
+      font-weight: 550;
+    }
+
+    .mdi-account-multiple-outline {
+        font-size: 63px;
+        display: inline-block;
+        background: linear-gradient(to right, #D083FF, #AB64FF);
+        -webkit-background-clip: text;
+        color: transparent;
+        text-align: center;
+        line-height: 50px;
+    }
+
+    .mdi-account-multiple {
+        font-size: 63px;
+        display: inline-block;
+        background: linear-gradient(to right, #6DE8D4, #23CCB4);
+        -webkit-background-clip: text;
+        color: transparent;
+        text-align: center;
+        line-height: 50px;
+    }
+
+    .mdi-account-minus {
+        font-size: 63px;
+        display: inline-block;
+        background: linear-gradient(to right, #FFBD96, #FE7B96);
+        -webkit-background-clip: text;
+        color: transparent;
+        text-align: center;
+        line-height: 50px;
+        transform: scaleX(-1);      
+    }
+
+    .center-text{
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .chart-area{
+        width:100%;
+        height: 240px;
+        align-items: center;
+        justify-content: center;
+        display : flex;
+    }
+
+    .pie-chart-area{
+        width:auto;
+        height: 240px;
+    }
+
+  .progress-container {
+    width: 100%;
+    margin: 15px 0;
+    }
+
+    .progress-labels {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .progress-percentage {
+        font-weight: bold;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Base progress style */
+    .progress {
+        height: 100%;
+        background-color: transparent; 
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .progress-completed {
+        height: 100%;
+        border-radius: 5px;
+    }
+
+    /* Specific colors for each progress bar */
+    .progress-payments {
+        background-color: #FFEFC8; /* Incomplete color */
+    }
+
+    .progress-payments .progress-completed {
+        background-color: #FF9F40; /* Completed color */
+    }
+
+    .progress-receipts {
+        background-color: #FFEFC8; /* Incomplete color */
+    }
+
+    .progress-receipts .progress-completed {
+        background-color: #9966FF; /* Completed color */
+    }
+
+    .progress-events {
+        background-color: #C0FAFA;
+    }
+
+    .progress-events .progress-completed {
+        background-color: #71CDCD;
+    }
+
+    .progress-groups {
+        background-color: #FFF9C0;
+    }
+
+    .progress-groups .progress-completed {
+        background-color: #FFD878;
+    }
+
+    .progress-members {
+        background-color: #CEE7F9;
+    }
+
+    .progress-members .progress-completed {
+        background-color: #5EB4EF;
+    }
+
+    .progress-reports {
+        background-color: #F5C9D1;
+    }
+
+    .progress-reports .progress-completed {
+        background-color: #F6829B;
+    }
+
+    .progress-sms-alerts {
+        background-color: #D2FFD1;
+    }
+
+    .progress-sms-alerts .progress-completed {
+        background-color: #5AE557;
+    }
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+table.data-table thead th {
+    border-bottom: 2px solid #ddd;
+    text-align: left;
+    padding-bottom: 10px;
+}
+
+table.data-table tbody td {
+    padding: 8px 5px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.progress-bar-container-1 {
+    width: 200px;
+    height: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    left: 100px;
+}
+
+
+.progress-bar-1 {
+    height: 100%;
+    border-radius: 5px;
+    background-color: #5EB4EF;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.small-text{
+     font-size: 10px;
+      color: #979797;
+      font-weight: 550;
+}
+
+.align-left {
+    text-align: left;
+    vertical-align: top ;
+}
+
+.padding-table{
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+canvas {
+    display: block;
+}
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container">
+{% comment %} First Row {% endcomment %}
+        <div class="row">
+            <div class="col card margin-top padding-card">
+                <div class="d-flex align-item-center ">
+                <div class="margin-left">
+                     <i class="mdi mdi-account-multiple-outline"></i>
+                     </div>
+                     <div class="margin-left">
+                     <h5 class="head-text mb-2">Total Users <span class="mdi mdi-alert-circle-outline"></h5>
+                     <p class="highlight mb-0">184</p>    
+                    </div>                
+                </div>
+            </div>
+             <div class="col card margin-top padding-card">
+                <div class="d-flex align-item-center ">
+                <div class="margin-left">
+                     <i class="mdi mdi-account-multiple"></i>
+                     </div>
+                     <div class="margin-left">
+                     <h5 class="head-text mb-2">Active Users <span class="mdi mdi-alert-circle-outline"></h5>
+                     <p class="highlight mb-0">122</p>    
+                    </div>                
+                </div>
+            </div>
+           <div class="col card margin-top padding-card">
+                <div class="d-flex align-item-center ">
+                <div class="margin-left">
+                     <i class="mdi mdi-account-minus"></i>
+                     </div>
+                     <div class="margin-left">
+                     <h5 class="head-text mb-2">Lapsing Users <span class="mdi mdi-alert-circle-outline"></h5>
+                     <p class="highlight mb-0">50</p>    
+                    </div>                
+                </div>
+            </div>
+        </div>
+{% comment %} Second Row {% endcomment %}
+        <div class="row">
+            <div class="col-lg-8">
+            {% comment %} Sub Row one {% endcomment %}
+                <div class="row">
+                    <div class="col card margin-top padding-card-2">
+                        <div class="card-content">
+                            <h5 class="chart-head-text mb-2">User Wise Engagement</h3>
+                            <hr class="m-0 w-100"></hr>
+                            <div class="pie-chart-area">
+                                <div class="chart-area">
+                                    <canvas id="myPieChart"></canvas>
+                                </div>
+
+                                <script>
+                                    const ctx3 = document.getElementById('myPieChart');
+                                    new Chart(ctx3, {
+                                            type: 'pie',
+                                            data: {
+                                                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                                datasets: [{
+                                                    label: '# of Votes',
+                                                    data: [12, 19, 3, 5, 2, 3],
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(153, 102, 255, 0.2)',
+                                                        'rgba(255, 159, 64, 0.2)'
+                                                    ],
+                                                    borderColor: [
+                                                        'rgba(255, 99, 132, 1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(153, 102, 255, 1)',
+                                                        'rgba(255, 159, 64, 1)'
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: true,
+                                                maintainAspectRatio: false,
+                                            }
+                                        });
+                                  </script>  
+                            </div>
+                             <a href="#" class="chart-link-text mb-4">View all<span class="mdi mdi-arrow-right"></a>
+                        </div>
+                    </div>
+                    <div class="col card margin-top padding-card-2">
+                        <div class="card-content">
+                            <h5 class="chart-head-text mb-2">Church Wise Engagement</h3>
+                            <hr class="m-0 w-100"></hr>
+                            <div class="pie-chart-area">
+                               <div class="chart-area">
+                                    <canvas id="mySecondPieChart"></canvas>
+                                </div>
+
+                                <script>
+                                    const ctx4 = document.getElementById('mySecondPieChart');
+                                    new Chart(ctx4, {
+                                            type: 'pie',
+                                            data: {
+                                                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                                datasets: [{
+                                                    label: '# of Votes',
+                                                    data: [12, 19, 3, 5, 2, 3],
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(153, 102, 255, 0.2)',
+                                                        'rgba(255, 159, 64, 0.2)'
+                                                    ],
+                                                    borderColor: [
+                                                        'rgba(255, 99, 132, 1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(153, 102, 255, 1)',
+                                                        'rgba(255, 159, 64, 1)'
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: true,
+                                                maintainAspectRatio: false,
+                                            }
+                                        });
+                                  </script> 
+                            </div>
+                             <a href="#" class="chart-link-text mb-4">View all<span class="mdi mdi-arrow-right"></a>
+                        </div>
+                    </div>
+                </div>
+                {% comment %} Sub row 2 {% endcomment %}
+                 <div class="row">
+                    <div class="col card margin-top padding-card-2">
+                          <div class="d-flex justify-content-between align-items-center">
+                             <h5 class="head-text-dark mb-2">Daily Logins</h3>
+                            <p class="head-text-dark">This Week <span class="mdi mdi-chevron-down"></p>
+                        </div>
+                        <div class="chart-area ">
+                            <canvas id="myChart"></canvas>
+                        </div>
+
+                        <script>
+                            const ctx = document.getElementById('myChart');
+
+                            new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                                datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                                }
+                            }
+                            });
+                        </script>
+                    </div>
+                </div>
+                {% comment %} Sub row 3 {% endcomment %}
+                <div class="row">
+                       <div class="col card margin-top padding-card-2">
+                          <div class="d-flex justify-content-between align-items-center">
+                             <h5 class="head-text-dark mb-2">Avergae time spent per user</h3>
+                            <p class="head-text-dark">This Week <span class="mdi mdi-chevron-down"></p>
+                        </div>
+                         <div class="chart-area ">
+                            <canvas id="mySecondChart"></canvas>
+                        </div>
+
+                        <script>
+                             const ctx2 = document.getElementById('mySecondChart');
+
+                            new Chart(ctx2, {
+                                type: 'line',  // Change the chart type if desired
+                                data: {
+                                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                                    datasets: [{
+                                        label: '# of Sales',
+                                        data: [15, 10, 25, 30, 20, 40],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        {% comment %} Current Active Users and Overall Engagement Time  {% endcomment %}
+            <div class="col">
+                  <div class="row">
+                    <div class="col card margin-top padding-card-2">          
+                            <h5 class="head-text-2 mb-2 mt-2">Lapsing Users</h5>
+                            <hr class="m-0 w-100">
+                            <div class = "mt-5 mb-5">
+                                  <p class="center-text highlight mb-0">14</p>
+                                  <p class="body-text center-text">Users active right now</p>
+                            </div>
+                             <hr class="m-0 w-100">
+                             <a href="#" class="chart-link-text mt-2">View recent logins<span class="mdi mdi-arrow-right"></a>
+
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col card margin-top padding-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                             <h5 class="head-text-dark ">Overall Engagement Time <span class="head-text mdi mdi-alert-circle-outline"></h5>
+                             <p class="head-text-dark">This Week <span class="mdi mdi-chevron-down"></p>
+                        </div>
+                        <div class="mt-4 mb-4">
+                            <p class="center-text highlight mb-0">4 hr 26 mins</p>
+                        </div>
+                        <p class="body-text-2 center-text mb-3">Total time spent interacting with the platform in the last 24 hours</p>
+                        <hr class="m-0 w-100">
+                        <div class="mt-2">
+                            <h5 class="head-text-dark mb-2">Feature Wise Engagement</h5>
+                            <p class="body-text-2 mb-3">Frequently used modules in the last 24 Hours</p>
+                        </div>
+                        <div class="mt-2 mb-3">
+                            <div class="progress-container">
+                            <div class="progress-labels">
+                                <span class="head-text-dark">Payments</span>
+                                <span class="head-text-dark">78%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress progress-payments">
+                                    <div class="progress-completed" style="width: 78%;"></div>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <div class="progress-labels">
+                                    <span class="head-text-dark">Receipts</span>
+                                    <span class="head-text-dark">60%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress progress-receipts">
+                                        <div class="progress-completed" style="width: 60%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <div class="progress-labels">
+                                    <span class="head-text-dark">Events</span>
+                                    <span class="head-text-dark">72%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress progress-events">
+                                        <div class="progress-completed" style="width: 72%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <div class="progress-labels">
+                                    <span class="head-text-dark">Groups</span>
+                                    <span class="head-text-dark">52%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress progress-groups">
+                                        <div class="progress-completed" style="width: 52%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <div class="progress-labels">
+                                    <span class="head-text-dark">Members</span>
+                                    <span class="head-text-dark">41%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress progress-members">
+                                        <div class="progress-completed" style="width: 41%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <div class="progress-labels">
+                                    <span class="head-text-dark">Reports</span>
+                                    <span class="head-text-dark">80%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress progress-reports">
+                                        <div class="progress-completed" style="width: 80%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="progress-container">
+                                <div class="progress-labels">
+                                    <span class="head-text-dark">SMS Alerts</span>
+                                    <span class="head-text-dark">90%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress progress-sms-alerts">
+                                        <div class="progress-completed" style="width: 90%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% comment %} Third Row {% endcomment %}
+        <div class="row">
+            <div class="col card margin-top padding-card">
+                <div class="d-flex justify-content-between align-items-center">
+                     <h5 class="head-text-dark-2 ">Event Count With Event Name </h5>
+                     <p class="head-text-dark">Last 28 Days <span class="mdi mdi-chevron-down"></p>
+                </div>
+        <div class="padding-table">
+        <table class="data-table">
+            <thead>
+                <tr class="align-left">
+                    <th>Module Name</th>
+                    <th>Event count <p class="small-text"><br>1,01,000<br>Total Events</p></th>
+                    <th>Event count per user</th>
+                    <th>Visitors <p class="small-text"><br>802<br>Total Users</p></th>
+                    <th>Page views</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Payments
+                    <div class="progress-bar-container-1">
+                            <div class="progress-bar-1" style="width: 80%;"></div>
+                        </div></td>
+                    <td>
+                    
+                        <span>30,000</span>
+                    </td>
+                    <td>308</td>
+                    <td>308</td>
+                    <td>308</td>
+                </tr>
+                <tr>
+                    <td>Receipts
+                    <div class="progress-bar-container-1">
+                            <div class="progress-bar-1" style="width: 60%;"></div>
+                        </div></td>
+                    <td>
+                    
+                        <span>30,000</span>
+                    </td>
+                    <td>455</td>
+                    <td>308</td>
+                    <td>308</td>
+                </tr>
+                <tr>
+                    <td>Events    
+                    <div class="progress-bar-container-1">
+                            <div class="progress-bar-1" style="width: 40%;"></div>
+                        </div></td>
+                    <td>
+                    
+                        <span>15,000</span>
+                    </td>
+                    <td>302</td>
+                    <td>308</td>
+                    <td>308</td>
+                </tr>
+                <tr>
+                    <td>Groups    
+                    <div class="progress-bar-container-1">
+                            <div class="progress-bar-1" style="width: 70%;"></div>
+                        </div></td>
+                    <td>
+                    
+                        <span>9,000</span>
+                    </td>
+                    <td>87</td>
+                    <td>308</td>
+                    <td>308</td>
+                </tr>
+                <tr>
+                    <td>Members   
+                    <div class="progress-bar-container-1">
+                            <div class="progress-bar-1" style="width: 50%;"></div>
+                        </div></td>
+                    <td>
+                        
+                        <span>29,000</span>
+                    </td>
+                    <td>308</td>
+                    <td>308</td>
+                    <td>308</td>
+                </tr>
+                <tr>
+                    <td>Reports   
+                    <div class="progress-bar-container-1">
+                            <div class="progress-bar-1" style="width: 30%;"></div>
+                        </div></td>
+                    <td>
+                        
+                        <span>30,000</span>
+                    </td>
+                    <td>401</td>
+                    <td>308</td>
+                    <td>308</td>
+                </tr>
+                <tr>
+                    <td>SMS Alert
+                    <div class="progress-bar-container-1">
+                            <div class="progress-bar-1" style="width: 10%;"></div>
+                        </div></td>
+                    <td>
+                    
+                        <span>8</span>
+                    </td>
+                    <td>4</td>
+                    <td>308</td>
+                    <td>308</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock%}

@@ -1,25 +1,767 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block head_title %}{{ title }}{% endblock %}
-
-{% block styles %}
-<link rel="stylesheet" href="{% static 'revenue/css/style.css' %}">
+{% extends "base.html" %} 
+{% load static %} 
+{% block head_title %}{
+   { title }
+}
 {% endblock %}
+
+<link rel="stylesheet" href="{% static 'revenue/css/style.css' %}" />
+
 
 {% block page_title %}
 <span class="page-title-icon bg-gradient-primary text-white me-2">
   <i class="mdi mdi-bullseye"></i>
 </span>
-{{ title }}
-{% endblock %}
-
+{{ title }} 
+{% endblock %} 
 {% block scripts %}
-  <script src="{% static 'revenue/js/app.js' %}"></script>
-{% endblock scripts %}
+<script src="{% static 'revenue/js/app.js' %}"></script>
+{% endblock scripts %} 
 
 {% block content %}
-<div class="row">
+<style>
+  .margin-right {
+    margin-right: 5px;
+  }
+  .margin-left {
+    margin-left: 5px;
+  }
+  .custom-card-left {
+      height: auto;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;    
+      padding: 25px;
+  }
 
+  .custom-card-right {
+      height: auto;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;    
+      padding: 25px;
+  }
+  .custom-card {
+      height: auto;
+      padding: 25px;
+  }
+
+  .highlight {
+    font-size: 30px; /* Decreased by 2 pixels */
+    color: #3A3A3A;
+    font-weight: bold; /* Medium font */
+  }
+
+  .highlight-sub {
+      font-size: 22px; /* Decreased by 2 pixels */
+      color: #3A3A3A;
+      font-weight: 500; /* Medium font */
+  }
+
+  .highlight-sub-1 {
+      font-size: 18px; /* Decreased by 2 pixels */
+      color: #3A3A3A;
+      font-weight: 550; /* Medium font */
+  }
+
+  .update-text-green {
+      font-size: 10px; /* Decreased by 2 pixels */
+      color: #009126;
+      font-weight: 500;
+      padding-top:2px; 
+      margin-left:5px; 
+  }
+
+  .update-text-red {
+      font-size: 10px; /* Decreased by 2 pixels */
+      color: #DC3545;
+      font-weight: 500;
+      padding-top:2px;
+      margin-left:5px; 
+  }
+
+  .highlight-sub-white {
+      font-size: 22px; /* Decreased by 2 pixels */
+      color: #FFFFFF;
+      font-weight: 500; /* Medium font */
+  }
+
+  .head-text {
+      font-size: 12px; /* Decreased by 2 pixels */
+      color: #6C6C6C;
+      font-weight: bold; /* Bold font */
+  }
+
+  .head-text-white {
+      font-size: 12px; /* Decreased by 2 pixels */
+      color: #FFFFFF;
+      font-weight: 500; /* Medium font */
+  }
+
+  .head-text-medium {
+      color: #6C6C6C;
+      font-size: 12px; /* Decreased by 2 pixels */
+      font-weight: 500; /* Medium font */
+  }
+
+  .head-text-dark{
+    color: #3A3A3A;
+    font-size: 12px; /* Decreased by 2 pixels */
+    font-weight: bold;
+  }
+
+  .head-text-regular{
+      color: #6C6C6C;
+      font-size: 10px; /* Decreased by 2 pixels */
+      font-weight: normal; /* Medium font */
+  }
+
+  .sub-text-red {
+      color: #DC3545;
+      font-size: 12px; /* Decreased by 2 pixels */
+      font-weight: 500; /* Medium font */
+  }
+
+  .sub-text-blue {
+      color: #116EFD;
+      font-size: 12px; /* Decreased by 2 pixels */
+      font-weight: 500; /* Medium font */
+  }
+
+  .text-green {
+      font-size: 12px; /* Decreased by 2 pixels */
+      font-weight: normal; /* Regular font */
+      color: #009126;
+  }
+
+  .text-red {
+      font-size: 12px; /* Decreased by 2 pixels */
+      font-weight: normal; /* Regular font */
+      color: #DC3545;
+  }
+
+  .text-blue {
+      font-size: 12px; /* Decreased by 2 pixels */
+      font-weight: normal; /* Regular font */
+      color: #116EFD;
+  }
+
+  .link-text {
+    font-size: 12px; /* Decreased by 2 pixels */
+    font-weight: 500; /* Medium font */
+    color: #9A55FF; 
+  }
+
+  .link-text-white {
+    font-size: 12px; /* Decreased by 2 pixels */
+    font-weight: 500; /* Medium font */
+    color: #FFFFFF;
+  }
+
+  .body-text{
+    color: #6C6C6C;
+    font-size: 9px;
+    font-weight: normal;
+  }
+
+  .circle-red {
+      width: 53px;
+      height: 53px;
+      background-color: #FFD9D9;
+      border-radius: 50%; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  .circle-red .mdi-calendar-remove {
+    color: #DC3545; /* Icon color set to blue */
+    font-size: 28px; /* Adjust the icon size as needed */
+}
+
+.circle-blue {
+    width: 53px;
+    height: 53px;
+    background-color: #E8F0FE;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle-blue .mdi-calendar-check {
+    color: #116EFD; /* Icon color set to blue */
+    font-size: 28px; /* Adjust the icon size as needed */
+}
+
+  .gradient-purple {
+      background-image: linear-gradient(to right, #D083FF, #A761FF);
+  }
+
+  .gradient-blue {
+      background-image: linear-gradient(to right, #71BAF5, #0470C7);
+  }
+
+  .gradient-red {
+      background-image: linear-gradient(to right, #FFBF96, #FE7096);
+  }
+
+  .top-half {
+    position: absolute; top: 0; left: 0;
+      width: 100%;
+      height: auto;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+  }
+
+  .bottom-half {
+      position: absolute;
+      top: 5.5rem;
+      left: 0;
+      width: 100%;
+      height: auto;
+      background-color: #FFFFFF;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+  }
+  .padding-recent{
+    padding-left: 25px;
+    padding-top: 10px;
+    padding-right: 25px;
+  }
+  .padding-card{
+    padding-left: 25px;
+    padding-top: 20px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+  }
+  
+  .border-right {
+    border-right: 2px solid #E6E6E6;
+  }
+
+  .progress-bars {
+    width: 65%;
+}
+
+.progress {
+    width: 100%;
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 100%;
+}
+
+.progress-bar-current {
+    background-color: #116efd;
+    width: 70%;
+}
+
+.progress-bar-overdue {
+    background-color: #dc3444;
+    width: 30%;
+}
+
+  .update-box-green,
+  .update-box-red {
+      width: auto;
+      height: 20px;
+      display: inline-flex;
+      align-items: center; 
+      margin-left: 5px;
+      background-color: #D7FFCB;
+      border-radius: 4px;
+      padding: 0 6px; /* Add padding to create space between content and box */
+  }
+
+  .update-box-red {
+      background-color: #FFD9D9;
+  }
+  .card-margin-left {
+    margin-top:10px;
+    margin-bottom: 0px;
+    margin-left: 3rem;
+  }
+
+  .card-margin-right{
+  margin-top: 10px;
+  margin-bottom: 0px;
+  margin-right: 3rem;
+  }
+
+  .card-margin {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  margin-left: 1.75rem;
+  margin-right: 1.75rem;
+  }
+
+  .card-margin-middle {
+  margin-top: 10px;
+  margin-bottom: 0px;
+
+  }
+  .scrollable-container {
+    overflow-y: scroll;
+    height: 80vh;
+  }
+
+  .scrollable-container::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+  }
+
+  .scrollable-container {
+      -ms-overflow-style: none;  
+      scrollbar-width: none;  
+  }
+  .update-icon-green {
+    font-size: 10px; /* Set the size of the icon */
+    color: #009126; 
+    padding-top:2px;
+  }
+  .update-icon-red {
+      font-size: 10px; /* Set the size of the icon */
+      color: #DC3545; 
+      padding-top:2px;
+  }
+
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<div class="scrollable-container">
+<!-- .........................................................................First Row............................................................................................. --><div class="row">
+  <!-- First box  -->
+  <div class="col bg-white card card-margin-left margin-right ">
+    <div class="row">
+      <div class="col-6 custom-card border-right">
+          <h5 class="head-text mb-3">MRR <span class="mdi mdi-alert-circle-outline"></h5>
+          <p class="highlight mb-0">₹5000 
+            <span class="update-box-green">
+                <i class="mdi mdi-trending-up update-icon-green"></i>
+                <span class="update-text-green">2.5%</span>
+            </span>
+          </p>
+
+      </div>
+      <div class="col-6 custom-card">
+        <h5 class="head-text mb-3">ARR  <span class="mdi mdi-alert-circle-outline"></h5>
+        <p class="highlight mb-3">₹25,000 
+            <span class="update-box-red">
+                <i class="mdi mdi-trending-down update-icon-red"></i>
+                <span class="update-text-red">+149k</span>
+            </span>
+          </p>
+      </div>
+  </div>
+  <hr class="w-100 m-0">
+  
+  <div class="row mt-0">
+    <div class="col-6 custom-card border-right">
+        <h5 class="head-text mb-3">Revenue For Renewal  <span class="mdi mdi-alert-circle-outline"></h5>
+       <p class="highlight mb-3">₹25,000 
+            <span class="update-box-green">
+                <i class="mdi mdi-trending-up update-icon-green"></i>
+                <span class="update-text-green">+149k</span>
+            </span>
+          </p>
+        <p class="body-text">Total value of renewals coming up in the next 60 days. (compared to previous period)</p>
+       <a href="#" class="link-text">View customers for renewal <span class="mdi mdi-arrow-right"></span></a>
+    </div>
+    <div class="col-6 custom-card">
+      <h5 class="head-text mb-3">Cancelled MRR  <span class="mdi mdi-alert-circle-outline"></h5>
+      <p class="highlight mb-3">₹5000 
+            <span class="update-box-green">
+                <i class="mdi mdi-trending-up update-icon-green"></i>
+                <span class="update-text-green">+200</span>
+            </span>
+          </p>
+      <p class="body-text">Total value of cancelled MRR  in the past 60 days. (compared to previous period)</p>
+        <a href="#" class="link-text">View canceled customers <span class="mdi mdi-arrow-right"></a>
+    </div>
+</div>
+  
+  </div>
+  <!-- Chart Area -->
+    <div class="col bg-white card card-margin-right margin-left">
+            <canvas id="myChart" class="mt-5"></canvas>
+          </div>
+
+          <script>
+            const ctx = document.getElementById('myChart');
+
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [12, 19, 3, 5, 2, 3],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          </script>
+
+    </div>
+<!-- .........................................................................Second Row............................................................................................. -->
+<div class="row mt-2 card-margin">
+  <!-- Total Receivables Area -->
+  <div class="col-6 bg-white custom-card-left border-right">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+          <h5 class="head-text-medium mb-0">Total Receivables</h5>
+          <p class="highlight-sub mb-0"><strong>₹2,50,000</strong></p>
+      </div>
+      <div class="progress-bars ml-auto">
+          <div class="label-container mb-2 d-flex justify-content-between">
+              <div class="sub-text-blue">Current</div>
+              <div class="sub-text-red">Overdue</div>
+          </div>
+          <div class="progress d-flex">
+              <div class="progress-bar progress-bar-current"></div>
+              <div class="progress-bar progress-bar-overdue"></div>
+          </div>
+      </div>
+  </div>
+  
+  
+  </div>
+  
+  <div class="col-3 bg-white custom-card border-right">
+    <div class="d-flex align-items-center">
+      <!-- Circle -->
+      <div class="circle-blue mr-3"> <span class="mdi mdi-calendar-check"> </div>
+      <!-- Text -->
+      <div>
+          <p class="sub-text-blue mb-0 margin-left">Current</p>
+          <p class="highlight-sub-1 mb-0 margin-left">₹5000</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-3 custom-card-right bg-white">
+    <div class="d-flex align-items-center">
+      <!-- Circle -->
+      <div class="circle-red mr-3"><span class="mdi mdi-calendar-remove"></div>
+      <!-- Text -->
+      <div>
+          <p class="sub-text-red mb-0 margin-left">Overdue</p>
+          <p class="highlight-sub-1 mb-0 margin-left">₹5000</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- .........................................................................Thrid Row............................................................................................. -->
+<div class="row">
+  <!-- Total Payments Received -->
+  <div class="col bg-white card card-margin-left margin-right">
+    <!-- Gradient Area -->
+      <div class="top-half gradient-purple padding-card">
+        <div class = "head-text-white">
+          <h5 class="head-text-white mb-2">Total Payments Received</h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <p class="highlight-sub-white mb-0">
+                <strong>₹34,55,645</strong>
+            </p>
+            <a href="#" class="link-text-white">View all <span class="mdi mdi-arrow-right"></a>
+        </div>
+        </div>
+      </div>
+      <!-- White Area -->
+      <div class="bottom-half">
+        <p class= "padding-recent head-text-medium mb-0">Recent</p>
+        <!-- Invoive Section -->
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+          <div class="col">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto">
+              <div class="text-green">₹34,545</div>
+          </div>
+      </div>
+        <hr class="w-100 mt-2 mb-2">
+
+        
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+          <div class="col">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto">
+              <div class="text-green">₹34,545</div>
+          </div>
+      </div>
+        <hr class="w-100 mt-2 mb-2">
+
+        
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+          <div class="col">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto">
+              <div class="text-green">₹34,545</div>
+          </div>
+      </div>
+        <hr class="w-100 mt-2 mb-2">
+        
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+          <div class="col">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto">
+              <div class="text-green">₹34,545</div>
+          </div>
+      </div>
+        <hr class="w-100 mt-2 mb-2">
+
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+          <div class="col">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto">
+              <div class="text-green">₹34,545</div>
+          </div>
+      </div>
+        <hr class="w-100 mt-2 mb-2">
+
+
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+          <div class="col mb-3">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto">
+              <div class="text-green">₹34,545</div>
+          </div>
+      </div>
+      </div>
+  </div>
+
+  <!-- Currrent Payments-->
+  <div class="col bg-white card card-margin-middle margin-right">
+      <div class="top-half gradient-blue padding-card mb">
+        <div class="head-text-white">
+          <h5 class="head-text-white mb-2">Current Payments</h5>
+          <div class="d-flex justify-content-between align-items-center">
+              <p class="highlight-sub-white mb-0">
+                  <strong>₹25,900</strong>
+              </p>
+              <a href="#" class="link-text-white">View all <span class="mdi mdi-arrow-right"></a>
+          </div>
+      </div>
+      </div>
+      <div class="bottom-half">
+        <p class= "padding-recent head-text-medium mb-0">Recent</p>
+       <!-- Invoive Section -->
+        <div class="row padding-recent mt-0">
+        <!-- Left column -->
+          <div class="col">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+              <div class="text-blue">₹34,545</div>
+          </div>
+        </div>
+        <hr class="w-100 mt-2 mb-2">
+
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+            <div class="col">
+                <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                <div class="head-text-regular">Lotha Baptist Church</div>
+            </div>
+            <!-- Right column -->
+            <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                <div class="text-blue">₹34,545</div>
+            </div>
+          </div>
+          <hr class="w-100 mt-2 mb-2">
+
+          <div class="row padding-recent mt-0">
+            <!-- Left column -->
+              <div class="col">
+                  <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                  <div class="head-text-regular">Lotha Baptist Church</div>
+              </div>
+              <!-- Right column -->
+              <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                  <div class="text-blue">₹34,545</div>
+              </div>
+            </div>
+            <hr class="w-100 mt-2 mb-2">
+
+            <div class="row padding-recent mt-0">
+              <!-- Left column -->
+                <div class="col">
+                    <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                    <div class="head-text-regular">Lotha Baptist Church</div>
+                </div>
+                <!-- Right column -->
+                <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                    <div class="text-blue">₹34,545</div>
+                </div>
+              </div>
+              <hr class="w-100 mt-2 mb-2">
+    
+          <div class="row padding-recent mt-0">
+            <!-- Left column -->
+              <div class="col">
+                  <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                  <div class="head-text-regular">Lotha Baptist Church</div>
+              </div>
+              <!-- Right column -->
+              <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                  <div class="text-blue">₹34,545</div>
+              </div>
+            </div>
+            <hr class="w-100 mt-2 mb-2">
+
+            <div class="row padding-recent mt-0">
+              <!-- Left column -->
+                <div class="col mb-3">
+                    <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                    <div class="head-text-regular">Lotha Baptist Church</div>
+                </div>
+                <!-- Right column -->
+                <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                    <div class="text-blue">₹34,545</div>
+                </div>
+              </div>
+            
+      </div>
+  </div>
+  <!-- Overdue Payments-->
+  <div class="col bg-white card card-margin-right margin-right">
+    <div class="top-half gradient-red padding-card">
+      <div class = "head-text-white">
+        <h5 class="head-text-white mb-2">Overdue Payments</h5>
+        <div class="d-flex justify-content-between align-items-center">
+          <p class="highlight-sub-white mb-0">
+              <strong>₹45,950</strong>
+          </p>
+          <a href="#" class="link-text-white">View all <span class="mdi mdi-arrow-right"></a>
+      </div>
+      </div>
+    </div>
+    <div class="bottom-half">
+      <p class= "padding-recent head-text-medium mb-0">Recent</p>
+      <!-- Invoice Area -->
+      <div class="row padding-recent mt-0">
+        <!-- Left column -->
+          <div class="col">
+              <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+              <div class="head-text-regular">Lotha Baptist Church</div>
+          </div>
+          <!-- Right column -->
+          <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+              <div class="text-red">₹34,545</div>
+          </div>
+        </div>
+        <hr class="w-100 mt-2 mb-2">
+
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+            <div class="col">
+                <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                <div class="head-text-regular">Lotha Baptist Church</div>
+            </div>
+            <!-- Right column -->
+            <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                <div class="text-red">₹34,545</div>
+            </div>
+          </div>
+          <hr class="w-100 mt-2 mb-2">
+
+          <div class="row padding-recent mt-0">
+            <!-- Left column -->
+              <div class="col">
+                  <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                  <div class="head-text-regular">Lotha Baptist Church</div>
+              </div>
+              <!-- Right column -->
+              <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                  <div class="text-red">₹34,545</div>
+              </div>
+            </div>
+            <hr class="w-100 mt-2 mb-2">
+
+        <div class="row padding-recent mt-0">
+          <!-- Left column -->
+            <div class="col">
+                <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                <div class="head-text-regular">Lotha Baptist Church</div>
+            </div>
+            <!-- Right column -->
+            <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                <div class="text-red">₹34,545</div>
+            </div>
+          </div>
+          <hr class="w-100 mt-2 mb-2">
+          
+          <div class="row padding-recent mt-0">
+            <!-- Left column -->
+              <div class="col">
+                  <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                  <div class="head-text-regular">Lotha Baptist Church</div>
+              </div>
+              <!-- Right column -->
+              <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                  <div class="text-red">₹34,545</div>
+              </div>
+            </div>
+            <hr class="w-100 mt-2 mb-2">
+
+            <div class="row padding-recent mt-0">
+              <!-- Left column -->
+                <div class="col mb-3">
+                    <div class="head-text-dark" id="INVO12">INVO12 • 28-04-2024</div>
+                    <div class="head-text-regular">Lotha Baptist Church</div>
+                </div>
+                <!-- Right column -->
+                <div class="col-auto ml-auto"> <!-- Added 'ml-auto' class here -->
+                    <div class="text-red">₹34,545</div>
+                </div>
+              </div>
+             
+    </div>
+  </div>
+</div>
 </div>
 {% endblock %}
