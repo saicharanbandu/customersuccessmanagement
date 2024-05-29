@@ -1,10 +1,6 @@
 {% load i18n %}
 {% load static %}
 {% autoescape off %}
-<div class="brand-logo">
-    <a class="navbar-brand brand-logo" href="index.html"><img src="{% static 'images/logo.png' %}"
-            alt="logo" /></a>
-</div>
 {% blocktrans with site_name=current_site.name %}Hello {{ username }}!<br>
 {% endblocktrans %}
 
