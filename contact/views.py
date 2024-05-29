@@ -6,7 +6,8 @@ from django.views.generic import ListView
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-
+from django_filters.views import FilterView
+from .filters import ContactFilter
 from . import models as contactModel, forms as contactForm
 
 from tabernacle_customer_success import constants
@@ -49,6 +50,7 @@ class ContactCreateView(View):
 @method_decorator(login_required, name='dispatch')
 class ContactListView(ListView):
     model = contactModel.Contact
+    filterset_class = ContactFilter
     title = "Contact Directory"
     active_tab = "contact"
     template_name = "contact/list_view.html"
@@ -57,6 +59,7 @@ class ContactListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         search_query = self.request.GET.get("search")
+        sort = self.request.GET.get("sort", "")
         if search_query:
             queryset = queryset.filter(
                 (
@@ -68,7 +71,26 @@ class ContactListView(ListView):
                     | Q(organization__icontains=" " + search_query)
                 )
             )
-        return queryset.order_by("name")
+        
+
+
+
+        if sort:
+            if sort == "name_asc":
+                print("a-z")
+                queryset = queryset.order_by("name")
+            elif sort == "name_desc":
+                print("z-a")
+                queryset = queryset.order_by("-name")
+            elif sort == "created_newest":
+                queryset = queryset.order_by("-created_at")
+            elif sort == "created_oldest":
+                queryset = queryset.order_by("created_at")
+            elif sort == "updated_newest":
+                queryset = queryset.order_by("-updated_at")
+            elif sort == "updated_oldest":
+                queryset = queryset.order_by("updated_at")
+        return queryset
 
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get("page_limit", constants.PAGINATION_LIMIT)
@@ -78,12 +100,21 @@ class ContactListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        more_context = {
+        sort_options = {
+            "name_asc": "Customer Name (A-Z)",
+            "name_desc": "Customer Name (Z-A)",
+            "created_newest": "Contact Created (Newest First)",
+            "created_oldest": "Contact Created (Oldest First)",
+            "updated_newest": "Contact Updated (Newest First)",
+            "updated_oldest": "Contact Updated (Oldest First) ",
+        }
+        filter_form = ContactFilter(self.request.GET, queryset=self.get_queryset())
+        context.update({
             "title": self.title,
             "active_tab": self.active_tab,
-        }
-        context.update(more_context)
+            "sort_options": sort_options,
+            "contact_filter": filter_form,
+        })
         return context
 
 

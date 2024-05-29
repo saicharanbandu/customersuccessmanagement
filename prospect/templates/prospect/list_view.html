@@ -17,13 +17,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-lg-12 grid-margin stretch-card">
+<div class="row mb-3">
+  <div class="col-lg-12 ">
     <div class="card">
       <div class="card-body">
         <div class="row">
-          <div class="col-8 col-lg-6">
-            <form method="GET">
+          <div class="col-12 col-lg-8 d-flex align-items-center">
+            <form class="d-flex w-100" method="GET" action="{% url 'prospect:list' %}">
               <div class="input-group">
                 <input type="search" class="form-control" placeholder="Search" name="search"
                   value="{{ request.GET.search }}">
@@ -31,9 +31,25 @@
                   <i class="mdi mdi-magnify"></i>
                 </button>
               </div>
+              <div class="input-group ms-2">
+                <select name="status" class="form-select form-select-sm" onchange="this.form.submit();">
+                  <option value="">Status</option>
+                  {% for key, value in prospect_filter.form.fields.status.choices %}
+                    <option value="{{ key }}" {% if key == request.GET.status %}selected{% endif %}>{{ value }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="input-group ms-2">
+                <select name="sort" class="form-select form-select-sm" onchange="this.form.submit();">
+                  <option value="">Sort</option>
+                  {% for key, value in sort_options.items %}
+                    <option value="{{ key }}" {% if key == request.GET.sort %}selected{% endif %}>{{ value }}</option>
+                  {% endfor %}
+                </select>
+              </div>
             </form>
           </div>
-          <div class="col-4 col-lg-6">
+          <div class="col-12 col-lg-4 text-end">
             <a href="{% url 'prospect:create' %}" class="btn btn-gradient-primary float-end">
               <i class="mdi mdi-plus me-2"></i>
               New Prospect
@@ -159,8 +175,7 @@
                       Edit Prospect Info
                     </a>
                     <a class="dropdown-item" href="{% url 'prospect:update-poc' prospect.uuid %}">
-
-                      <i class="mdi mdi mdi-contacts me-2"></i>
+                      <i class="mdi mdi-contacts me-2"></i>
                       Update Contacts Persons
                     </a>
                     <a class="dropdown-item prospect-action" data-bs-toggle="modal" data-bs-target="#updateModal"
@@ -173,7 +188,6 @@
                       <i class="mdi mdi-account-convert me-2"></i>
                       Re-assign CRM
                     </a>
-
                     <a class="dropdown-item border-top status-action" data-bs-toggle="modal"
                       data-bs-target="#updateModal" data-url="{% url "prospect:update-status-ajax" prospect.uuid %}">
                       <i class="mdi mdi-refresh me-2"></i>

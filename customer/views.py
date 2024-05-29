@@ -692,3 +692,37 @@ class CustomerDashboardView(View):
             'title': self.title,
         }
         return render(request, self.template_name, context)
+class PaymentView(View):
+    template_name = "customer/payment.html"
+    title = "Record Payment"
+    active_tab = "payment"
+
+    def get(self, request, customer_id, *args, **kwargs):
+        customer = get_object_or_404(customerModels.Profile, uuid=customer_id)
+        customer1 = get_object_or_404(customerModels.PaymentHistory, customer=customer_id)
+        payment_form = customerForms.PaymentHistoryForm(initial={'created_by': request.user})
+        
+        context = {
+            "title": self.title,
+            "active_tab": self.active_tab,
+            "payment_form": payment_form,
+            "customer": customer,
+        }
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, customer_id, *args, **kwargs):
+        customer = get_object_or_404(customerModels.PaymentHistory, customer=customer_id)
+        payment_form = customerForms.PaymentHistoryForm(request.POST,  instance=customer)
+        if payment_form.is_valid():
+            payment_form.save()
+            return redirect(reverse("contact:list"))
+        else:
+            payment_form = customerForms.PaymentHistoryForm(instance=customer)
+            context = {
+                "title": self.title,
+                "active_tab": self.active_tab,
+                "payment_form": payment_form,
+                "customer": customer,
+            }
+            return render(request, self.template_name, context)

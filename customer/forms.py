@@ -151,3 +151,21 @@ class CustomerManagerForm(forms.ModelForm):
         choices = userModels.User.objects.all().values_list('uuid', 'full_name')
         formatted_choices = [(user_id, f'{full_name}') for user_id, full_name in choices]
         return [('', '--Select--')] + formatted_choices
+
+class PaymentHistoryForm(forms.ModelForm):
+    class Meta:
+        model = customerModels.PaymentHistory
+        fields = [
+            'amount',
+            'payment_date',
+            'invoice_no',
+            'receipt_no',
+            'remarks',
+        ]
+        widgets = {
+            'payment_date': forms.DateInput(attrs={'class': 'form-control'}),
+            'amount': forms.TextInput(attrs={'class': 'form-control'}),
+            'invoice_no': forms.TextInput(attrs={'class': 'form-control'}),
+            'receipt_no': forms.TextInput(attrs={'class': 'form-control'}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control','rows': 2}),
+        }

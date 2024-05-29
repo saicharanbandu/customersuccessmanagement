@@ -1,70 +1,68 @@
 {% load static %}
 <div class="row">
-    <div class="col col-md-8">
-        
-        <div class="form-group">
-            <label for="{{ contact_form.name.id_for_label }}">Name *</label>
-            {{ contact_form.name }}
-        </div>
-        <div class="form-group">
-            <label for="{{ contact_form.designation.id_for_label }}">Designation</label>
-            {{ contact_form.designation }}
-        </div>
-        <div class="form-group">
-            <label for="{{ contact_form.organization.id_for_label }}">Organization *</label>
-            {{ contact_form.organization }}
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="form-group float-end">
-            <div class="form-group text-center">
-                <label for="{{ contact_form.profile_picture.id_for_label }}" class="text-uppercase fw-bold">Upload
-                    Picture *</label>
-                {% if contact_form.instance.profile_picture %}
-                <div>
-                    <img src="{{ contact_form.instance.profile_picture.url }}" alt="Profile Picture" width="100%" />
-                </div>
-                {% else %}
-                <div>
-                    <img src="{% static 'images/avatar.jpg' %}" alt="Default Profile Picture" width="75%">
-                </div>
-                {% endif %}
+  <div class="col col-md-8">
 
-                <div class="my-3">
-                    {% if contact_form.profile_picture.value %}
-                    <label for="{{ contact_form.profile_picture.auto_id }}-clear_id">Remove photo</label>
-                    <input type="checkbox" name="{{ contact_form.profile_picture.html_name }}-clear"
-                        id="{{ contact_form.profile_picture.auto_id }}-clear_id" />
-                    {% endif %}
-                    <input type="file" class="form-control file-upload-info"
-                        name="{{ contact_form.profile_picture.html_name }}"
-                        id="{{ contact_form.profile_picture.id_for_label }}">
-                </div>
-            </div>
-
-        </div>
+    <div class="form-group">
+      <label for="{{ contact_form.name.id_for_label }}">Name *</label>
+      {{ contact_form.name }}
     </div>
+    <div class="form-group">
+      <label for="{{ contact_form.designation.id_for_label }}">Designation</label>
+      {{ contact_form.designation }}
+    </div>
+    <div class="form-group">
+      <label for="{{ contact_form.organization.id_for_label }}">Organization *</label>
+      {{ contact_form.organization }}
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="form-group float-end">
+      <div class="form-group text-center">
+        <label for="{{ contact_form.profile_picture.id_for_label }}" class="text-uppercase fw-bold">Upload Picture
+          *</label>
+        {% if contact_form.instance.profile_picture %}
+        <div>
+          <img src="{{ contact_form.instance.profile_picture.url }}" alt="Profile Picture" width="100%" />
+        </div>
+        {% else %}
+        <div>
+          <img src="{% static 'images/avatar.jpg' %}" alt="Default Profile Picture" width="75%" />
+        </div>
+        {% endif %}
+
+        <div class="my-3">
+          {% if contact_form.profile_picture.value %}
+          <label for="{{ contact_form.profile_picture.auto_id }}-clear_id">Remove photo</label>
+          <input type="checkbox" name="{{ contact_form.profile_picture.html_name }}-clear"
+            id="{{ contact_form.profile_picture.auto_id }}-clear_id" />
+          {% endif %}
+          <input type="file" class="form-control file-upload-info" name="{{ contact_form.profile_picture.html_name }}"
+            id="{{ contact_form.profile_picture.id_for_label }}" />
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
 <div class="row">
-    <div class="col">
-        <div class="form-group">
-            <label for="{{ contact_form.mobile_number.id_for_label }}">Mobile Number *</label>
-            {{ contact_form.mobile_number }}
-        </div>
+  <div class="col">
+    <div class="form-group">
+      <label for="{{ contact_form.mobile_number.id_for_label }}">Mobile Number *</label>
+      {{ contact_form.mobile_number }}
     </div>
-    <div class="col">
-        <div class="form-group">
-            <label for="{{ contact_form.alt_number.id_for_label }}">Alternate Mobile Number</label>
-            {{ contact_form.alt_number }}
-        </div>
+  </div>
+  <div class="col">
+    <div class="form-group">
+      <label for="{{ contact_form.alt_number.id_for_label }}">Alternate Mobile Number</label>
+      {{ contact_form.alt_number }}
     </div>
+  </div>
 </div>
 <div class="form-group">
-    <label for="{{ contact_form.email.id_for_label }}">Email</label>
-    {{ contact_form.email }}
+  <label for="{{ contact_form.email.id_for_label }}">Email</label>
+  {{ contact_form.email }}
 </div>
 <div class="form-group">
-    <label for="{{ contact_form.address.id_for_label }}">Address</label>
-    {{ contact_form.address }}
+  <label for="{{ contact_form.address.id_for_label }}">Address</label>
+  {{ contact_form.address }}
 </div>

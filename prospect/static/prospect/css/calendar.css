@@ -105,20 +105,20 @@
     margin: 0.5em 0 0.5em 0;
     padding: 0.75rem;
     border: none;
-    border-radius: 1em;
+    border-radius: 10px;
 }
 
 .main .event-date {
     --size: 4rem;
-    width: 5rem;
+    width: 4rem;
     height: var(--size);
     display: block;
     align-content: baseline;
     color: #343a40;
     text-align: center;
     background-color: #f2edf3;
-    border-radius: 0.8em;
-    padding: 0.5rem;
+    border-radius: 10px;
+    padding: 0.75rem;
 }
 
 .main .event-highlight.calendar-status-meeting:hover .event-date,
@@ -137,9 +137,6 @@
     transform: 0.3s ease-in-out;
 }
 
-.main .event-date {
-    width: 25%;
-}
 .main .event-details {
     width: 75%;
 }
@@ -167,22 +164,22 @@
 }
 
 .main .event-date .event-weekday {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    margin-bottom: -0.5rem;
+    margin-bottom: -0.25rem;
     text-transform: capitalize;
 }
 
 .main .event-date .event-day {
-    font-size: 2em; 
-    margin-top: -0.3em;
+    font-size: 1.25rem; 
+    margin-top: -0.5rem;
     font-weight: 700;
 }
 
 .main .events {
     position: absolute;
-    height: 2em;
-    width: 18em;
+    height: 2rem;
+    width: 18rem;
     margin: 4px;
     border-radius: 5px;
 }
