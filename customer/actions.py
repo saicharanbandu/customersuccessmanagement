@@ -26,10 +26,8 @@ def delete_customer(request, customer_id):
         messages.error(request,'Unsuccessful, try again')
 @login_required       
 def delete_payment(request,customer_id, payment_id):
-    print(request.POST)
     if request.method == 'POST':
         payment = customerModels.PaymentHistory.objects.get(uuid=payment_id)
-        print(payment)
         payment.delete()
         messages.success(request, 'Payment has been successfully deleted')
         return redirect(reverse("customer:payment_list", kwargs={"customer_id": customer_id}))

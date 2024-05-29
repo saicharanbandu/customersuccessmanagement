@@ -45,8 +45,6 @@ class UserCreateView(View):
             "user_form": user_form,
             "profile_form": profile_form,
         }
-        print(user_form.errors)
-        print(profile_form.errors)
         messages.error(request, 'Failed to add user')
         return render(request, self.template_name, context)
 
@@ -122,8 +120,6 @@ class UserEditView(View):
             "profile_form": profile_form,
             "profile_id": profile_id,
         }
-            print(user_form.errors)
-            print(profile_form.errors)
             messages.error(request, 'Contact has not been successfully edited')
             return render(request, self.template_name, context)
         
@@ -133,9 +129,7 @@ class LoggedUserEditView(View):
     active_tab = "user"
 
     def get(self, request, *args, **kwargs):
-        print(request.user)
         profile_id=request.user.uuid
-        print(profile_id)
         user = get_object_or_404(userModels.Profile, user=profile_id)
         user_form = userForms.UserInfo(instance=user.user)
         profile_form = userForms.UserProfile(instance=user)
@@ -170,7 +164,5 @@ class LoggedUserEditView(View):
             "profile_form": profile_form,
             "profile_id": profile_id,
         }
-            print(user_form.errors)
-            print(profile_form.errors)
             messages.error(request, 'Contact has not been successfully edited')
             return render(request, self.template_name, context)

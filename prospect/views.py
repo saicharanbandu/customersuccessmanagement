@@ -127,7 +127,7 @@ class ProspectListView(ListView):
         queryset = self.search_query(queryset)
 
         for query in queryset:
-            status_history = prospectModels.StatusHistory.objects.filter(prospect_id=query.uuid).order_by('-created_at')
+            status_history = prospectModels.StatusHistory.objects.filter(prospect_id=query.uuid)
             if status_history.exists():
                 query.status_history = status_history.first()
                 if query.status_history.status == constants.TRIAL:
@@ -135,13 +135,14 @@ class ProspectListView(ListView):
                     query.expiry_days = (query.expiry_date - timezone.now()).days
         return queryset
     
-    def get_ordering(self):
-        sort = self.request.GET.get("sort", "")
-        sort_field = constants.PROSPECT_SORT_CHOICES.get(sort, '-created_at')
-        if sort_field:
-            return [sort_field]
-        else:
-            return ['-created_at']    
+    # def get_ordering(self):
+    #     sort = self.request.GET.get("sort", "")
+    #     sort_field = constants.PROSPECT_SORT_CHOICES.get(sort, '-created_at')
+    #     print(sort_field)
+    #     if sort_field:
+    #         return [sort_field]
+    #     else:
+    #         return ['-created_at']    
     
     
 

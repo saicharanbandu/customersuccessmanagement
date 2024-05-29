@@ -720,7 +720,6 @@ class PaymentView(View):
             payment.created_by = request.user
             subscribed_plan = customer.customer_plan
             
-            print(subscribed_plan.duration)
             if not payment.due_date:  
                 payment.due_date = datetime.now() + timedelta(days=subscribed_plan.duration*30)
             payment.save()
