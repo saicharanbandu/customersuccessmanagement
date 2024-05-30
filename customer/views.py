@@ -762,7 +762,7 @@ class PaymentListView(ListView):
 class PaymentEditView(View):
     title = "Edit Payment"
     active_tab = "payment"
-    template_name = "customer/payment.html"
+    template_name = "customer/payment_edit.html"
 
     def get(self, request, payment_id, *args, **kwargs):
         payment = get_object_or_404(customerModels.PaymentHistory, uuid=payment_id)

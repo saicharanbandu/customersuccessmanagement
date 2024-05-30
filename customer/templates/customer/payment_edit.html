@@ -55,7 +55,7 @@
                   <a href="{% url 'customer:payment_list' customer.uuid %}" type="button" class="btn btn-outline-primary">Cancel</a>
                 </div>
                 <div>
-                  <a class="text-danger" id="deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Payment</a>
+                    <a class="text-danger" id="deleteButton" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Payment</a>
                 </div>
               </div>
             </div>
@@ -66,24 +66,25 @@
   </div>
 </div>
 
+
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h3 class="modal-title" id="deleteModalLabel">Delete Payment</h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <p>Are you sure you want to delete this payment?</p>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-              <form method="POST" action="{% url 'customer:delete_payment' customer_id=customer.uuid payment_id=payment.uuidpayment.uuid %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-danger">Delete Payment</button>
-              </form>
-          </div>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="deleteModalLabel">Delete Payment</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this payment?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                <form method="POST" action="{% url 'customer:delete_payment' customer_id=customer.uuid payment_id=payment.uuid %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
   </div>
-</div>
 {% endblock %}
