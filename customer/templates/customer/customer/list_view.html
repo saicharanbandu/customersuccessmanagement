@@ -24,13 +24,43 @@
       <div class="card-body">
         <div class="row">
           <div class="col-8 col-lg-6">
-            <form method="GET">
+            <form class="d-flex w-100" method="GET" action="{% url 'customer:list' %}">
               <div class="input-group">
                 <input type="search" class="form-control" placeholder="Search" name="search"
                   value="{{ request.GET.search }}">
                 <button type="submit" class="btn btn-sm btn-light">
                   <i class="mdi mdi-magnify"></i>
                 </button>
+              </div>
+              <div class="dropdown me-2">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  Plan Status
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                  {% comment %} <li>
+                    <div class="form-check ms-3">
+                      <input class="form-check-input" type="checkbox" name="select_all_status" value="all" id="selectAllStatus" onclick="this.form.submit();" {% if 'select_all_status' in request.GET %}checked{% endif %}>
+                      <label class="form-check-label" for="selectAllStatus">Select All</label>
+                    </div>
+                  </li> {% endcomment %}
+                  <li><hr class="dropdown-divider"></li>
+                  {% for key, value in plan_filter.form.fields.plan_status.choices %}
+                  <li>
+                    <div class="form-check ms-3">
+                      <input class="form-check-input" type="checkbox" name="plan_status" value="{{ key }}" id="status{{ key }}" {% if key in plan_status_list %}checked{% endif %} onclick="this.form.submit();">
+                      <label class="form-check-label" for="status{{ key }}">{{ value }}</label>
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="input-group ms-2">
+                <select name="sort" class="form-select form-select-sm" onchange="this.form.submit();">
+                  <option value="">Sort</option>
+                  {% for key, value in sort_options.items %}
+                    <option value="{{ key }}" {% if key == request.GET.sort %}selected{% endif %}>{{ key }}</option>
+                  {% endfor %}
+                </select>
               </div>
             </form>
           </div>
@@ -63,7 +93,7 @@
               <td>
                 <a class="action-link view-action" data-url="{% url 'customer:get-customer-info' customer.uuid %}"
                   data-bs-toggle="modal" data-bs-target="#viewModal">
-                  {{ customer.prospect.name }}
+                  {{ customer.official_name }}
                 </a>
               </td>
               <td>

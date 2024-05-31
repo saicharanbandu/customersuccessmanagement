@@ -18,8 +18,14 @@ CASH = 'cash'
 ONLINE = 'online'
 BANK_TRANSFER = 'bank_transfer'
 ALL_ACCESS = 'all_access'
-
-
+TINY='tiny'
+BASIC='basic'
+PRO='pro'
+PREMIUM='premium'
+DUE='due'
+OVERDUE='overdue'
+PAID='paid'
+PENDING='pending'
 TRIAL_DURATION = 14
 
 STAFF_ACCESS_ROLE_CHOICES = [(VIEWER, 'Viewer'), (EDITOR, 'Editor')]
@@ -39,12 +45,33 @@ PROSPECT_STATUS_CHOICES = [
     (ACCEPTED, 'Responded Yes'),
     (REJECTED, 'Responded No'),
 ]
-
+CUSTOMER_PLAN_STATUS_CHOICES = [
+    (TINY,'Tiny'),
+    (BASIC, 'Basic'),
+    (PRO, 'Pro'),
+    (PREMIUM, 'Premium'),
+    
+]
+CUSTOMER_Payment_STATUS_CHOICES = [
+    (TINY,'Due'),
+    (BASIC, 'Overdue'),
+    (PRO, 'Paid'),
+    (PREMIUM, 'Pending'),
+    
+]
 contact_sort_options = {
             "Customer Name (A-Z)": "name",
             "Customer Name (Z-A)": "-name",
             "Contact Created (Newest First)": "created_at",
             "Contact Created (Oldest First)": "-created_at",
+            "Contact Updated (Newest First)": "-updated_at",
+            "Contact Updated (Oldest First)": "updated_at",
+        }
+customer_sort_options = {
+            "Customer Name (A-Z)": "name",
+            "Customer Name (Z-A)": "-name",
+            "CSM Name (A-Z)": "created_at",
+            "CSM Name (Z-A)": "-created_at",
             "Contact Updated (Newest First)": "-updated_at",
             "Contact Updated (Oldest First)": "updated_at",
         }

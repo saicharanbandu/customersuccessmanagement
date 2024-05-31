@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from decimal import Decimal
-
+from .filters import CustomerFilter
 from uuid import UUID
 
 # Project Imports
@@ -184,26 +184,32 @@ class OnboardingPlanView(View):
 @method_decorator(login_required, name='dispatch')
 class CustomerListView(ListView):
     model = customerModels.Profile
+    filterset_class = CustomerFilter
     template_name = 'customer/customer/list_view.html'
     title = 'Customer List'
     active_tab = 'customer'
     context_object_name = 'customers'
-
-    def get_queryset(self):
-        request=self.request
-        if 'customer_profile_uuid' in request.session:
-            del request.session['customer_profile_uuid']
-        queryset = super().get_queryset()
+    
+    def search_query(self, queryset):
+        
         search_query = self.request.GET.get('search')
+        plan_status = self.request.GET.getlist("plan_status")
+        
         if search_query:
             queryset = queryset.filter(
-                (
-                    Q(legal_name__istartswith=search_query)
-                    | Q(legal_name__icontains=' ' + search_query)
-                )
+                Q(official_name__istartswith=search_query) |
+                Q(official_name__icontains=' ' + search_query)
             )
-        queryset = queryset.order_by('official_name')
+        
+        if plan_status:
+            filter_form = self.filterset_class(self.request.GET, queryset=queryset)
+            queryset = filter_form.qs
+        
+        return queryset
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
         for query in queryset:
             try:
                 last_payment = customerModels.PaymentHistory.objects.filter(customer_id=query.uuid).order_by('-created_at').first()
@@ -226,7 +232,8 @@ class CustomerListView(ListView):
                         query.days_difference = (timezone.now() - query.due_date).days
             except:
                 pass
-        return queryset
+        
+        return self.search_query(queryset)
 
     def get_paginate_by(self, queryset):
         page_limit = self.request.GET.get('page_limit', constants.PAGINATION_LIMIT)
@@ -236,14 +243,16 @@ class CustomerListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-    
+        filter_form = CustomerFilter(self.request.GET, queryset=self.get_queryset())
         more_context = {
             'title': self.title,
             'active_tab': self.active_tab,
+            "sort_options": constants.customer_sort_options,
+            "plan_filter": filter_form,
+            "plan_status_list": self.request.GET.getlist("plan_status"),
         }
         context.update(more_context)
         return context
-
 
 @method_decorator(login_required, name='dispatch')
 class CustomerEditView(View):
